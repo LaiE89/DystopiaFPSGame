@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDefaultItem: 0
+  isGun: 0
   attackDamage: 2
   attackRange: 2
   attackCooldown: 1.5
@@ -71,6 +72,21 @@ MonoBehaviour:
   blockAnimation: {fileID: 0}
   fpAttackAnimation: {fileID: -6741758067321407611, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
   fpBlockAnimation: {fileID: 3281725632038056797, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+  attackSound: Stab
+  hurtSound: StabHurt
+  blockSound: WoodBlock
+  breakSound: 
+  shootDamage: 0
+  shootRange: 0
+  shootCooldown: 0
+  shootKnockback: 0
+  maxBullets: 0
+  bullets: 0
+  muzzleFlash: {fileID: 0}
+  enemyShootAnimation: {fileID: 0}
+  fpShootAnimation: {fileID: 0}
+  shootSound: 
+  shootHurtSound: 
 --- !u!114 &2979141476633309684
 MonoBehaviour:
   m_ObjectHideFlags: 0

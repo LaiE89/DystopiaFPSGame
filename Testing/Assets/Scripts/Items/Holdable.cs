@@ -70,7 +70,9 @@ public class Holdable : Interactable {
 
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         foreach (Transform child in transform) {
-            child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            if (child.gameObject.GetComponent<ParticleSystem>() == null){
+                child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            }
         }
         //this.GetComponent<BoxCollider>().isTrigger = true;
         itemCollider.isTrigger = true;

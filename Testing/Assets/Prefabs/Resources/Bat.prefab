@@ -153,14 +153,21 @@ MonoBehaviour:
   blockAnimation: {fileID: 0}
   fpAttackAnimation: {fileID: -4738338977195520429, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
   fpBlockAnimation: {fileID: 3281725632038056797, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+  attackSound: Swing
+  hurtSound: SwingHurt
+  blockSound: WoodBlock
+  breakSound: 
   shootDamage: 0
   shootRange: 0
   shootCooldown: 0
   shootKnockback: 0
   maxBullets: 0
   bullets: 0
+  muzzleFlash: {fileID: 0}
   enemyShootAnimation: {fileID: 0}
   fpShootAnimation: {fileID: 0}
+  shootSound: 
+  shootHurtSound: 
 --- !u!114 &17489390492456399
 MonoBehaviour:
   m_ObjectHideFlags: 0

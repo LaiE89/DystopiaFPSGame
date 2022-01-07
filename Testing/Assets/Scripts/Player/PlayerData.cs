@@ -63,5 +63,15 @@ namespace Player {
             sceneIndex = player.sceneIndex;
             myWeapon = player.myWeapon.name.Replace("(Clone)", "");
         }
+
+        public PlayerData (float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int pickUpRange, int sceneIndex, string myWeapon) {
+            this.walkSpeed = walkSpeed;
+            this.sprintSpeed = sprintSpeed;
+            this.jumpForce = jumpForce;
+            this.playerDrugs = playerDrugs;
+            this.pickUpRange = pickUpRange;
+            this.sceneIndex = sceneIndex;
+            this.myWeapon = myWeapon;
+        }
     }
 }

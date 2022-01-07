@@ -36,7 +36,7 @@ namespace Player {
                 return null;
             }
         }*/
-
+        
         public static void SavePlayer(Player.PlayerMovement player) {
             Debug.Log(Application.persistentDataPath);
             string path = Application.persistentDataPath + "/player.dat";

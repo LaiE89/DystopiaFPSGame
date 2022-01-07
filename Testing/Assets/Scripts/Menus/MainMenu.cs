@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Xml;
 
 public class MainMenu : MonoBehaviour {
     [SerializeField] public OptionsMenu options; 
@@ -13,6 +15,15 @@ public class MainMenu : MonoBehaviour {
     public static bool loading;
     public static bool saving;
 
+    [Header("Player Default Values")]
+    [SerializeField] float walkSpeed = 2.5f;
+    [SerializeField] float sprintSpeed = 4f;
+    [SerializeField] float jumpForce = 5f;
+    [SerializeField] int playerDrugs = 1;
+    [SerializeField] int pickUpRange = 3;
+    [SerializeField] int sceneIndex = 1;
+    [SerializeField] string myWeapon = "Fist";
+
     private void Awake() {
         options.InitializeSettings();
         saving = false;
@@ -20,6 +31,7 @@ public class MainMenu : MonoBehaviour {
 
     public void PlayGame() {
         DeleteFile();
+        NewPlayer();
         StartCoroutine(LoadAsyncronously(1));
     }
 
@@ -68,5 +80,22 @@ public class MainMenu : MonoBehaviour {
             UnityEditor.AssetDatabase.Refresh();
             #endif
         }
+    }
+
+    public void NewPlayer() {
+        Debug.Log(Application.persistentDataPath);
+        string path = Application.persistentDataPath + "/player.dat";
+
+        Player.PlayerData data = new Player.PlayerData(walkSpeed, sprintSpeed, jumpForce, playerDrugs, pickUpRange, sceneIndex, myWeapon);
+        
+        var serializer = new DataContractSerializer(typeof(Player.PlayerData));
+        var settings = new XmlWriterSettings()
+        {
+            Indent = true,
+            IndentChars = "\t",
+        };
+        var writer = XmlWriter.Create(path, settings);
+        serializer.WriteObject(writer, data);
+        writer.Close();
     }
 }

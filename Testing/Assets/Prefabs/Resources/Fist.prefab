@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDefaultItem: 1
+  isGun: 0
   attackDamage: 1
   attackRange: 2
   attackCooldown: 1
@@ -55,3 +56,18 @@ MonoBehaviour:
   blockAnimation: {fileID: 0}
   fpAttackAnimation: {fileID: 6720303635017113406, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
   fpBlockAnimation: {fileID: -6801083763907307519, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+  attackSound: Punch
+  hurtSound: PunchHurt
+  blockSound: HandBlock
+  breakSound: HandBreak
+  shootDamage: 0
+  shootRange: 0
+  shootCooldown: 0
+  shootKnockback: 0
+  maxBullets: 0
+  bullets: 0
+  muzzleFlash: {fileID: 0}
+  enemyShootAnimation: {fileID: 0}
+  fpShootAnimation: {fileID: 0}
+  shootSound: 
+  shootHurtSound: 

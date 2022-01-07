@@ -92,6 +92,7 @@ namespace Player {
         int selectedWeapon;
 
         [Header("Others")]
+        [HideInInspector] public SoundController soundController;
         [HideInInspector] public int sceneIndex;
         Health health;
         Rigidbody rb;
@@ -117,6 +118,7 @@ namespace Player {
         }
 
         private void Start() {
+            soundController = SceneController.Instance.soundController;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -230,9 +232,8 @@ namespace Player {
         private void Jump() {
             if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming) {
                 if (playerStamina >= 20f) {
+                    soundController.Play("PlayerJump");
                     UsingStamina(20f);
-                    // animator.ResetTrigger("isPunching");
-                    // animator.SetTrigger("isJumping");
                     rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                     rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
                 }
@@ -240,16 +241,6 @@ namespace Player {
         }
         
         private void Movement() {
-            isMovingLR = Input.GetKey(leftKey) || Input.GetKey(rightKey);
-            isMovingForward = Input.GetKey(forwardKey);
-            isMovingBackward = Input.GetKey(backwardKey);
-            /*if (!isAttacking && isGrounded && !isConsuming && (isMovingBackward || (!isMovingForward && isMovingLR) || (!Input.GetKey(sprintKey) && (isMovingForward || isMovingLR)))) {
-                Walk();
-            }else if (!isAttacking && isGrounded && !isConsuming && Input.GetKey(sprintKey) && Input.GetKey(forwardKey)) {
-                Sprint();
-            }else {
-                Idle();
-            }*/
             if (isGrounded && !isConsuming) {
                 if (Input.GetKey(sprintKey) && Input.GetKey(forwardKey)) {
                     Sprint();
@@ -260,20 +251,21 @@ namespace Player {
         }
 
         private void Walk() {
-            isRunning = false;
+            if (isRunning) {
+                soundController.Stop("PlayerRun", 0.25f);
+                isRunning = false;
+            }
             // moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
-            moveSpeed = walkSpeed;
-        }
-
-        private void Idle() {
-            isRunning = false;
             moveSpeed = walkSpeed;
         }
 
         private void Sprint() {
             if (playerStamina >= 20f) {
+                if (!isRunning) {
+                    soundController.Play("PlayerRun");
+                    isRunning = true;
+                }
                 UsingStamina(0.2f);
-                isRunning = true;
                 moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
             }else {
                 Walk();
@@ -330,10 +322,11 @@ namespace Player {
         }
 
         public void BlockingDamage(float amount) {
+            soundController.Play(myWeaponStats.blockSound);
             myWeaponStats.weaponHealth -= amount;
             if (!myWeaponStats.isDefaultItem) {
                 if (myWeaponStats.weaponHealth <= 0) {
-                    //Destroy(modelHand.transform.GetChild(myWeapon.transform.GetSiblingIndex()-1).gameObject);
+                    soundController.Play(myWeaponStats.breakSound);
                     Destroy(myWeapon);
                     selectedWeapon = 0;
                     SwitchWeapon(selectedWeapon);
@@ -341,6 +334,7 @@ namespace Player {
             }else {
                 if (myWeaponStats.weaponHealth <= 0) {
                     CameraShaker.Instance.ShakeOnce(amount*4, amount, 0.1f, 0.5f);
+                    soundController.Play(myWeaponStats.breakSound);
                     GameObject droppedBone =  Instantiate(boneWeapon, hand.transform.position, transform.rotation) as GameObject;
                     droppedBone.GetComponent<Holdable>().CreatingWeapon(transform);
                     armMeshRenderer.material = injuredArmMaterial;
@@ -409,11 +403,13 @@ namespace Player {
             }
         }
 
-        public void AttackDamage(float range, float damage, float knockback) {
+        public void AttackDamage(float range, float damage, float knockback, string attackSound, string hurtSound) {
             Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            soundController.Play(attackSound);
             if (Physics.Raycast(ray, out hit, range)) {
                 if (hit.collider.tag == "Enemy") {
+                    soundController.Play(hurtSound);
                     enemy = hit.collider.gameObject;
                     eMovement = enemy.GetComponent<Enemies.Movement>();
                     eRb = enemy.GetComponent<Rigidbody>();

@@ -13,6 +13,7 @@ public class SceneController : MonoBehaviour {
    [SerializeField] public TextMeshProUGUI savingText;
 
    [Header("Singletons")]
+   public SoundController soundController;
    public Player.PlayerMovement player;
    public GameObject playerObject;
 
@@ -36,6 +37,7 @@ public class SceneController : MonoBehaviour {
         }
 
         // Cache references to all desired variables
+        soundController = FindObjectOfType<SoundController>();
         player = FindObjectOfType<Player.PlayerMovement>();
         playerObject = GameObject.Find("Player");
     }

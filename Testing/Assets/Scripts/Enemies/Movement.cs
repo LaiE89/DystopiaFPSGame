@@ -12,6 +12,7 @@ namespace Enemies {
         [SerializeField] LayerMask whatIsGround, whatIsPlayer;
         [SerializeField] float height;
         [HideInInspector] public GameObject thePlayer;
+        [HideInInspector] public SoundController soundController;
         LayerMask enemyLayers;
         float groundDistance = 0.2f;
         bool isGrounded;
@@ -56,6 +57,7 @@ namespace Enemies {
         }
 
         private void Start() {
+            soundController = SceneController.Instance.soundController;
             thePlayer = SceneController.Instance.playerObject;
             animator = GetComponent<Animator>();
             animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
@@ -199,6 +201,7 @@ namespace Enemies {
                                 print("Blocked!");
                                 CameraShaker.Instance.ShakeOnce(eWeaponStats.attackDamage/2, eWeaponStats.attackDamage, 0.1f, 0.5f);
                                 if (pMovement.isParrying) {
+                                    soundController.Play("Parry");
                                     pMovement.StartParrying();
                                     TakeDamage(1f);
                                     if (Hand.transform.childCount > 1) {
