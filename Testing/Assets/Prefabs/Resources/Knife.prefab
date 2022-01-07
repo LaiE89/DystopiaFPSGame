@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6440084402712432932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1211974971014852669}
+  - component: {fileID: 4561213485818672579}
+  - component: {fileID: 7756521747004693684}
+  - component: {fileID: 8040703314720630243}
+  m_Layer: 0
+  m_Name: Knife
+  m_TagString: Item
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1211974971014852669
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6440084402712432932}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4011518386806937898}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4561213485818672579
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6440084402712432932}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.05, y: 0.05, z: 0.4}
+  m_Center: {x: 0, y: 0, z: -0.14}
+--- !u!114 &7756521747004693684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6440084402712432932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b16a1a12fa90f941aa24c458d5d2fc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDefaultItem: 0
+  attackDamage: 2
+  attackRange: 2
+  attackCooldown: 1
+  staminaCost: 10
+  attackKnockback: 5
+  maxWeaponHealth: 3
+  weaponHealth: 3
+  attackAnimation: {fileID: -6741758067321407611, guid: b076720bba6593045915887e8637b497, type: 3}
+  blockAnimation: {fileID: 0}
+  fpAttackAnimation: {fileID: -6741758067321407611, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+  fpBlockAnimation: {fileID: 3281725632038056797, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+--- !u!114 &8040703314720630243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6440084402712432932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1666855f1572533488ed9ba0536897b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Knife
+--- !u!1001 &3468193674170351297
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1211974971014852669}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.000141
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.000179
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9834073
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.18141171
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 20.904
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+      propertyPath: m_Name
+      value: knife
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+--- !u!4 &4011518386806937898 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 424ddb0d7b9c37540a9b792fab03486e, type: 3}
+  m_PrefabInstance: {fileID: 3468193674170351297}
+  m_PrefabAsset: {fileID: 0}

@@ -1,0 +1,326 @@
+Using pre-set license
+Built from '2020.3/staging' branch; Version is '2020.3.13f1 (71691879b7f5) revision 7432472'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Home; OS build 19042.1415; Version 2009; 64bit' Language: 'en' Physical Memory: 15742 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2020.3.13f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/12893/Desktop/GitHub/DystopiaFPSGame/Testing
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+59763
+Successfully changed project path to: C:/Users/12893/Desktop/GitHub/DystopiaFPSGame/Testing
+C:/Users/12893/Desktop/GitHub/DystopiaFPSGame/Testing
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 37.63 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.13f1 (71691879b7f5)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.13f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/12893/Desktop/GitHub/DystopiaFPSGame/Testing/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: AMD Radeon(TM) Graphics (ID=0x1636)
+    Vendor:   
+    VRAM:     7871 MB
+    Driver:   27.20.21002.112
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.13f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.13f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.13f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56196
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.13f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001672 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 36.38 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.939 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.003435 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.47 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.931 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 0.47 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1812 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 124.4 MB.
+System memory in use after: 124.4 MB.
+
+Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 2298.
+Total: 2.899500 ms (FindLiveObjects: 0.299700 ms CreateObjectMapping: 0.083600 ms MarkObjects: 2.253000 ms  DeleteObjects: 0.261200 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/Tom's Terrain Tools/Unity Terrain Assets/Trees Ambient-Occlusion/Materials
+  artifactKey: Guid(8333afbb3c36c70478febc66405353cd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Unity Terrain Assets/Trees Ambient-Occlusion/Materials using Guid(8333afbb3c36c70478febc66405353cd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6128e18a71e78bd59c02fd2731eb83ba') in 0.011682 seconds 
+  Import took 0.015480 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 16.338739 seconds.
+  path: Assets/Tom's Terrain Tools/Unity Terrain Assets/Rocks/Materials
+  artifactKey: Guid(d422824fedef1e44ca84ed3f59e6a10a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Unity Terrain Assets/Rocks/Materials using Guid(d422824fedef1e44ca84ed3f59e6a10a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0d763ec63e30dafccc229477e58d9ece') in 0.004274 seconds 
+  Import took 0.007964 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 21.697097 seconds.
+  path: Assets/Tom's Terrain Tools/Unity Terrain Assets/Bushes/Materials
+  artifactKey: Guid(487c7d53058486b48a2fe9936c432e91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Unity Terrain Assets/Bushes/Materials using Guid(487c7d53058486b48a2fe9936c432e91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a50ccebbf1e0e687e5bb542e9bb1539b') in 0.004122 seconds 
+  Import took 0.007421 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 19.280948 seconds.
+  path: Assets/Tom's Terrain Tools/Scripts/ForceGrassDistanceInEditor.cs
+  artifactKey: Guid(3004f4094e984eb46b847e9ba18ed492) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Scripts/ForceGrassDistanceInEditor.cs using Guid(3004f4094e984eb46b847e9ba18ed492) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4589c62d698ad4f8ca7c9c2b2a02e276') in 0.057018 seconds 
+  Import took 0.059941 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.589201 seconds.
+  path: Assets/Tom's Terrain Tools/Scripts/KeepOnSurface.cs
+  artifactKey: Guid(9a355555949fb5a42a2d2b6b5c6cf0c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Scripts/KeepOnSurface.cs using Guid(9a355555949fb5a42a2d2b6b5c6cf0c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a4fec0f158ebe113a601a010e96b0a04') in 0.009404 seconds 
+  Import took 0.012367 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.502049 seconds.
+  path: Assets/Tom's Terrain Tools/Scripts/SpawnInArea.cs
+  artifactKey: Guid(3f50c05f1abb647bba0d0dae5369cdbd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Scripts/SpawnInArea.cs using Guid(3f50c05f1abb647bba0d0dae5369cdbd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '814a50f9e4fec747a36a6908ae143dc6') in 0.008488 seconds 
+  Import took 0.011684 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.716064 seconds.
+  path: Assets/Tom's Terrain Tools/Scripts/TreeExplosion.cs
+  artifactKey: Guid(477348cb63ecc4983abccaa515285fb0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Scripts/TreeExplosion.cs using Guid(477348cb63ecc4983abccaa515285fb0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b84403f600015a127fdade85a88573d') in 0.009155 seconds 
+  Import took 0.013031 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.065741 seconds.
+  path: Assets/Tom's Terrain Tools/Scripts/TerrainQualitySettings.cs
+  artifactKey: Guid(a09db656f44b3461dae2141b163c5c13) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Scripts/TerrainQualitySettings.cs using Guid(a09db656f44b3461dae2141b163c5c13) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '833e8f6af06bc7d8e7b240ad2f041287') in 0.009051 seconds 
+  Import took 0.012904 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.699107 seconds.
+  path: Assets/Tom's Terrain Tools/Scripts/PlaceOnSurfaceAtStart.cs
+  artifactKey: Guid(e07443750b3a27a4fbfe28d649bd73ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Scripts/PlaceOnSurfaceAtStart.cs using Guid(e07443750b3a27a4fbfe28d649bd73ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a00aead721c7c49266f6de61316b8ed5') in 0.008282 seconds 
+  Import took 0.011979 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.003213 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.47 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.025 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.52 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1759 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 120.1 MB.
+System memory in use after: 120.1 MB.
+
+Unloading 20 unused Assets to reduce memory usage. Loaded Objects now: 2295.
+Total: 2.505700 ms (FindLiveObjects: 0.236300 ms CreateObjectMapping: 0.042200 ms MarkObjects: 2.007600 ms  DeleteObjects: 0.218100 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 45.505758 seconds.
+  path: Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader
+  artifactKey: Guid(48bb5f55d8670e349b6e614913f9d910) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader using Guid(48bb5f55d8670e349b6e614913f9d910) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a6e773292f765700e36128470ac2b09b') in 0.020332 seconds 
+  Import took 0.032876 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021652 seconds.
+  path: Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader
+  artifactKey: Guid(48bb5f55d8670e349b6e614913f9d910) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader using Guid(48bb5f55d8670e349b6e614913f9d910) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a6e773292f765700e36128470ac2b09b') in 0.003250 seconds 
+  Import took 0.006152 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.790331 seconds.
+  path: Assets/TextMesh Pro/Shaders/TMP_Bitmap-Mobile.shader
+  artifactKey: Guid(1e3b057af24249748ff873be7fafee47) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap-Mobile.shader using Guid(1e3b057af24249748ff873be7fafee47) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '344ef1613159f6124c746b2a060c4bfd') in 0.007672 seconds 
+  Import took 0.011373 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.986037 seconds.
+  path: Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader
+  artifactKey: Guid(128e987d567d4e2c824d754223b3f3b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader using Guid(128e987d567d4e2c824d754223b3f3b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9f225947b6ad066d1aba1b604d4804f2') in 0.007288 seconds 
+  Import took 0.010119 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.961507 seconds.
+  path: Assets/Standard Assets/Environment
+  artifactKey: Guid(6ca8c4e270f964e0da9f731d7d34b123) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment using Guid(6ca8c4e270f964e0da9f731d7d34b123) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '68590199e877190c58d5b39b491140f8') in 0.022112 seconds 
+  Import took 0.029827 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.609003 seconds.
+  path: Assets/Standard Assets/Environment/TerrainAssets
+  artifactKey: Guid(7e6f84bf81c8d4de280f1133cff7e601) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/TerrainAssets using Guid(7e6f84bf81c8d4de280f1133cff7e601) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9fb13f86e3e09734e83d17d8479d1d77') in 0.008304 seconds 
+  Import took 0.011917 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 33.274872 seconds.
+  path: Assets/Tom's Terrain Tools/Example AutoMagic/Terrain-297665599-heightmap.raw
+  artifactKey: Guid(95b4379e86a8f46279b7be8523f0e254) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Example AutoMagic/Terrain-297665599-heightmap.raw using Guid(95b4379e86a8f46279b7be8523f0e254) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6e27056fa38151f32371d0bd3ade208f') in 0.045944 seconds 
+  Import took 0.049363 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.704186 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Broadleaf
+  artifactKey: Guid(98f48093c79e1de4aad538371abbe607) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Broadleaf using Guid(98f48093c79e1de4aad538371abbe607) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '64413698155409243a75bf3c99d87abc') in 0.008929 seconds 
+  Import took 0.014218 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.452099 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials
+  artifactKey: Guid(5d2a4cf4598e80f48a3b902218fb54d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials using Guid(5d2a4cf4598e80f48a3b902218fb54d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '27e6c6d43bacc395d2ba9336b25cc327') in 0.009106 seconds 
+  Import took 0.012097 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.701357 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Desktop Materials
+  artifactKey: Guid(76d1c0d83720ea445ba84ce7d478511a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Desktop Materials using Guid(76d1c0d83720ea445ba84ce7d478511a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '31f6c8340d7622fee4a9e128fbc8e795') in 0.008622 seconds 
+  Import took 0.012588 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.438556 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Palm
+  artifactKey: Guid(fccca0d181c493e46828f38365641574) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Palm using Guid(fccca0d181c493e46828f38365641574) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8c9bf453910594ef03ab98f039a4dd03') in 0.008717 seconds 
+  Import took 0.013886 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.965311 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Conifer
+  artifactKey: Guid(73ab447d8034be44f8321c730cc6247a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Conifer using Guid(73ab447d8034be44f8321c730cc6247a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1456c93554650225828c3b39b613fcd1') in 0.008374 seconds 
+  Import took 0.012291 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.999602 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials/LOD2
+  artifactKey: Guid(2c0b1e62b5409f6468554bb2f297badc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials/LOD2 using Guid(2c0b1e62b5409f6468554bb2f297badc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd7a8f0deb914f495cf6277dc3d024a07') in 0.009487 seconds 
+  Import took 0.013383 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.497974 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials/LOD1
+  artifactKey: Guid(f43b0d85aede78949b2f8fa931a218a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials/LOD1 using Guid(f43b0d85aede78949b2f8fa931a218a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa27a93c63a7cfdf4b433f67096f7241') in 0.008385 seconds 
+  Import took 0.011799 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.699006 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials/LOD0
+  artifactKey: Guid(f420aff58dc8992489809a07ff0b3889) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree/Broadleaf/Broadleaf_Mobile Materials/LOD0 using Guid(f420aff58dc8992489809a07ff0b3889) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'be3be08a12c4275947f45a9adc40d614') in 0.009448 seconds 
+  Import took 0.012825 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 37.577925 seconds.
+  path: Assets/Standard Assets/Environment/SpeedTree
+  artifactKey: Guid(c04a867c41990cb44b46672730a8e63f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Standard Assets/Environment/SpeedTree using Guid(c04a867c41990cb44b46672730a8e63f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2b7ef85f640ac1a11786699485a2dc1') in 0.027320 seconds 
+  Import took 0.031111 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 104.745760 seconds.
+  path: Assets/Models/Materials/Muzzle Flash.mat
+  artifactKey: Guid(1aa649f2669d9b741b47c0a7113e26b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Materials/Muzzle Flash.mat using Guid(1aa649f2669d9b741b47c0a7113e26b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c653f9d92f35b1f4793d312af9b38265') in 0.084072 seconds 
+  Import took 0.087172 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 68.965094 seconds.
+  path: Assets/Tom's Terrain Tools/Unity Terrain Assets/Textures/SurfaceTextures/_TerrainAutoUpgrade
+  artifactKey: Guid(37f4c7c3d46011f46a74df485a47f2fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tom's Terrain Tools/Unity Terrain Assets/Textures/SurfaceTextures/_TerrainAutoUpgrade using Guid(37f4c7c3d46011f46a74df485a47f2fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d2c992f98eb50ff577d1b4a8a095c19') in 0.009280 seconds 
+  Import took 0.012971 seconds .
+
