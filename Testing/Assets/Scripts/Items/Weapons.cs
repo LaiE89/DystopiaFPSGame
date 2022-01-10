@@ -17,10 +17,10 @@ public class Weapons : MonoBehaviour {
     public AnimationClip blockAnimation;
     public AnimationClip fpAttackAnimation;
     public AnimationClip fpBlockAnimation;
-    public string attackSound;
-    public string hurtSound;
-    public string blockSound;
-    public string breakSound;
+    public AudioSource attackSound;
+    public AudioSource hurtSound;
+    public AudioSource blockSound;
+    public AudioSource breakSound;
 
     [Header("Gun Parameters")]
     public float shootDamage;
@@ -32,7 +32,7 @@ public class Weapons : MonoBehaviour {
     public ParticleSystem muzzleFlash;
     public AnimationClip enemyShootAnimation;
     public AnimationClip fpShootAnimation;
-    public string shootSound;
-    public string shootHurtSound;
+    public AudioSource shootSound;
+    public AudioSource shootHurtSound;
 }
         

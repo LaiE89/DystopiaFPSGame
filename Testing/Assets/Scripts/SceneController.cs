@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,11 +17,13 @@ public class SceneController : MonoBehaviour {
    public SoundController soundController;
    public Player.PlayerMovement player;
    public GameObject playerObject;
+   public Enemies.Movement[] listOfEnemies;
 
    public static int sceneIndex;
    public static SceneController Instance { get; private set; } // static singleton
 
     void Awake() {
+        Array.Clear(listOfEnemies, 0, listOfEnemies.Length);
         // Scene begin stuff
         if (MainMenu.saving) {
             StartCoroutine(FadeOutSaving());
@@ -40,6 +43,10 @@ public class SceneController : MonoBehaviour {
         soundController = FindObjectOfType<SoundController>();
         player = FindObjectOfType<Player.PlayerMovement>();
         playerObject = GameObject.Find("Player");
+    }
+
+    void Start() {
+        listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
     }
 
     IEnumerator LoadAsyncronously (int sceneIndex) {

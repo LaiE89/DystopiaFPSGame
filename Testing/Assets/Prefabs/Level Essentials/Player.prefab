@@ -109,6 +109,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128
   groundCheck: {fileID: 4708515010587764783}
   isGrounded: 0
   moveSpeed: 0
@@ -117,7 +120,7 @@ MonoBehaviour:
   staminaSlider: {fileID: 0}
   maxPlayerStamina: 100
   timeBeforeStamina: 1
-  jumpForce: 5
+  jumpForce: 7
   bulletsTextBox: {fileID: 0}
   bloodParticles: {fileID: 0}
   attackCam: {fileID: 0}
@@ -136,6 +139,7 @@ MonoBehaviour:
   drugsTextBox: {fileID: 0}
   pickUpRange: 3
   interactTextBox: {fileID: 0}
+  soundController: {fileID: 0}
   sceneIndex: 0
 --- !u!1 &4708515010587764780
 GameObject:

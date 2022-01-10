@@ -29,6 +29,10 @@ public class MainMenu : MonoBehaviour {
         saving = false;
     }
 
+    private void Start() {
+        options.InitializeSettings();
+    }
+
     public void PlayGame() {
         DeleteFile();
         NewPlayer();

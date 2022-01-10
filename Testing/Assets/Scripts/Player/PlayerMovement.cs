@@ -30,6 +30,7 @@ namespace Player {
 
         [Header("Ground Detection")]
         [SerializeField] LayerMask groundMask;
+        [SerializeField] LayerMask enemyMask;
         [SerializeField] Transform groundCheck;
         [HideInInspector] public bool isGrounded;
         float groundDistance = 0.2f;
@@ -73,6 +74,7 @@ namespace Player {
         [HideInInspector] public bool isParrying;
         [HideInInspector] public bool isInjured;
         [HideInInspector] public Weapons myWeaponStats;
+        LayerMask playerLayers;
         SkinnedMeshRenderer armMeshRenderer;
         Weapons defaultWeaponStats;
         Animator weaponAnimator;
@@ -137,6 +139,8 @@ namespace Player {
             staminaSlider.maxValue = maxPlayerStamina;
             playerStamina = maxPlayerStamina;
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
+
+            playerLayers = groundMask | enemyMask;
 
             if (savedWeapon != null) {
                 savedWeapon.GetComponent<Interactable>().Interact(hand.transform);
@@ -322,11 +326,11 @@ namespace Player {
         }
 
         public void BlockingDamage(float amount) {
-            soundController.Play(myWeaponStats.blockSound);
+            myWeaponStats.blockSound.Play();
             myWeaponStats.weaponHealth -= amount;
             if (!myWeaponStats.isDefaultItem) {
                 if (myWeaponStats.weaponHealth <= 0) {
-                    soundController.Play(myWeaponStats.breakSound);
+                    myWeaponStats.breakSound.Play();
                     Destroy(myWeapon);
                     selectedWeapon = 0;
                     SwitchWeapon(selectedWeapon);
@@ -334,7 +338,7 @@ namespace Player {
             }else {
                 if (myWeaponStats.weaponHealth <= 0) {
                     CameraShaker.Instance.ShakeOnce(amount*4, amount, 0.1f, 0.5f);
-                    soundController.Play(myWeaponStats.breakSound);
+                    myWeaponStats.breakSound.Play();
                     GameObject droppedBone =  Instantiate(boneWeapon, hand.transform.position, transform.rotation) as GameObject;
                     droppedBone.GetComponent<Holdable>().CreatingWeapon(transform);
                     armMeshRenderer.material = injuredArmMaterial;
@@ -403,13 +407,13 @@ namespace Player {
             }
         }
 
-        public void AttackDamage(float range, float damage, float knockback, string attackSound, string hurtSound) {
+        public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
             Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            soundController.Play(attackSound);
-            if (Physics.Raycast(ray, out hit, range)) {
+            attackSound.Play();
+            if (Physics.Raycast(ray, out hit, range, playerLayers)) {
                 if (hit.collider.tag == "Enemy") {
-                    soundController.Play(hurtSound);
+                    hurtSound.Play();
                     enemy = hit.collider.gameObject;
                     eMovement = enemy.GetComponent<Enemies.Movement>();
                     eRb = enemy.GetComponent<Rigidbody>();
@@ -490,6 +494,15 @@ namespace Player {
                 weaponOverrideController["Attack"] = myWeaponStats.fpAttackAnimation;
             }
             weaponOverrideController["Block"] = myWeaponStats.fpBlockAnimation;
+        }
+
+        public void AlertEveryone() {
+            Enemies.Movement[] list = SceneController.Instance.listOfEnemies;
+            for (int i = 0; i < list.Length; i++) {
+                if (list[i] != null && list[i].agent.enabled) {
+                    list[i].agent.SetDestination(transform.position);
+                }
+            }
         }
 
         public void SavePlayer() {

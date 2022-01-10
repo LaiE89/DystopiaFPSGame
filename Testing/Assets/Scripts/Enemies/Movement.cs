@@ -7,16 +7,16 @@ namespace Enemies {
     public class Movement : MonoBehaviour {
         
         [SerializeField] Transform groundCheck;
-        [SerializeField] NavMeshAgent agent;
+        [SerializeField] public NavMeshAgent agent;
         [SerializeField] public Rigidbody rb;
         [SerializeField] LayerMask whatIsGround, whatIsPlayer;
         [SerializeField] float height;
         [HideInInspector] public GameObject thePlayer;
         [HideInInspector] public SoundController soundController;
+        [HideInInspector] public AnimatorOverrideController animatorOverrideController;
         LayerMask enemyLayers;
         float groundDistance = 0.2f;
         bool isGrounded;
-        AnimatorOverrideController animatorOverrideController;
         Animator animator;
         Player.Health pHealth;
         Player.PlayerMovement pMovement;
@@ -26,19 +26,24 @@ namespace Enemies {
         [SerializeField] float runningSpeed;
         [SerializeField] float walkingSpeed;
         [SerializeField] Vector3[] destinations;
+        bool isRunning;
+        bool isWalking;
         int destPoint = 0;
         bool targetLocked;
+        float angleToPlayer;
         float distanceToTarget;
         public bool canSeePlayer;
 
         [Header("Attacking")]
         [SerializeField] GameObject Hand;
         [SerializeField] float timeBetweenAttacks;
+        [SerializeField] float shootingAccuracyAngle;
+        [SerializeField] float meleeAccuracyAngle;
+        [HideInInspector] public Weapons eWeaponStats;
+        [HideInInspector] public bool isRotating;
         int selectedWeapon;
         GameObject eWeapon;
-        Weapons eWeaponStats;
         bool alreadyAttacked;
-        bool isRotating;
         Vector3 playerPos;
 
         [Header("States")]
@@ -52,11 +57,16 @@ namespace Enemies {
         public float enemyHealth;
         bool isDying = false;
 
+        [Header("Sounds")]
+        [SerializeField] public AudioSource walkSound;
+        [SerializeField] public AudioSource runSound;
+
         private void Awake() {
             agent = GetComponent<NavMeshAgent>();
         }
 
         private void Start() {
+            isWalking = false;
             soundController = SceneController.Instance.soundController;
             thePlayer = SceneController.Instance.playerObject;
             animator = GetComponent<Animator>();
@@ -68,7 +78,6 @@ namespace Enemies {
             pMovement = thePlayer.GetComponent<Player.PlayerMovement>();
             selectedWeapon = 0;
             SwitchWeapon(selectedWeapon);
-
             StartCoroutine(FOVRoutine());
         }
         
@@ -81,8 +90,14 @@ namespace Enemies {
                     if (!alreadyAttacked) {
                         agent.SetDestination(thePlayer.transform.position);
                     }
-                    if (distanceToTarget <= eWeaponStats.attackRange - 0.5f) { 
-                        AttackPlayer();
+                    if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
+                        if (distanceToTarget <= eWeaponStats.shootRange - 0.5f && angleToPlayer < shootingAccuracyAngle) { 
+                            AttackPlayer();
+                        }
+                    }else {
+                        if (distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
+                            AttackPlayer();
+                        }
                     }
                 }else {
                     Walking();
@@ -107,7 +122,8 @@ namespace Enemies {
             if (rangeChecks.Length != 0) {
                 Transform target = rangeChecks[0].transform;
                 Vector3 directionToTarget = (target.position - transform.position).normalized;
-                if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2) {
+                angleToPlayer = Vector3.Angle(transform.forward, directionToTarget);
+                if (angleToPlayer < angle / 2) {
                     distanceToTarget = Vector3.Distance(transform.position, target.position);
                     if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z), directionToTarget, distanceToTarget, whatIsGround)){
                         canSeePlayer = true;
@@ -137,58 +153,72 @@ namespace Enemies {
             destPoint = (destPoint + 1) % destinations.Length;
         }
 
-        public void GoToPlayer() {
-            agent.SetDestination(thePlayer.transform.position);
-        }
-
         private void Running() {
-            animator.SetBool("isRunning", true);
-            agent.speed = runningSpeed;
+            if (!isRunning) {
+                animator.SetBool("isRunning", true);
+                agent.speed = runningSpeed;
+                isWalking = false;
+                isRunning = true;
+            }
         }
 
         private void Walking() {
-            animator.SetBool("isRunning", false);
-            agent.speed = walkingSpeed;
+            if (!isWalking) {
+                animator.SetBool("isRunning", false);
+                agent.speed = walkingSpeed;
+                isRunning = false;
+                isWalking = true;
+            }
         }
         
 
 // Combat Methods
+
         private void AttackPlayer() {
             if (isRotating) {
                 Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
-
-                /*playerPos = new Vector3(thePlayer.transform.position.x, transform.position.y, thePlayer.transform.position.z);
-                var playerRotation = Quaternion.LookRotation(playerPos - transform.position, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, playerRotation, 10 * Time.deltaTime);
-                */
             }
+
             if (!alreadyAttacked) {
                 // Attack code here
                 agent.SetDestination(transform.position);
-                animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.attackCooldown);
                 animator.SetTrigger("isAttacking");
                 isRotating = false;
                 alreadyAttacked = true;
-                Invoke(nameof(ResetAttack), eWeaponStats.attackCooldown + timeBetweenAttacks);
+                if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
+                    print("Enemy Shot gun: bullets = " + eWeaponStats.bullets);
+                    eWeaponStats.bullets -= 1;
+                    animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.shootCooldown);
+                    //StartCoroutine(ResetAttack2(eWeaponStats.shootCooldown + timeBetweenAttacks));
+                    Invoke(nameof(ResetAttack), eWeaponStats.shootCooldown + timeBetweenAttacks);
+                }else {
+                    animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.attackCooldown);
+                    //StartCoroutine(ResetAttack2(eWeaponStats.shootCooldown + timeBetweenAttacks));
+                    Invoke(nameof(ResetAttack), eWeaponStats.attackCooldown + timeBetweenAttacks);
+                }
             }
+        }
+
+        private IEnumerator ResetAttack2(float time) {
+            yield return new WaitForSeconds(time);
+            alreadyAttacked = false;
         }
 
         private void ResetAttack() {
             alreadyAttacked = false;
         }
 
-        public void StartRotation() {
-            isRotating = true;
-        }
-
-        public void PlayerDamage() {
+        public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
             RaycastHit hit;
-            Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
+            //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
             //if (Physics.Raycast(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward), out hit, eWeaponStats.attackRange)) {
-            if (Physics.SphereCast(transform.position + new Vector3(0, height - 0.5f, 0), 0.3f, transform.TransformDirection(Vector3.forward), out hit, eWeaponStats.attackRange, enemyLayers)) {
+            attackSound.Play();
+            if (Physics.SphereCast(transform.position + new Vector3(0, height - 0.5f, 0), 0.3f, transform.TransformDirection(Vector3.forward), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
+                    AlertOthers();
+                    hurtSound.Play();
                     if (pMovement.isBlocking) {
                         var forward = transform.TransformDirection(Vector3.forward);
                         var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
@@ -196,10 +226,10 @@ namespace Enemies {
 
                         if (dotProduct < -0.9) {
                             if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.isInjured) {
-                                pHealth.TakeDamage(eWeaponStats.attackDamage);
+                                pHealth.TakeDamage(damage);
                             }else {
                                 print("Blocked!");
-                                CameraShaker.Instance.ShakeOnce(eWeaponStats.attackDamage/2, eWeaponStats.attackDamage, 0.1f, 0.5f);
+                                CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
                                 if (pMovement.isParrying) {
                                     soundController.Play("Parry");
                                     pMovement.StartParrying();
@@ -210,15 +240,15 @@ namespace Enemies {
                                         SwitchWeapon(selectedWeapon);
                                     }
                                 }else {
-                                    pMovement.BlockingDamage(eWeaponStats.attackDamage);
+                                    pMovement.BlockingDamage(damage);
                                 }
                             }
                         }else {
                             print("Failed Block!");
-                            pHealth.TakeDamage(eWeaponStats.attackDamage);
+                            pHealth.TakeDamage(damage);
                         }
                     }else {
-                        pHealth.TakeDamage(eWeaponStats.attackDamage);
+                        pHealth.TakeDamage(damage);
                     }
                 }
             }else {
@@ -263,10 +293,6 @@ namespace Enemies {
             print(gameObject.name + " took some damage. Current Health: " + enemyHealth);
         }
 
-        public void DestroyEnemy() {
-            Destroy(gameObject);
-        }
-
         private void SwitchWeapon(int selectedWeapon) {
             if (selectedWeapon > Hand.transform.childCount - 1) {
                 selectedWeapon = 0;
@@ -285,7 +311,23 @@ namespace Enemies {
                 i++; 
             }
             eWeaponStats = eWeapon.GetComponent<Weapons>();
-            animatorOverrideController["Punch"] = eWeaponStats.attackAnimation;
+
+            if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
+                animatorOverrideController["Punch"] = eWeaponStats.enemyShootAnimation;
+            }else {
+                animatorOverrideController["Punch"] = eWeaponStats.attackAnimation;
+            }
+        }
+
+        public void AlertOthers() {
+            Movement[] list = SceneController.Instance.listOfEnemies;
+            for (int i = 0; i < list.Length; i++) {
+                Debug.Log("listOfEnemies[i] : " + SceneController.Instance.listOfEnemies[i]);
+                Debug.Log("This: " + this);
+                if (list[i] != this && list[i] != null && list[i].agent.enabled) {
+                    list[i].agent.SetDestination(thePlayer.transform.position);
+                }
+            }
         }
 
         /*void OnDrawGizmos() {

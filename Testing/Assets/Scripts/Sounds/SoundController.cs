@@ -4,21 +4,28 @@ using UnityEngine.Audio;
 using UnityEngine;
 
 public class SoundController : MonoBehaviour {
-    public Sound[] sounds;
+    public Sound[] specialSounds;
+    public AudioSource[] allSounds;
 
     void Awake() {
-        foreach(Sound s in sounds) {
+        foreach(Sound s in specialSounds) {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
 
             s.source.volume = s.volume; 
             s.source.pitch = s.pitch;
+            s.source.spatialBlend = s.spatialBlend;
             s.source.loop = s.loop;
+            s.source.outputAudioMixerGroup = s.group;
         }
     }
 
+    void Start() {
+        allSounds = FindObjectsOfType<AudioSource>() as AudioSource[];
+    }
+
     public void Play(string name) {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
+        Sound s = Array.Find(specialSounds, sound => sound.name == name);
         if (s == null) {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
@@ -27,7 +34,7 @@ public class SoundController : MonoBehaviour {
     }
 
     public void Stop(string sound, float fadeTime) {
-        Sound s = Array.Find(sounds, item => item.name == sound);
+        Sound s = Array.Find(specialSounds, item => item.name == sound);
         if (s == null) {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
@@ -50,9 +57,9 @@ public class SoundController : MonoBehaviour {
     }
 
     public void StopAll() {
-        foreach (Sound s in sounds) {
-            if (!s.music) {
-                s.source.Stop();
+        foreach (AudioSource s in allSounds) {
+            if (s != null) {
+                s.Stop();
             }
         }
     }

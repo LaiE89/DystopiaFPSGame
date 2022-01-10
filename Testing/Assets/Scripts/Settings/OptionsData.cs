@@ -14,9 +14,18 @@ public class OptionsData {
     public float sens;
     [DataMember]
     public int qualityIndex;
+    [DataMember]
+    public float volume;
+    [DataMember]
+    public int resolutionIndex;
+    [DataMember]
+    public bool isFullscreen;
     
     public OptionsData () {
         sens = OptionsMenu.sens;
         qualityIndex = OptionsMenu.qualityIndex;
+        volume = OptionsMenu.volume;
+        resolutionIndex = OptionsMenu.resolutionIndex;
+        isFullscreen = OptionsMenu.isFullscreen;
     }
 }

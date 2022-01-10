@@ -43,109 +43,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18f7ae7600b986e47b7b9b0e3e19a2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds:
+  specialSounds:
   - name: PlayerRun
     clip: {fileID: 8300000, guid: 6da235e2573048249bcbe608f984ff48, type: 3}
-    volume: 0.2
+    volume: 0.5
     pitch: 0.5
+    spatialBlend: 0
     loop: 1
     music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
   - name: PlayerJump
     clip: {fileID: 8300000, guid: 65d9836027675574b8d070c5718f99c7, type: 3}
-    volume: 0.2
-    pitch: 0.5
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: Punch
-    clip: {fileID: 8300000, guid: 40cda279da2faea43ad6582184440a70, type: 3}
-    volume: 0.5
-    pitch: 0.3
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: PunchHurt
-    clip: {fileID: 8300000, guid: f066f3ebedc79dc429b921d5076e5491, type: 3}
-    volume: 0.5
-    pitch: 0.3
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: Stab
-    clip: {fileID: 8300000, guid: 2375dadc4293d3f4380b59887ce8416b, type: 3}
-    volume: 0.5
-    pitch: 0.7
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: StabHurt
-    clip: {fileID: 8300000, guid: d64e91cef03af304fa237225b23c5707, type: 3}
     volume: 0.5
     pitch: 0.5
+    spatialBlend: 0
     loop: 0
     music: 0
-    source: {fileID: 0}
-  - name: Swing
-    clip: {fileID: 8300000, guid: 13182107f288fdc47a11f9216c8f062b, type: 3}
-    volume: 0.25
-    pitch: 0.3
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: SwingHurt
-    clip: {fileID: 8300000, guid: 3701591439d62044eb2ec54a4a8ad4d5, type: 3}
-    volume: 0.5
-    pitch: 0.1
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: MetalBlock
-    clip: {fileID: 8300000, guid: 32b2a2d4cc24b644aa82dd931fddb620, type: 3}
-    volume: 0.5
-    pitch: 0.3
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: HandBlock
-    clip: {fileID: 8300000, guid: d64e91cef03af304fa237225b23c5707, type: 3}
-    volume: 0.5
-    pitch: 0.3
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: WoodBlock
-    clip: {fileID: 8300000, guid: 3701591439d62044eb2ec54a4a8ad4d5, type: 3}
-    volume: 0.5
-    pitch: 0.5
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: HandBreak
-    clip: {fileID: 8300000, guid: 5f81bdff582c2fc4488e1129bc037245, type: 3}
-    volume: 0.5
-    pitch: 0.5
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: ShootHurt
-    clip: {fileID: 8300000, guid: f066f3ebedc79dc429b921d5076e5491, type: 3}
-    volume: 0.5
-    pitch: 0.5
-    loop: 0
-    music: 0
-    source: {fileID: 0}
-  - name: Shoot
-    clip: {fileID: 8300000, guid: 4fbf6d504dd54844486a19fb1cab7a0a, type: 3}
-    volume: 0.5
-    pitch: 1
-    loop: 0
-    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
   - name: Parry
     clip: {fileID: 8300000, guid: a0546ce17a1ca974fb62b43f366021f1, type: 3}
     volume: 0.5
-    pitch: 1
+    pitch: 0.5
+    spatialBlend: 0
     loop: 0
     music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
+  allSounds: []
