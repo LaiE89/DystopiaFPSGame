@@ -3691,7 +3691,7 @@ MonoBehaviour:
   loadingScreen: {fileID: 1517354757}
   slider: {fileID: 1193368968}
   progressText: {fileID: 1569442236}
-  walkSpeed: 2.5
+  walkSpeed: 2
   sprintSpeed: 4
   jumpForce: 7
   playerDrugs: 1

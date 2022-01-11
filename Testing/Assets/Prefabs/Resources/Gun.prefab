@@ -99,7 +99,7 @@ MonoBehaviour:
   shootRange: 15
   shootCooldown: 0.5
   shootKnockback: 1
-  maxBullets: 100
+  maxBullets: 5
   bullets: 5
   muzzleFlash: {fileID: 4945823519645007402}
   enemyShootAnimation: {fileID: -3704289112126983070, guid: b076720bba6593045915887e8637b497, type: 3}

@@ -38,12 +38,14 @@ namespace Enemies {
         [SerializeField] GameObject Hand;
         [SerializeField] float timeBetweenAttacks;
         [SerializeField] float shootingAccuracyAngle;
-        [SerializeField] float meleeAccuracyAngle;
+        [SerializeField] float meleeAccuracyAngle = 180; // or else the enemy might circle the player
+        [SerializeField] float rotationDegPerSec;
+        [SerializeField] float alertRadius;
         [HideInInspector] public Weapons eWeaponStats;
         [HideInInspector] public bool isRotating;
+        [HideInInspector] public bool alreadyAttacked;
         int selectedWeapon;
         GameObject eWeapon;
-        bool alreadyAttacked;
         Vector3 playerPos;
 
         [Header("States")]
@@ -91,17 +93,17 @@ namespace Enemies {
                         agent.SetDestination(thePlayer.transform.position);
                     }
                     if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                        if (distanceToTarget <= eWeaponStats.shootRange - 0.5f && angleToPlayer < shootingAccuracyAngle) { 
+                        if (canSeePlayer && distanceToTarget <= eWeaponStats.shootRange - 1f && angleToPlayer < shootingAccuracyAngle) { 
                             AttackPlayer();
                         }
                     }else {
-                        if (distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
+                        if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
                             AttackPlayer();
                         }
                     }
                 }else {
                     Walking();
-                    if (!agent.pathPending && agent.remainingDistance < 0.5f) {
+                    if (!agent.pathPending && agent.remainingDistance <= 1f) {
                         GoNextPoint();
                     }
                 }
@@ -157,6 +159,7 @@ namespace Enemies {
             if (!isRunning) {
                 animator.SetBool("isRunning", true);
                 agent.speed = runningSpeed;
+                agent.acceleration = runningSpeed + 5;
                 isWalking = false;
                 isRunning = true;
             }
@@ -166,6 +169,7 @@ namespace Enemies {
             if (!isWalking) {
                 animator.SetBool("isRunning", false);
                 agent.speed = walkingSpeed;
+                agent.acceleration = walkingSpeed + 5;
                 isRunning = false;
                 isWalking = true;
             }
@@ -178,7 +182,7 @@ namespace Enemies {
             if (isRotating) {
                 Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
             }
 
             if (!alreadyAttacked) {
@@ -188,22 +192,13 @@ namespace Enemies {
                 isRotating = false;
                 alreadyAttacked = true;
                 if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                    print("Enemy Shot gun: bullets = " + eWeaponStats.bullets);
-                    eWeaponStats.bullets -= 1;
                     animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.shootCooldown);
-                    //StartCoroutine(ResetAttack2(eWeaponStats.shootCooldown + timeBetweenAttacks));
                     Invoke(nameof(ResetAttack), eWeaponStats.shootCooldown + timeBetweenAttacks);
                 }else {
                     animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.attackCooldown);
-                    //StartCoroutine(ResetAttack2(eWeaponStats.shootCooldown + timeBetweenAttacks));
                     Invoke(nameof(ResetAttack), eWeaponStats.attackCooldown + timeBetweenAttacks);
                 }
             }
-        }
-
-        private IEnumerator ResetAttack2(float time) {
-            yield return new WaitForSeconds(time);
-            alreadyAttacked = false;
         }
 
         private void ResetAttack() {
@@ -217,7 +212,7 @@ namespace Enemies {
             attackSound.Play();
             if (Physics.SphereCast(transform.position + new Vector3(0, height - 0.5f, 0), 0.3f, transform.TransformDirection(Vector3.forward), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
-                    AlertOthers();
+                    SceneController.Instance.player.AlertRadius(alertRadius);
                     hurtSound.Play();
                     if (pMovement.isBlocking) {
                         var forward = transform.TransformDirection(Vector3.forward);
@@ -228,7 +223,6 @@ namespace Enemies {
                             if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.isInjured) {
                                 pHealth.TakeDamage(damage);
                             }else {
-                                print("Blocked!");
                                 CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
                                 if (pMovement.isParrying) {
                                     soundController.Play("Parry");
@@ -244,15 +238,16 @@ namespace Enemies {
                                 }
                             }
                         }else {
-                            print("Failed Block!");
                             pHealth.TakeDamage(damage);
                         }
                     }else {
                         pHealth.TakeDamage(damage);
                     }
+                }else {
+                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ground.Play();
+                    Destroy(ground.gameObject, 0.5f);
                 }
-            }else {
-                print("Missed Attack.");
             }
         }
 
@@ -278,6 +273,7 @@ namespace Enemies {
         public void TakeDamage(float amount) {
             enemyHealth -= amount;
             alreadyAttacked = false;
+            isRotating = true;
             animator.ResetTrigger("isAttacking");
             animator.SetTrigger("isDamaged");
             if (enemyHealth <= 0) {
@@ -319,7 +315,7 @@ namespace Enemies {
             }
         }
 
-        public void AlertOthers() {
+        /*public void AlertOthers() {
             Movement[] list = SceneController.Instance.listOfEnemies;
             for (int i = 0; i < list.Length; i++) {
                 Debug.Log("listOfEnemies[i] : " + SceneController.Instance.listOfEnemies[i]);
@@ -328,7 +324,7 @@ namespace Enemies {
                     list[i].agent.SetDestination(thePlayer.transform.position);
                 }
             }
-        }
+        }*/
 
         /*void OnDrawGizmos() {
             Gizmos.color = Color.yellow;

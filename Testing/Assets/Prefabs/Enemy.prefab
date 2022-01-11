@@ -2175,7 +2175,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6827979740373383463}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8611542895925254413}
@@ -2193,7 +2193,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
   m_audioClip: {fileID: 8300000, guid: 9ea11a2d13d536e4e8441a0f5895995c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 0.5
   Loop: 0
   Mute: 0
@@ -2202,9 +2202,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -3101,7 +3101,7 @@ NavMeshAgent:
   m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 360
+  m_AngularSpeed: 1080
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -3145,14 +3145,17 @@ MonoBehaviour:
   Hand: {fileID: 8072950676114729681}
   timeBetweenAttacks: 0.2
   shootingAccuracyAngle: 30
-  meleeAccuracyAngle: 90
+  meleeAccuracyAngle: 180
+  rotationDegPerSec: 30
+  alertRadius: 10
   eWeaponStats: {fileID: 0}
   isRotating: 0
+  alreadyAttacked: 0
   isKnockedBack: 0
   sightRange: 10
   enemyHealth: 5
-  walkSound: {fileID: 3656513323643895576}
-  runSound: {fileID: 5438079613430625552}
+  walkSound: {fileID: 5438079613430625552}
+  runSound: {fileID: 3656513323643895576}
 --- !u!114 &8970192068022437333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3191,7 +3194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9063445373481331893}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8611542895925254413}
@@ -3217,10 +3220,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 3
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0

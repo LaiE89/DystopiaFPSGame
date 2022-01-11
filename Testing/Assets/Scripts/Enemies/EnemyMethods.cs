@@ -29,6 +29,7 @@ namespace Enemies {
         }
 
         public void ShootDamage() {
+            enemyMovement.eWeaponStats.bullets -= 1;
             enemyMovement.eWeaponStats.muzzleFlash.Play();
             enemyMovement.AttackDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
         }

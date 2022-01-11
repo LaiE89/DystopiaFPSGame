@@ -62,8 +62,7 @@ namespace Player {
 
         [Header("Attacking")]
         [SerializeField] public TextMeshProUGUI bulletsTextBox;
-        [SerializeField] ParticleSystem bloodParticles;
-        [SerializeField] Camera attackCam;
+        [SerializeField] public Camera attackCam;
         [SerializeField] GameObject hand;
         [SerializeField] GameObject firstPersonView;
         [SerializeField] Material injuredArmMaterial;
@@ -281,8 +280,6 @@ namespace Player {
             if (Input.GetMouseButton(0) && !isConsuming) {
                 if (myWeaponStats.isGun && myWeaponStats.bullets > 0) {
                     if (attackTimer >= myWeaponStats.shootCooldown) {
-                        myWeaponStats.bullets -= 1;
-                        bulletsTextBox.text = ("BULLETS x" + myWeaponStats.bullets);
                         isAttacking = true;
                         attackTimer = 0f;
                         weaponAnimator.SetFloat("AttackMultiplier", 1 / myWeaponStats.shootCooldown);
@@ -407,6 +404,17 @@ namespace Player {
             }
         }
 
+        public bool interactableInRange(GameObject interactableObj) {
+            Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, pickUpRange)) {
+                if (hit.transform.gameObject == interactableObj) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
             Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -417,13 +425,17 @@ namespace Player {
                     enemy = hit.collider.gameObject;
                     eMovement = enemy.GetComponent<Enemies.Movement>();
                     eRb = enemy.GetComponent<Rigidbody>();
-                    ParticleSystem blood = Instantiate(bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     blood.Play();
                     Destroy(blood.gameObject, 0.5f);
                     eMovement.TakeDamage(damage);
                     Vector3 eDirection = enemy.transform.position - transform.position;
                     eDirection.y = (float)(Math.Sin(-xRotation * Math.PI/180) * knockback);
                     eRb.AddForce(eDirection.normalized * knockback, ForceMode.Impulse);
+                }else {
+                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ground.Play();
+                    Destroy(ground.gameObject, 0.5f);
                 }
             }
         }
@@ -505,6 +517,17 @@ namespace Player {
             }
         }
 
+        public void AlertRadius(float radius) {
+            Collider[] list = Physics.OverlapSphere(transform.position, radius, enemyMask);
+
+            for (int i = 0; i < list.Length; i++) {
+                Enemies.Movement enemyScript = list[i].GetComponent<Enemies.Movement>();
+                if (enemyScript != null && enemyScript.agent.enabled && !enemyScript.alreadyAttacked) {
+                    enemyScript.agent.SetDestination(transform.position);
+                }
+            } 
+        }
+
         public void SavePlayer() {
             SaveSystem.SavePlayer(this);
         }
@@ -521,5 +544,11 @@ namespace Player {
                 savedWeapon = Instantiate(cloneWeapon, this.transform.position, transform.rotation) as GameObject; 
             }
         }
+
+        /*void OnDrawGizmos() {
+            Gizmos.color = Color.yellow;
+            //Gizmos.DrawWireSphere(transform.position, 10f);
+            Gizmos.DrawRay(attackCam.ScreenPointToRay(Input.mousePosition));
+        }*/
     }
 }

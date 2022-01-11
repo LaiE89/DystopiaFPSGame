@@ -22,6 +22,8 @@ namespace Player {
 
         public void ShootDamage() {
             PlayerMovement.AlertEveryone();
+            PlayerMovement.myWeaponStats.bullets -= 1;
+            PlayerMovement.bulletsTextBox.text = ("BULLETS x" + PlayerMovement.myWeaponStats.bullets);
             PlayerMovement.myWeaponStats.muzzleFlash.Play();
             PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound); 
         }

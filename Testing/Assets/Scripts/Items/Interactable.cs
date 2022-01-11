@@ -14,16 +14,20 @@ public abstract class Interactable : MonoBehaviour {
     }
 
     void OnMouseOver() {
-        if (transform.parent == null && !ingameMenus.pausedGame) {
-            //Player.PlayerMovement.interactBox.text = (itemName.ToUpper());
-            SceneController.Instance.player.interactTextBox.text = (itemName.ToUpper());
+        Player.PlayerMovement player = SceneController.Instance.player;
+        Transform playerTransform = SceneController.Instance.playerObject.transform;
+        print(Vector3.Distance(transform.position, playerTransform.position));
+        if (transform.parent == null && !ingameMenus.pausedGame && player.interactableInRange(this.gameObject)){
+            player.interactTextBox.text = (itemName.ToUpper());
+        }else {
+            player.interactTextBox.text = ("");
         }
     }
 
     void OnMouseExit() {
-       if (transform.parent == null && !ingameMenus.pausedGame) {
-            SceneController.Instance.player.interactTextBox.text = ("");
-            //Player.PlayerMovement.interactBox.text = ("");
+        Player.PlayerMovement player = SceneController.Instance.player;
+        if (transform.parent == null && !ingameMenus.pausedGame) {
+            player.interactTextBox.text = ("");
         }
     }
 }

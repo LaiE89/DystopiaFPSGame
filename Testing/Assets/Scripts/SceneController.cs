@@ -12,6 +12,8 @@ public class SceneController : MonoBehaviour {
    [SerializeField] public Slider slider;
    [SerializeField] public TextMeshProUGUI progressText;
    [SerializeField] public TextMeshProUGUI savingText;
+   [SerializeField] public ParticleSystem bloodParticles;
+   [SerializeField] public ParticleSystem groundParticles;
 
    [Header("Singletons")]
    public SoundController soundController;
