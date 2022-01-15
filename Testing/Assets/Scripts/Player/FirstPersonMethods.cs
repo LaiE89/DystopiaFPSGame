@@ -17,11 +17,12 @@ namespace Player {
         }
 
         public void AttackDamage() {
+            PlayerMovement.AlertRadius(PlayerMovement.myWeaponStats.alertRadius);
             PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound);   
         }
 
         public void ShootDamage() {
-            PlayerMovement.AlertEveryone();
+            PlayerMovement.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius);
             PlayerMovement.myWeaponStats.bullets -= 1;
             PlayerMovement.bulletsTextBox.text = ("BULLETS x" + PlayerMovement.myWeaponStats.bullets);
             PlayerMovement.myWeaponStats.muzzleFlash.Play();

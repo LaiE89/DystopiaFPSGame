@@ -16,7 +16,6 @@ public abstract class Interactable : MonoBehaviour {
     void OnMouseOver() {
         Player.PlayerMovement player = SceneController.Instance.player;
         Transform playerTransform = SceneController.Instance.playerObject.transform;
-        print(Vector3.Distance(transform.position, playerTransform.position));
         if (transform.parent == null && !ingameMenus.pausedGame && player.interactableInRange(this.gameObject)){
             player.interactTextBox.text = (itemName.ToUpper());
         }else {

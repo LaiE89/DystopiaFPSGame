@@ -56,6 +56,7 @@ MonoBehaviour:
   attackKnockback: 5
   maxWeaponHealth: 2
   weaponHealth: 0
+  alertRadius: 3
   attackAnimation: {fileID: 2353680664591731088, guid: b076720bba6593045915887e8637b497, type: 3}
   blockAnimation: {fileID: 0}
   fpAttackAnimation: {fileID: 6720303635017113406, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
@@ -70,6 +71,7 @@ MonoBehaviour:
   shootKnockback: 0
   maxBullets: 0
   bullets: 0
+  shootAlertRadius: 0
   muzzleFlash: {fileID: 0}
   enemyShootAnimation: {fileID: 0}
   fpShootAnimation: {fileID: 0}

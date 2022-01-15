@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -18,6 +19,7 @@ namespace Player {
         [SerializeField] KeyCode pickUpKey = KeyCode.Q;
 
         [Header("Mouse Movement")]
+        [SerializeField] float startingYRotation;
         [SerializeField] Transform mouseCam;
         [SerializeField] Transform orientation;
         private static float sensX;
@@ -55,7 +57,7 @@ namespace Player {
         [SerializeField] float maxPlayerStamina;
         [SerializeField] float timeBeforeStamina;
         float playerStamina;
-        bool isRegeningStamina;
+        Coroutine isRegenStamina;
 
         [Header("Jumping")]
         [SerializeField] public float jumpForce;
@@ -95,8 +97,8 @@ namespace Player {
         [Header("Others")]
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public int sceneIndex;
+        [HideInInspector] public Rigidbody rb;
         Health health;
-        Rigidbody rb;
         GameObject enemy;
         Enemies.Movement eMovement;
         Rigidbody eRb;
@@ -119,6 +121,7 @@ namespace Player {
         }
 
         private void Start() {
+            yRotation = startingYRotation;
             soundController = SceneController.Instance.soundController;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -137,6 +140,7 @@ namespace Player {
 
             staminaSlider.maxValue = maxPlayerStamina;
             playerStamina = maxPlayerStamina;
+            staminaSlider.value = playerStamina;
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
 
             playerLayers = groundMask | enemyMask;
@@ -156,7 +160,6 @@ namespace Player {
                 ControlDrag();
                 MyInput();
                 MouseInput();
-                CheckingStamina();
 
                 // Key Inputs
                 Movement();
@@ -189,29 +192,26 @@ namespace Player {
             sensY = newSens;
         }
 
-        private void CheckingStamina() {
-            staminaSlider.value = playerStamina;
-            if (!isAttacking && !isBlocking && !isRunning && !Input.GetKeyDown(jumpKey)) {
-                if (!isRegeningStamina) {
-                    InvokeRepeating("RegenStamina", timeBeforeStamina, 0.5f);
-                    isRegeningStamina = true;
-                }
-            }else {
-                CancelInvoke("RegenStamina");
-                isRegeningStamina = false;
-            }
-        }
-
-        private void UsingStamina(float amount) {
+        public void UsingStamina(float amount) {
             playerStamina -= amount;
+            if (playerStamina < 0) {
+                playerStamina = 0;
+            }
+            staminaSlider.value = playerStamina;
+            if (isRegenStamina != null) {
+                StopCoroutine(isRegenStamina);
+            }
+            isRegenStamina = StartCoroutine(RegenStamina());
         }
 
-        void RegenStamina() {
-            if (playerStamina < maxPlayerStamina) {
-                playerStamina += 5f;
-            }else if (playerStamina > maxPlayerStamina) {
-                playerStamina = maxPlayerStamina;
-            }   
+        private IEnumerator RegenStamina() {
+            yield return new WaitForSeconds(timeBeforeStamina);
+            while (playerStamina < maxPlayerStamina) {
+                playerStamina += maxPlayerStamina / 100;
+                staminaSlider.value = playerStamina;
+                yield return new WaitForSeconds(0.1f);
+            }
+            isRegenStamina = null;
         }
 
         private void MyInput() {
@@ -263,12 +263,12 @@ namespace Player {
         }
 
         private void Sprint() {
-            if (playerStamina >= 20f) {
+            if (playerStamina > 20f) {
                 if (!isRunning) {
                     soundController.Play("PlayerRun");
                     isRunning = true;
                 }
-                UsingStamina(0.2f);
+                UsingStamina(Time.deltaTime * 20f); // 0.2f
                 moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
             }else {
                 Walk();

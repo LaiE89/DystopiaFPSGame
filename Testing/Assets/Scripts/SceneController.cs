@@ -81,7 +81,7 @@ public class SceneController : MonoBehaviour {
             MainMenu.loading = true;
             StartCoroutine(LoadAsyncronously(sceneIndex));
         }
-        MainMenu.saving = true;
         player.SavePlayer();
+        MainMenu.saving = true;
     }
 }

@@ -45,7 +45,7 @@ public class MainMenu : MonoBehaviour {
         while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / .9f);
             slider.value = progress;
-            progressText.text = progress * 100f + "%";
+            progressText.text = Mathf.RoundToInt(progress * 100f) + "%";
             yield return null;
         }
     }

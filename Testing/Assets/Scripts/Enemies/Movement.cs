@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using EZCameraShake;
@@ -46,7 +47,6 @@ namespace Enemies {
         [HideInInspector] public bool alreadyAttacked;
         int selectedWeapon;
         GameObject eWeapon;
-        Vector3 playerPos;
 
         [Header("States")]
         [HideInInspector] bool playerInSightRange;
@@ -93,9 +93,20 @@ namespace Enemies {
                         agent.SetDestination(thePlayer.transform.position);
                     }
                     if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                        if (canSeePlayer && distanceToTarget <= eWeaponStats.shootRange - 1f && angleToPlayer < shootingAccuracyAngle) { 
-                            AttackPlayer();
+                        if (canSeePlayer && distanceToTarget <= eWeaponStats.shootRange - 1f) { 
+                            if (distanceToTarget <= eWeaponStats.attackRange) {
+                                if (angleToPlayer < meleeAccuracyAngle) {
+                                    AttackPlayer();
+                                }
+                            }else {
+                                if (angleToPlayer < shootingAccuracyAngle) {
+                                    AttackPlayer();
+                                }
+                            }
                         }
+                        /*if (canSeePlayer && distanceToTarget <= eWeaponStats.shootRange - 1f && angleToPlayer < shootingAccuracyAngle) { \
+                            AttackPlayer();
+                        */
                     }else {
                         if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
                             AttackPlayer();
@@ -212,8 +223,11 @@ namespace Enemies {
             attackSound.Play();
             if (Physics.SphereCast(transform.position + new Vector3(0, height - 0.5f, 0), 0.3f, transform.TransformDirection(Vector3.forward), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
-                    SceneController.Instance.player.AlertRadius(alertRadius);
+                    pMovement.AlertRadius(alertRadius);
                     hurtSound.Play();
+                    Vector3 direction = thePlayer.transform.position - transform.position;
+                    direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
+                    pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
                     if (pMovement.isBlocking) {
                         var forward = transform.TransformDirection(Vector3.forward);
                         var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
@@ -224,6 +238,7 @@ namespace Enemies {
                                 pHealth.TakeDamage(damage);
                             }else {
                                 CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
+                                pMovement.UsingStamina(damage * 10f);
                                 if (pMovement.isParrying) {
                                     soundController.Play("Parry");
                                     pMovement.StartParrying();

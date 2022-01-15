@@ -13,6 +13,7 @@ public class Weapons : MonoBehaviour {
     public float attackKnockback;
     public float maxWeaponHealth;
     public float weaponHealth;
+    public float alertRadius;
     public AnimationClip attackAnimation;
     public AnimationClip blockAnimation;
     public AnimationClip fpAttackAnimation;
@@ -29,6 +30,7 @@ public class Weapons : MonoBehaviour {
     public float shootKnockback;
     public int maxBullets;
     public int bullets;
+    public float shootAlertRadius;
     public ParticleSystem muzzleFlash;
     public AnimationClip enemyShootAnimation;
     public AnimationClip fpShootAnimation;
