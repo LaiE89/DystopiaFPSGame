@@ -6,23 +6,23 @@ using UnityEngine.UI;
 using TMPro;
 
 public class SceneController : MonoBehaviour {
-   // Declare any public variables that you want to be able 
-   // to access throughout your scene
-   [SerializeField] public GameObject loadingScreen; 
-   [SerializeField] public Slider slider;
-   [SerializeField] public TextMeshProUGUI progressText;
-   [SerializeField] public TextMeshProUGUI savingText;
-   [SerializeField] public ParticleSystem bloodParticles;
-   [SerializeField] public ParticleSystem groundParticles;
+    // Declare any public variables that you want to be able 
+    // to access throughout your scene
+    [SerializeField] public GameObject loadingScreen; 
+    [SerializeField] public Slider slider;
+    [SerializeField] public TextMeshProUGUI progressText;
+    [SerializeField] public TextMeshProUGUI savingText;
+    [SerializeField] public ParticleSystem bloodParticles;
+    [SerializeField] public ParticleSystem groundParticles;
 
-   [Header("Singletons")]
-   public SoundController soundController;
-   public Player.PlayerMovement player;
-   public GameObject playerObject;
-   public Enemies.Movement[] listOfEnemies;
+    [Header("Singletons")]
+    public SoundController soundController;
+    public Player.PlayerMovement player;
+    public GameObject playerObject;
+    public Enemies.Movement[] listOfEnemies;
 
-   public static int sceneIndex;
-   public static SceneController Instance { get; private set; } // static singleton
+    public static int sceneIndex;
+    public static SceneController Instance { get; private set; } // static singleton
 
     void Awake() {
         Array.Clear(listOfEnemies, 0, listOfEnemies.Length);

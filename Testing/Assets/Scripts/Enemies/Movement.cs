@@ -6,12 +6,15 @@ using EZCameraShake;
 
 namespace Enemies {
     public class Movement : MonoBehaviour {
-        
+        [Header("=====ESSENTIALS=====")]
         [SerializeField] Transform groundCheck;
         [SerializeField] public NavMeshAgent agent;
         [SerializeField] public Rigidbody rb;
         [SerializeField] LayerMask whatIsGround, whatIsPlayer;
         [SerializeField] float height;
+        [SerializeField] GameObject Hand;
+        [SerializeField] public AudioSource walkSound;
+        [SerializeField] public AudioSource runSound;
         [HideInInspector] public GameObject thePlayer;
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public AnimatorOverrideController animatorOverrideController;
@@ -22,53 +25,58 @@ namespace Enemies {
         Player.Health pHealth;
         Player.PlayerMovement pMovement;
 
-        [Header("Patroling")]
-        [Range(0,360)] public float angle;
+        [Header("=====STATS=====", order=0)]
+
+        [Header("Patroling Variables", order=1)]
+        [Range(0,360)] public float viewAngle;
         [SerializeField] float runningSpeed;
         [SerializeField] float walkingSpeed;
         [SerializeField] Vector3[] destinations;
+        [SerializeField] public float sightRange;
+        [HideInInspector] bool playerInSightRange;
+        [HideInInspector] bool playerInAttackRange;
+        [HideInInspector] bool isKnockedDown;
+        [HideInInspector] public bool isKnockedBack;
         bool isRunning;
         bool isWalking;
-        int destPoint = 0;
+        int destPoint;
         bool targetLocked;
         float angleToPlayer;
         float distanceToTarget;
         public bool canSeePlayer;
-
-        [Header("Attacking")]
-        [SerializeField] GameObject Hand;
+        
+        [Header("Attacking Variables")]
         [SerializeField] float timeBetweenAttacks;
         [SerializeField] float shootingAccuracyAngle;
-        [SerializeField] float meleeAccuracyAngle = 180; // or else the enemy might circle the player
+        [SerializeField] float meleeAccuracyAngle = 180;
         [SerializeField] float rotationDegPerSec;
         [SerializeField] float alertRadius;
+        [SerializeField] public float enemyHealth;
         [HideInInspector] public Weapons eWeaponStats;
         [HideInInspector] public bool isRotating;
         [HideInInspector] public bool alreadyAttacked;
         int selectedWeapon;
         GameObject eWeapon;
+        bool isDying;
+        bool isInitialRotation;
 
-        [Header("States")]
-        [HideInInspector] bool playerInSightRange;
-        [HideInInspector] bool playerInAttackRange;
-        [HideInInspector] bool isKnockedDown;
-        [HideInInspector] public bool isKnockedBack;
-        [SerializeField] public float sightRange;
-
-        [Header("Health")]
-        public float enemyHealth;
-        bool isDying = false;
-
-        [Header("Sounds")]
-        [SerializeField] public AudioSource walkSound;
-        [SerializeField] public AudioSource runSound;
+        [Header("States Variables")]
+        [SerializeField] bool isIdle;
+        [SerializeField] AnimationClip idleAnimation;
 
         private void Awake() {
             agent = GetComponent<NavMeshAgent>();
         }
 
         private void Start() {
+
+            // Initializing Variables
             isWalking = false;
+            isInitialRotation = false;
+            isDying = false;
+            targetLocked = false;
+            destPoint = 0;
+            agent.speed = walkingSpeed;
             soundController = SceneController.Instance.soundController;
             thePlayer = SceneController.Instance.playerObject;
             animator = GetComponent<Animator>();
@@ -80,6 +88,11 @@ namespace Enemies {
             pMovement = thePlayer.GetComponent<Player.PlayerMovement>();
             selectedWeapon = 0;
             SwitchWeapon(selectedWeapon);
+
+            if (isIdle) {
+                animatorOverrideController["Idle"] = idleAnimation;
+            }
+            GoNextPoint();
             StartCoroutine(FOVRoutine());
         }
         
@@ -92,30 +105,47 @@ namespace Enemies {
                     if (!alreadyAttacked) {
                         agent.SetDestination(thePlayer.transform.position);
                     }
-                    if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                        if (canSeePlayer && distanceToTarget <= eWeaponStats.shootRange - 1f) { 
-                            if (distanceToTarget <= eWeaponStats.attackRange) {
-                                if (angleToPlayer < meleeAccuracyAngle) {
-                                    AttackPlayer();
-                                }
-                            }else {
-                                if (angleToPlayer < shootingAccuracyAngle) {
-                                    AttackPlayer();
-                                }
+                    if (isInitialRotation) {
+                        if (canSeePlayer && eWeaponStats.isGun && eWeaponStats.bullets > 0) {
+                            if (distanceToTarget <= eWeaponStats.shootRange - 1f && angleToPlayer < shootingAccuracyAngle) {
+                                AttackPlayer();
+                                isInitialRotation = false;
+                            }
+                        }else {
+                            if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
+                                AttackPlayer();
+                                isInitialRotation = false;
                             }
                         }
-                        /*if (canSeePlayer && distanceToTarget <= eWeaponStats.shootRange - 1f && angleToPlayer < shootingAccuracyAngle) { \
-                            AttackPlayer();
-                        */
                     }else {
-                        if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
-                            AttackPlayer();
+                        if (isRotating) {
+                            Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
+                            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
+                        }
+                        if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
+                            if (distanceToTarget <= eWeaponStats.shootRange - 1f && canSeePlayer) {
+                                AttackPlayer(); 
+                            }
+                        }else {
+                            if (distanceToTarget <= eWeaponStats.attackRange - 0.5f) {
+                                AttackPlayer();
+                            }
                         }
                     }
                 }else {
-                    Walking();
-                    if (!agent.pathPending && agent.remainingDistance <= 1f) {
-                        GoNextPoint();
+                    if (!isIdle) {
+                        Walking();
+                        if (!agent.pathPending && agent.remainingDistance <= 1f) {
+                            GoNextPoint();
+                        }
+                    }else {
+                        if (!agent.pathPending && agent.remainingDistance <= 1f) {
+                            animator.SetBool("isWalking", false);
+                            animator.SetBool("isRunning", false);
+                        }else {
+                            Walking();
+                        }
                     }
                 }
             }
@@ -136,8 +166,8 @@ namespace Enemies {
                 Transform target = rangeChecks[0].transform;
                 Vector3 directionToTarget = (target.position - transform.position).normalized;
                 angleToPlayer = Vector3.Angle(transform.forward, directionToTarget);
-                if (angleToPlayer < angle / 2) {
-                    distanceToTarget = Vector3.Distance(transform.position, target.position);
+                distanceToTarget = Vector3.Distance(transform.position, target.position);
+                if (angleToPlayer < viewAngle / 2) {
                     if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z), directionToTarget, distanceToTarget, whatIsGround)){
                         canSeePlayer = true;
                     }else {
@@ -149,10 +179,11 @@ namespace Enemies {
             }else if (canSeePlayer) {
                 canSeePlayer = false;
             }
-            if (canSeePlayer) {
+            if (!targetLocked && canSeePlayer) {
                 targetLocked = true;
-            }else if (!canSeePlayer && rangeChecks.Length == 0){
+            }else if (targetLocked && !canSeePlayer && rangeChecks.Length == 0){
                 targetLocked = false;
+                isInitialRotation = false;
             }
         }
 
@@ -169,8 +200,9 @@ namespace Enemies {
         private void Running() {
             if (!isRunning) {
                 animator.SetBool("isRunning", true);
+                animator.SetBool("isWalking", false);
                 agent.speed = runningSpeed;
-                agent.acceleration = runningSpeed + 5;
+                //agent.acceleration = runningSpeed + 5;
                 isWalking = false;
                 isRunning = true;
             }
@@ -179,8 +211,9 @@ namespace Enemies {
         private void Walking() {
             if (!isWalking) {
                 animator.SetBool("isRunning", false);
+                animator.SetBool("isWalking", true);
                 agent.speed = walkingSpeed;
-                agent.acceleration = walkingSpeed + 5;
+                //agent.acceleration = walkingSpeed + 5;
                 isRunning = false;
                 isWalking = true;
             }
@@ -190,12 +223,6 @@ namespace Enemies {
 // Combat Methods
 
         private void AttackPlayer() {
-            if (isRotating) {
-                Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
-                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
-            }
-
             if (!alreadyAttacked) {
                 // Attack code here
                 agent.SetDestination(transform.position);
@@ -219,7 +246,6 @@ namespace Enemies {
         public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
             RaycastHit hit;
             //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
-            //if (Physics.Raycast(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward), out hit, eWeaponStats.attackRange)) {
             attackSound.Play();
             if (Physics.SphereCast(transform.position + new Vector3(0, height - 0.5f, 0), 0.3f, transform.TransformDirection(Vector3.forward), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
@@ -288,7 +314,11 @@ namespace Enemies {
         public void TakeDamage(float amount) {
             enemyHealth -= amount;
             alreadyAttacked = false;
-            isRotating = true;
+            if (!targetLocked) {
+                isInitialRotation = true;
+            }else {
+                isRotating = true;
+            }
             animator.ResetTrigger("isAttacking");
             animator.SetTrigger("isDamaged");
             if (enemyHealth <= 0) {

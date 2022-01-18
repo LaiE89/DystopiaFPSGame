@@ -20,6 +20,12 @@ public class DialogueController : MonoBehaviour {
         sentences = new Queue<string>();
         animator.SetBool("isOpen", true);
         nameText.text = dialogue.name;
+        if (dialogue.isCenter) {
+            dialogueText.alignment = TextAlignmentOptions.Center;
+            dialogueText.alignment = TextAlignmentOptions.Top;
+        }else {
+            dialogueText.alignment = TextAlignmentOptions.Left;
+        }
         sentences.Clear();
 
         foreach(string sentence in dialogue.sentences) {

@@ -235,12 +235,19 @@ namespace Player {
         private void Jump() {
             if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming) {
                 if (playerStamina >= 20f) {
+                    soundController.Stop("PlayerRun", 0.25f);
                     soundController.Play("PlayerJump");
                     UsingStamina(20f);
                     rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                     rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+                    StartCoroutine(JumpDelay());
                 }
             }
+        }
+
+        private IEnumerator JumpDelay() {
+            yield return new WaitForSeconds(0.1f);
+            isRunning = false;
         }
         
         private void Movement() {

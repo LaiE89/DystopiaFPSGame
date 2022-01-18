@@ -2183,30 +2183,32 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   height: 1.5
+  Hand: {fileID: 4877149250868410995}
+  walkSound: {fileID: 4877149250873810415}
+  runSound: {fileID: 4877149250733455983}
   thePlayer: {fileID: 0}
   soundController: {fileID: 0}
   animatorOverrideController: {fileID: 0}
-  angle: 120
-  runningSpeed: 4
+  viewAngle: 120
+  runningSpeed: 6
   walkingSpeed: 2.5
   destinations:
   - {x: 9, y: 4, z: 32.56}
   - {x: 41.878, y: 0, z: 27}
+  sightRange: 20
+  isKnockedBack: 0
   canSeePlayer: 0
-  Hand: {fileID: 4877149250868410995}
   timeBetweenAttacks: 0.3
   shootingAccuracyAngle: 30
   meleeAccuracyAngle: 180
   rotationDegPerSec: 30
   alertRadius: 10
+  enemyHealth: 5
   eWeaponStats: {fileID: 0}
   isRotating: 0
   alreadyAttacked: 0
-  isKnockedBack: 0
-  sightRange: 20
-  enemyHealth: 5
-  walkSound: {fileID: 4877149250873810415}
-  runSound: {fileID: 4877149250733455983}
+  isIdle: 0
+  idleAnimation: {fileID: 0}
 --- !u!195 &4877149249930582016
 NavMeshAgent:
   m_ObjectHideFlags: 0
