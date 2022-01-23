@@ -43,6 +43,7 @@ namespace Enemies {
         bool targetLocked;
         float angleToPlayer;
         float distanceToTarget;
+        Vector3 directionToTarget;
         public bool canSeePlayer;
         
         [Header("Attacking Variables")]
@@ -103,35 +104,42 @@ namespace Enemies {
                 if (targetLocked) {
                     Running();
                     if (!alreadyAttacked) {
+                        if (agent.isStopped) {
+                            agent.isStopped = false;
+                        }
                         agent.SetDestination(thePlayer.transform.position);
                     }
                     if (isInitialRotation) {
                         if (canSeePlayer && eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                            if (distanceToTarget <= eWeaponStats.shootRange - 1f && angleToPlayer < shootingAccuracyAngle) {
+                            if (distanceToTarget <= eWeaponStats.shootRange - 1f && distanceToTarget > eWeaponStats.attackRange && angleToPlayer < shootingAccuracyAngle) {
+                                AttackPlayer();
+                                isInitialRotation = false;
+                            }else if (distanceToTarget <= eWeaponStats.attackRange && angleToPlayer < meleeAccuracyAngle) {
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }
                         }else {
-                            if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange - 0.5f && angleToPlayer < meleeAccuracyAngle) { 
+                            if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange && angleToPlayer < meleeAccuracyAngle) { 
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }
                         }
                     }else {
-                        if (isRotating) {
-                            Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
-                            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
-                        }
                         if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
                             if (distanceToTarget <= eWeaponStats.shootRange - 1f && canSeePlayer) {
                                 AttackPlayer(); 
                             }
                         }else {
-                            if (distanceToTarget <= eWeaponStats.attackRange - 0.5f) {
+                            if (distanceToTarget <= eWeaponStats.attackRange) {
                                 AttackPlayer();
                             }
                         }
+                    }
+                    if (isRotating) {
+                        Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
+                        Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
+                        //new Vector3(direction.x, 0, direction.z)
+                        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
                     }
                 }else {
                     if (!isIdle) {
@@ -164,11 +172,14 @@ namespace Enemies {
             Collider[] rangeChecks = Physics.OverlapSphere(transform.position, sightRange, whatIsPlayer);
             if (rangeChecks.Length != 0) {
                 Transform target = rangeChecks[0].transform;
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
+                directionToTarget = (target.position - transform.position).normalized;
                 angleToPlayer = Vector3.Angle(transform.forward, directionToTarget);
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 if (angleToPlayer < viewAngle / 2) {
-                    if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z), directionToTarget, distanceToTarget, whatIsGround)){
+                    if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, 0.75f, 0), directionToTarget, distanceToTarget, whatIsGround)){
+                        if (!targetLocked) {
+                            isInitialRotation = true;
+                        }
                         canSeePlayer = true;
                     }else {
                         canSeePlayer = false;
@@ -225,9 +236,10 @@ namespace Enemies {
         private void AttackPlayer() {
             if (!alreadyAttacked) {
                 // Attack code here
-                agent.SetDestination(transform.position);
+                // agent.SetDestination(transform.position);
+                agent.velocity = Vector3.zero;
+                agent.isStopped = true;
                 animator.SetTrigger("isAttacking");
-                isRotating = false;
                 alreadyAttacked = true;
                 if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
                     animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.shootCooldown);
@@ -243,11 +255,66 @@ namespace Enemies {
             alreadyAttacked = false;
         }
 
-        public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
+        public void SpherecastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
             RaycastHit hit;
             //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
+            //new Vector3(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z)
+            //Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingPosition(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), Color.green, 3);
             attackSound.Play();
-            if (Physics.SphereCast(transform.position + new Vector3(0, height - 0.5f, 0), 0.3f, transform.TransformDirection(Vector3.forward), out hit, range, enemyLayers)) {
+            isRotating = false;
+            if (Physics.SphereCast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {
+                if (hit.collider.tag == "Player") {
+                    pMovement.AlertRadius(alertRadius);
+                    hurtSound.Play();
+                    Vector3 direction = thePlayer.transform.position - transform.position;
+                    direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
+                    pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
+                    if (pMovement.isBlocking) {
+                        var forward = transform.TransformDirection(Vector3.forward);
+                        var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
+                        var dotProduct = Vector3.Dot(forward, playerForward);
+
+                        if (dotProduct < -0.9) {
+                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.isInjured) {
+                                pHealth.TakeDamage(damage);
+                            }else {
+                                CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
+                                pMovement.UsingStamina(damage * 10f);
+                                if (pMovement.isParrying) {
+                                    soundController.Play("Parry");
+                                    pMovement.StartParrying();
+                                    TakeDamage(1f);
+                                    if (Hand.transform.childCount > 1) {
+                                        eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+                                        selectedWeapon = 1;
+                                        SwitchWeapon(selectedWeapon);
+                                    }
+                                }else {
+                                    pMovement.BlockingDamage(damage);
+                                }
+                            }
+                        }else {
+                            pHealth.TakeDamage(damage);
+                        }
+                    }else {
+                        pHealth.TakeDamage(damage);
+                    }
+                }else {
+                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ground.Play();
+                    Destroy(ground.gameObject, 0.5f);
+                }
+            }
+        }
+
+        public void RaycastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
+            RaycastHit hit;
+            //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
+            //new Vector3(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z)
+            //Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingPosition(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), Color.green, 3);
+            isRotating = false;
+            attackSound.Play();
+            if (Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
                     pMovement.AlertRadius(alertRadius);
                     hurtSound.Play();
@@ -316,9 +383,8 @@ namespace Enemies {
             alreadyAttacked = false;
             if (!targetLocked) {
                 isInitialRotation = true;
-            }else {
-                isRotating = true;
             }
+            isRotating = true;
             animator.ResetTrigger("isAttacking");
             animator.SetTrigger("isDamaged");
             if (enemyHealth <= 0) {

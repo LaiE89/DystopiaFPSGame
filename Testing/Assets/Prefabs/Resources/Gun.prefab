@@ -85,8 +85,8 @@ MonoBehaviour:
   attackCooldown: 1
   staminaCost: 10
   attackKnockback: 3
-  maxWeaponHealth: 1
-  weaponHealth: 1
+  maxWeaponHealth: 2
+  weaponHealth: 2
   alertRadius: 3
   attackAnimation: {fileID: 0}
   blockAnimation: {fileID: 0}

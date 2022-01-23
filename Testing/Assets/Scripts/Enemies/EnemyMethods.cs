@@ -17,7 +17,7 @@ namespace Enemies {
         }
 
         public void PlayerDamage() {
-            enemyMovement.AttackDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
+            enemyMovement.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
         }
 
         public void StartRotation() {
@@ -31,11 +31,11 @@ namespace Enemies {
         public void ShootDamage() {
             enemyMovement.eWeaponStats.bullets -= 1;
             enemyMovement.eWeaponStats.muzzleFlash.Play();
-            enemyMovement.AttackDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
+            enemyMovement.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
         }
 
         public void ShootDamageEnd() {
-            if (enemyMovement.eWeaponStats.bullets == 0) {
+            if (enemyMovement.eWeaponStats.bullets <= 0) {
                 enemyMovement.animatorOverrideController["Punch"] = enemyMovement.eWeaponStats.attackAnimation;
             }
         }

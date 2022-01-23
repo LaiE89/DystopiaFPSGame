@@ -238,7 +238,8 @@ namespace Player {
                     soundController.Stop("PlayerRun", 0.25f);
                     soundController.Play("PlayerJump");
                     UsingStamina(20f);
-                    rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                    //rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                    rb.velocity = ToolMethods.SettingVector(rb.velocity.x, 0, rb.velocity.z);
                     rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
                     StartCoroutine(JumpDelay());
                 }
@@ -334,7 +335,7 @@ namespace Player {
             myWeaponStats.weaponHealth -= amount;
             if (!myWeaponStats.isDefaultItem) {
                 if (myWeaponStats.weaponHealth <= 0) {
-                    myWeaponStats.breakSound.Play();
+                    soundController.Play("Item Break");
                     Destroy(myWeapon);
                     selectedWeapon = 0;
                     SwitchWeapon(selectedWeapon);
@@ -454,9 +455,11 @@ namespace Player {
                 rb.drag = 1;
             }
         }
+    
 
         private bool OnSlope() {
-            if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Vector3.down, out slopeHit, 0.75f)) {
+            //if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Vector3.down, out slopeHit, 0.75f)) {
+            if (Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, 0.5f, 0), Vector3.down, out slopeHit, 0.75f)) {
                 if (slopeHit.normal != Vector3.up) {
                     return true;
                 }else {
