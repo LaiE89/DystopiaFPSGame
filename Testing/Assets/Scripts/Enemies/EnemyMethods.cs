@@ -7,6 +7,7 @@ using EZCameraShake;
 namespace Enemies {
     public class EnemyMethods : MonoBehaviour {
         [SerializeField] Movement enemyMovement;
+        [SerializeField] Food food;
 
         public void walkFootStep() {
             enemyMovement.walkSound.Play();
@@ -25,7 +26,14 @@ namespace Enemies {
         }
 
         public void DestroyEnemy() {
-            Destroy(gameObject);
+            //Destroy(gameObject, 30);
+            gameObject.tag = "Food";
+            food.enabled = true;
+            CapsuleCollider eCollider = gameObject.GetComponent<CapsuleCollider>() as CapsuleCollider;
+            eCollider.center = ToolMethods.SettingVector(0, 0.35f, 0); 
+            eCollider.height = 0.3f;
+            enemyMovement.enabled = false;
+            enemyMovement.agent.enabled = false;
         }
 
         public void ShootDamage() {

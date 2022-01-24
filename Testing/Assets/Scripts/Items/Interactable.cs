@@ -13,9 +13,8 @@ public abstract class Interactable : MonoBehaviour {
 
     }
 
-    void OnMouseOver() {
+    public virtual void OnMouseOver() {
         Player.PlayerMovement player = SceneController.Instance.player;
-        Transform playerTransform = SceneController.Instance.playerObject.transform;
         if (transform.parent == null && !ingameMenus.pausedGame && player.interactableInRange(this.gameObject)){
             player.interactTextBox.text = (itemName.ToUpper());
         }else {
@@ -23,7 +22,7 @@ public abstract class Interactable : MonoBehaviour {
         }
     }
 
-    void OnMouseExit() {
+    public virtual void OnMouseExit() {
         Player.PlayerMovement player = SceneController.Instance.player;
         if (transform.parent == null && !ingameMenus.pausedGame) {
             player.interactTextBox.text = ("");

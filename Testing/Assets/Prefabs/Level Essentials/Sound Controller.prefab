@@ -80,4 +80,22 @@ MonoBehaviour:
     music: 0
     group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
+  - name: Eating
+    clip: {fileID: 8300000, guid: 9552e6518d78b4d45a2f55098491713d, type: 3}
+    volume: 0.5
+    pitch: 0.5
+    spatialBlend: 0
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Death
+    clip: {fileID: 8300000, guid: 9cdccb3b2b811ac4cb3d8f9dca8d04d4, type: 3}
+    volume: 0.5
+    pitch: 0.5
+    spatialBlend: 0
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
   allSounds: []

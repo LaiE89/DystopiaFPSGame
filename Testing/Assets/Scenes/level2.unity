@@ -2556,6 +2556,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3498789430206715880, guid: 7d935a81317b1684ea32781331c123f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4887671606330590092, guid: 7d935a81317b1684ea32781331c123f1, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2694,6 +2698,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &322975668 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1511227876357489369, guid: 7d935a81317b1684ea32781331c123f1, type: 3}
+  m_PrefabInstance: {fileID: 322975663}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &322975669 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 401400904273907774, guid: 7d935a81317b1684ea32781331c123f1, type: 3}
+  m_PrefabInstance: {fileID: 322975663}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &328607920
@@ -28556,6 +28582,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1252997275}
     - target: {fileID: 4708515010566225306, guid: c64276fcf15eb2b4199f08b1f41a3aee, type: 3}
+      propertyPath: hungerSlider
+      value: 
+      objectReference: {fileID: 322975669}
+    - target: {fileID: 4708515010566225306, guid: c64276fcf15eb2b4199f08b1f41a3aee, type: 3}
       propertyPath: staminaSlider
       value: 
       objectReference: {fileID: 1155233845}
@@ -28575,6 +28605,10 @@ PrefabInstance:
       propertyPath: interactTextBox
       value: 
       objectReference: {fileID: 1287229840}
+    - target: {fileID: 4708515010566225306, guid: c64276fcf15eb2b4199f08b1f41a3aee, type: 3}
+      propertyPath: holdInteractSlider
+      value: 
+      objectReference: {fileID: 322975668}
     - target: {fileID: 4708515010566225307, guid: c64276fcf15eb2b4199f08b1f41a3aee, type: 3}
       propertyPath: m_Icon
       value: 

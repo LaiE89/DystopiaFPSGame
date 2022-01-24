@@ -320,7 +320,7 @@ MonoBehaviour:
   isGun: 0
   attackDamage: 2
   attackRange: 2
-  attackCooldown: 1.5
+  attackCooldown: 1
   staminaCost: 10
   attackKnockback: 6
   maxWeaponHealth: 1

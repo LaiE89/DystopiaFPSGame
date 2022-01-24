@@ -30,6 +30,9 @@ ModelImporter:
   - first:
       74: -3704289112126983070
     second: Shoot
+  - first:
+      74: 2278987193732934936
+    second: ConsumeNoDrugs
   externalObjects:
   - first:
       type: UnityEngine:Material

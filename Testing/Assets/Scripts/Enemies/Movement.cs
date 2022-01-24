@@ -275,7 +275,7 @@ namespace Enemies {
                         var dotProduct = Vector3.Dot(forward, playerForward);
 
                         if (dotProduct < -0.9) {
-                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.isInjured) {
+                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
                                 pHealth.TakeDamage(damage);
                             }else {
                                 CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
@@ -327,7 +327,7 @@ namespace Enemies {
                         var dotProduct = Vector3.Dot(forward, playerForward);
 
                         if (dotProduct < -0.9) {
-                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.isInjured) {
+                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
                                 pHealth.TakeDamage(damage);
                             }else {
                                 CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);

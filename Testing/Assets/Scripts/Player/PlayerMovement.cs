@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -37,7 +38,6 @@ namespace Player {
         [HideInInspector] public bool isGrounded;
         float groundDistance = 0.2f;
         RaycastHit slopeHit;
-        //Vector3 slopeMoveDirection;
 
         [Header("Movement")]
         [SerializeField] float moveSpeed;
@@ -54,10 +54,15 @@ namespace Player {
 
         [Header("Stamina")]
         [SerializeField] Slider staminaSlider;
-        [SerializeField] float maxPlayerStamina;
+        [SerializeField] float maxPlayerStamina = 100;
         [SerializeField] float timeBeforeStamina;
         float playerStamina;
         Coroutine isRegenStamina;
+        
+        [Header("Hunger")]
+        [SerializeField] public Slider hungerSlider;
+        [SerializeField] public float maxPlayerHunger = 100;
+        [SerializeField] public float playerHunger;
 
         [Header("Jumping")]
         [SerializeField] public float jumpForce;
@@ -65,6 +70,7 @@ namespace Player {
         [Header("Attacking")]
         [SerializeField] public TextMeshProUGUI bulletsTextBox;
         [SerializeField] public Camera attackCam;
+        [SerializeField] public AnimatorOverrideController weaponOverrideController;
         [SerializeField] GameObject hand;
         [SerializeField] GameObject firstPersonView;
         [SerializeField] Material injuredArmMaterial;
@@ -73,13 +79,11 @@ namespace Player {
         [SerializeField] public GameObject myWeapon;
         [HideInInspector] public bool isBlocking;
         [HideInInspector] public bool isParrying;
-        [HideInInspector] public bool isInjured;
         [HideInInspector] public Weapons myWeaponStats;
+        [HideInInspector] public Animator weaponAnimator;
         LayerMask playerLayers;
         SkinnedMeshRenderer armMeshRenderer;
         Weapons defaultWeaponStats;
-        Animator weaponAnimator;
-        public AnimatorOverrideController weaponOverrideController;
         float attackTimer;
         bool isAttacking;
         GameObject savedWeapon;
@@ -87,12 +91,19 @@ namespace Player {
         [Header("Consume")]
         [SerializeField] public int playerDrugs;
         [SerializeField] public TextMeshProUGUI drugsTextBox;
-        bool isConsuming;
+        [HideInInspector] public bool isConsuming;
 
-        [Header("Pick Up")]
+        [Header("Interaction")]
         [SerializeField] public int pickUpRange;
         [SerializeField] public TextMeshProUGUI interactTextBox;
+        [SerializeField] public Slider holdInteractSlider;
         int selectedWeapon;
+
+        [Header("Status")]
+        [SerializeField] public List<string> statusEffects;
+        [HideInInspector] public float damageMultiplier;
+        [HideInInspector] public float attackSpeedMultiplier;
+        [HideInInspector] public float staminaUsageMultiplier;
 
         [Header("Others")]
         [HideInInspector] public SoundController soundController;
@@ -115,6 +126,7 @@ namespace Player {
             weaponAnimator.runtimeAnimatorController = weaponOverrideController;
 
             if (MainMenu.loading) {
+                Debug.Log("Hey: ");
                 LoadPlayer();
                 MainMenu.loading = false;
             }
@@ -141,9 +153,15 @@ namespace Player {
             staminaSlider.maxValue = maxPlayerStamina;
             playerStamina = maxPlayerStamina;
             staminaSlider.value = playerStamina;
+
+            hungerSlider.maxValue = maxPlayerHunger;
+            hungerSlider.value = playerHunger;
+
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
 
             playerLayers = groundMask | enemyMask;
+
+            UpdatingStatus(this.statusEffects);
 
             if (savedWeapon != null) {
                 savedWeapon.GetComponent<Interactable>().Interact(hand.transform);
@@ -184,6 +202,32 @@ namespace Player {
             transform.rotation = Quaternion.Euler(0, yRotation, 0);
         }
 
+        public void UpdatingStatus(List<string> statusList) {
+            damageMultiplier = 1;
+            attackSpeedMultiplier = 1;
+            staminaUsageMultiplier = 1;
+            if (statusList.Count > 0) {
+                foreach (string status in statusList) {
+                    switch (status) {
+                        case "isInjured":
+                            damageMultiplier *= 0.5f;
+                            attackSpeedMultiplier *= 1.5f;
+                            armMeshRenderer.material = injuredArmMaterial;
+                            if(defaultWeaponStats.weaponHealth > 0) {
+                                defaultWeaponStats.weaponHealth = 0;
+                            }
+                            break;
+                        case "isHungry":
+                            attackSpeedMultiplier *= 1.5f;
+                            staminaUsageMultiplier *= 1.5f;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
         public static void SettingChanges() {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -193,10 +237,21 @@ namespace Player {
         }
 
         public void UsingStamina(float amount) {
-            playerStamina -= amount;
+            playerStamina -= amount * staminaUsageMultiplier;
+            playerHunger -= amount * staminaUsageMultiplier * 0.25f;
             if (playerStamina < 0) {
                 playerStamina = 0;
             }
+            if (playerHunger <= 0) {
+                if (playerHunger < 0) {
+                    playerHunger = 0;
+                }
+                if (!statusEffects.Contains("isHungry")){
+                    statusEffects.Add("isHungry");
+                    UpdatingStatus(statusEffects);
+                }
+            }
+            hungerSlider.value = playerHunger;
             staminaSlider.value = playerStamina;
             if (isRegenStamina != null) {
                 StopCoroutine(isRegenStamina);
@@ -287,19 +342,19 @@ namespace Player {
             attackTimer += Time.deltaTime;
             if (Input.GetMouseButton(0) && !isConsuming) {
                 if (myWeaponStats.isGun && myWeaponStats.bullets > 0) {
-                    if (attackTimer >= myWeaponStats.shootCooldown) {
+                    if (attackTimer >= myWeaponStats.shootCooldown * attackSpeedMultiplier) {
                         isAttacking = true;
                         attackTimer = 0f;
-                        weaponAnimator.SetFloat("AttackMultiplier", 1 / myWeaponStats.shootCooldown);
+                        weaponAnimator.SetFloat("AttackMultiplier", 1 / (myWeaponStats.shootCooldown * attackSpeedMultiplier));
                         weaponAnimator.SetTrigger("isAttacking");
                     }
                 }else {
-                    if (attackTimer >= myWeaponStats.attackCooldown) {
+                    if (attackTimer >= myWeaponStats.attackCooldown  * attackSpeedMultiplier) {
                         if (playerStamina >= myWeaponStats.staminaCost) {
                             UsingStamina(myWeaponStats.staminaCost);
                             isAttacking = true;
                             attackTimer = 0f;
-                            weaponAnimator.SetFloat("AttackMultiplier", 1 / myWeaponStats.attackCooldown);
+                            weaponAnimator.SetFloat("AttackMultiplier", 1 / (myWeaponStats.attackCooldown * attackSpeedMultiplier));
                             weaponAnimator.SetTrigger("isAttacking");
                         }
                     }
@@ -346,8 +401,9 @@ namespace Player {
                     myWeaponStats.breakSound.Play();
                     GameObject droppedBone =  Instantiate(boneWeapon, hand.transform.position, transform.rotation) as GameObject;
                     droppedBone.GetComponent<Holdable>().CreatingWeapon(transform);
-                    armMeshRenderer.material = injuredArmMaterial;
-                    isInjured = true;
+                    //isInjured = true;
+                    statusEffects.Add("isInjured");
+                    UpdatingStatus(this.statusEffects);
                 }
             }
         }
@@ -376,8 +432,9 @@ namespace Player {
             if (health.playerHealth < health.maxPlayerHealth) {
                 health.playerHealth += 1;
             }
-            if (isInjured) {
-                isInjured = false;
+            if (statusEffects.Contains("isInjured")) {
+                statusEffects.Remove("isInjured");
+                UpdatingStatus(this.statusEffects);
                 armMeshRenderer.material = healedArmMaterial;
                 defaultWeaponStats.weaponHealth = defaultWeaponStats.maxWeaponHealth;
             }
@@ -402,6 +459,10 @@ namespace Player {
                         case "Appliance":
                             GameObject targetAppliance = hit.collider.gameObject;
                             targetAppliance.GetComponent<Interactable>().Interact(transform);
+                            break;
+                        case "Consumable" :
+                            GameObject targetConsumable = hit.collider.gameObject;
+                            targetConsumable.GetComponent<Interactable>().Interact();
                             break;
                         case "Food":
                             GameObject targetFood = hit.collider.gameObject;
@@ -544,11 +605,13 @@ namespace Player {
 
         public void LoadPlayer() {
             PlayerData data = SaveSystem.LoadPlayer();
+            playerHunger = data.playerHunger;
             walkSpeed = data.walkSpeed;
             sprintSpeed = data.sprintSpeed;
             jumpForce = data.jumpForce;
             playerDrugs = data.playerDrugs;
             pickUpRange = data.pickUpRange;
+            statusEffects = data.statusEffects;
             GameObject cloneWeapon = (GameObject)Resources.Load(data.myWeapon, typeof(GameObject));
             if (!cloneWeapon.GetComponent<Weapons>().isDefaultItem) {
                 savedWeapon = Instantiate(cloneWeapon, this.transform.position, transform.rotation) as GameObject; 

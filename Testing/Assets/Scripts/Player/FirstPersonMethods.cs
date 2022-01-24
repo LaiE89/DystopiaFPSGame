@@ -13,12 +13,15 @@ namespace Player {
         }
 
         public void Consuming() {
-            PlayerMovement.Consuming();
+            PlayerMovement.soundController.Play("Eating");
+            if (PlayerMovement.isConsuming) {
+                PlayerMovement.Consuming();
+            }
         }
 
         public void AttackDamage() {
             PlayerMovement.AlertRadius(PlayerMovement.myWeaponStats.alertRadius);
-            PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound);   
+            PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage * PlayerMovement.damageMultiplier, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound);   
         }
 
         public void ShootDamage() {
