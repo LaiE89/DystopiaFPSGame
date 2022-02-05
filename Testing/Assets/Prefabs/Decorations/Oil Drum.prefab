@@ -12,12 +12,14 @@ GameObject:
   - component: {fileID: 2766822571206680955}
   - component: {fileID: 108452742294295985}
   - component: {fileID: 958260322265487145}
+  - component: {fileID: 3929658785608190944}
+  - component: {fileID: -5448607539991435403}
   m_Layer: 3
   m_Name: Oil Drum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1281944716207828702
 Transform:
@@ -95,3 +97,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.59512496, y: 0.59604996, z: 0.87462485}
   m_Center: {x: 0.013702497, y: -0.23033807, z: 0.44067696}
+--- !u!114 &3929658785608190944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910002613973283940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1cc72a293845642bb4ba917cf4125d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactSound: Explosion
+  interactParticle: {fileID: 580945606245989265, guid: 103e3580c015d564f91646c7d9ca367c, type: 3}
+  radius: 5
+  horizontalForce: 15
+  verticalForce: 0
+  damage: 3
+  alertRadius: 20
+--- !u!208 &-5448607539991435403
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910002613973283940}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.298, y: 0.298, z: 0.437}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.014, y: -0.23, z: 0.441}
+  m_TimeToStationary: 0.5

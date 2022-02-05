@@ -8,6 +8,7 @@ public class DialogueController : MonoBehaviour {
 
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
+    public string textSound;
     public Animator animator;
     
     private Queue<string> sentences;
@@ -24,7 +25,7 @@ public class DialogueController : MonoBehaviour {
             dialogueText.alignment = TextAlignmentOptions.Center;
             dialogueText.alignment = TextAlignmentOptions.Top;
         }else {
-            dialogueText.alignment = TextAlignmentOptions.Left;
+            dialogueText.alignment = TextAlignmentOptions.TopLeft;
         }
         sentences.Clear();
 
@@ -49,6 +50,9 @@ public class DialogueController : MonoBehaviour {
         dialogueText.text = "";
         foreach (char letter in sentence.ToCharArray()) {
             dialogueText.text += letter;
+            if (textSound != null) {
+                SceneController.Instance.soundController.PlayOneShot(textSound);
+            }
             yield return new WaitForSeconds(0.01f);
         }
         yield return new WaitForSeconds(2f);

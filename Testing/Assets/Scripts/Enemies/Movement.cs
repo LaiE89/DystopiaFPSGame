@@ -22,7 +22,6 @@ namespace Enemies {
         float groundDistance = 0.2f;
         bool isGrounded;
         Animator animator;
-        Player.Health pHealth;
         Player.PlayerMovement pMovement;
 
         [Header("=====STATS=====", order=0)]
@@ -31,20 +30,22 @@ namespace Enemies {
         [Range(0,360)] public float viewAngle;
         [SerializeField] float runningSpeed;
         [SerializeField] float walkingSpeed;
-        [SerializeField] Vector3[] destinations;
         [SerializeField] public float sightRange;
+        // [SerializeField] float startingYRotation;
+        [SerializeField] Vector3[] destinations;
         [HideInInspector] bool playerInSightRange;
         [HideInInspector] bool playerInAttackRange;
         [HideInInspector] bool isKnockedDown;
         [HideInInspector] public bool isKnockedBack;
+        [HideInInspector] public bool canSeePlayer;
+        [HideInInspector] public bool targetLocked;
         bool isRunning;
         bool isWalking;
         int destPoint;
-        bool targetLocked;
         float angleToPlayer;
+        float angleToPlayerHorz;
         float distanceToTarget;
         Vector3 directionToTarget;
-        public bool canSeePlayer;
         
         [Header("Attacking Variables")]
         [SerializeField] float timeBetweenAttacks;
@@ -56,13 +57,14 @@ namespace Enemies {
         [HideInInspector] public Weapons eWeaponStats;
         [HideInInspector] public bool isRotating;
         [HideInInspector] public bool alreadyAttacked;
+        [HideInInspector] public bool isDying;
         int selectedWeapon;
         GameObject eWeapon;
-        bool isDying;
         bool isInitialRotation;
 
         [Header("States Variables")]
         [SerializeField] bool isIdle;
+        [SerializeField] public bool isAlertable;
         [SerializeField] AnimationClip idleAnimation;
 
         private void Awake() {
@@ -70,7 +72,14 @@ namespace Enemies {
         }
 
         private void Start() {
+            SceneController.Instance.listOfEnemies.Add(this);
 
+            foreach (Transform weapon in Hand.transform) {
+                if (weapon.GetComponent<Weapons>().isDefaultItem) {
+                    weapon.SetAsLastSibling();
+                }
+            }
+            
             // Initializing Variables
             isWalking = false;
             isInitialRotation = false;
@@ -85,15 +94,15 @@ namespace Enemies {
             animator.runtimeAnimatorController = animatorOverrideController;
             rb.freezeRotation = true;
             enemyLayers = whatIsGround | whatIsPlayer;
-            pHealth = thePlayer.GetComponent<Player.Health>();
             pMovement = thePlayer.GetComponent<Player.PlayerMovement>();
             selectedWeapon = 0;
             SwitchWeapon(selectedWeapon);
-
+            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Item"), LayerMask.NameToLayer("Enemy"), true);
             if (isIdle) {
                 animatorOverrideController["Idle"] = idleAnimation;
+            }else {
+                GoNextPoint();
             }
-            GoNextPoint();
             StartCoroutine(FOVRoutine());
         }
         
@@ -111,15 +120,15 @@ namespace Enemies {
                     }
                     if (isInitialRotation) {
                         if (canSeePlayer && eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                            if (distanceToTarget <= eWeaponStats.shootRange - 1f && distanceToTarget > eWeaponStats.attackRange && angleToPlayer < shootingAccuracyAngle) {
+                            if (distanceToTarget <= eWeaponStats.shootRange - 1f && distanceToTarget > eWeaponStats.attackRange && angleToPlayerHorz < shootingAccuracyAngle) {
                                 AttackPlayer();
                                 isInitialRotation = false;
-                            }else if (distanceToTarget <= eWeaponStats.attackRange && angleToPlayer < meleeAccuracyAngle) {
+                            }else if (distanceToTarget <= eWeaponStats.attackRange && angleToPlayerHorz < meleeAccuracyAngle) {
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }
                         }else {
-                            if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange && angleToPlayer < meleeAccuracyAngle) { 
+                            if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange && angleToPlayerHorz < meleeAccuracyAngle) { 
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }
@@ -148,6 +157,16 @@ namespace Enemies {
                             GoNextPoint();
                         }
                     }else {
+                        /*if (Vector3.Distance(transform.position, destinations[0]) > 0.2f && !awayFromIdlePos) {
+                            GoNextPoint();
+                            Walking();
+                            awayFromIdlePos = true;
+                        }else if (Vector3.Distance(transform.position, destinations[0]) <= 0.2f && awayFromIdlePos){
+                            transform.rotation = Quaternion.Euler(0, startingYRotation, 0);
+                            animator.SetBool("isWalking", false);
+                            animator.SetBool("isRunning", false);
+                            awayFromIdlePos = false;
+                        }*/
                         if (!agent.pathPending && agent.remainingDistance <= 1f) {
                             animator.SetBool("isWalking", false);
                             animator.SetBool("isRunning", false);
@@ -174,6 +193,7 @@ namespace Enemies {
                 Transform target = rangeChecks[0].transform;
                 directionToTarget = (target.position - transform.position).normalized;
                 angleToPlayer = Vector3.Angle(transform.forward, directionToTarget);
+                angleToPlayerHorz = Vector3.Angle(transform.forward, ToolMethods.SettingVector(directionToTarget.x, 0, directionToTarget.z));
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 if (angleToPlayer < viewAngle / 2) {
                     if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, 0.75f, 0), directionToTarget, distanceToTarget, whatIsGround)){
@@ -193,6 +213,9 @@ namespace Enemies {
             if (!targetLocked && canSeePlayer) {
                 targetLocked = true;
             }else if (targetLocked && !canSeePlayer && rangeChecks.Length == 0){
+                if (agent.isActiveAndEnabled && agent.isStopped) {
+                    agent.isStopped = false;
+                }
                 targetLocked = false;
                 isInitialRotation = false;
             }
@@ -204,7 +227,8 @@ namespace Enemies {
             if(destinations.Length == 0){
                 return;
             }
-            agent.destination = destinations[destPoint];
+            agent.SetDestination(destinations[destPoint]);
+            //agent.destination = destinations[destPoint];
             destPoint = (destPoint + 1) % destinations.Length;
         }
 
@@ -256,53 +280,59 @@ namespace Enemies {
         }
 
         public void SpherecastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
-            RaycastHit hit;
             //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
             //new Vector3(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z)
             //Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingPosition(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), Color.green, 3);
             attackSound.Play();
             isRotating = false;
-            if (Physics.SphereCast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {
-                if (hit.collider.tag == "Player") {
-                    pMovement.AlertRadius(alertRadius);
-                    hurtSound.Play();
-                    Vector3 direction = thePlayer.transform.position - transform.position;
-                    direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
-                    pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
-                    if (pMovement.isBlocking) {
-                        var forward = transform.TransformDirection(Vector3.forward);
-                        var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
-                        var dotProduct = Vector3.Dot(forward, playerForward);
+            RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), range, enemyLayers);
+            if (hits.Length > 0) {
+                foreach (RaycastHit hit in hits) {
+                    if (hit.collider.tag == "Player") {
+                        ToolMethods.AlertRadius(alertRadius, thePlayer.transform.position, pMovement.enemyMask);
+                        hurtSound.Play();
+                        Vector3 direction = thePlayer.transform.position - transform.position;
+                        direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
+                        pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
+                        if (pMovement.isBlocking) {
+                            var forward = transform.TransformDirection(Vector3.forward);
+                            var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
+                            var dotProduct = Vector3.Dot(forward, playerForward);
 
-                        if (dotProduct < -0.9) {
-                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
-                                pHealth.TakeDamage(damage);
-                            }else {
-                                CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
-                                pMovement.UsingStamina(damage * 10f);
-                                if (pMovement.isParrying) {
-                                    soundController.Play("Parry");
-                                    pMovement.StartParrying();
-                                    TakeDamage(1f);
-                                    if (Hand.transform.childCount > 1) {
-                                        eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
-                                        selectedWeapon = 1;
-                                        SwitchWeapon(selectedWeapon);
-                                    }
+                            if (dotProduct < -0.9) {
+                                if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
+                                    pMovement.TakeDamage(damage);
                                 }else {
-                                    pMovement.BlockingDamage(damage);
+                                    CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
+                                    pMovement.UsingStamina(damage * 10f);
+                                    if (pMovement.isParrying) {
+                                        soundController.PlayOneShot("Parry");
+                                        pMovement.StartParrying();
+                                        TakeDamage(1f);
+                                        if (Hand.transform.childCount > 1) {
+                                            eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+                                            selectedWeapon = 1;
+                                            SwitchWeapon(selectedWeapon);
+                                        }
+                                    }else {
+                                        pMovement.BlockingDamage(damage);
+                                    }
                                 }
+                            }else {
+                                pMovement.TakeDamage(damage);
                             }
                         }else {
-                            pHealth.TakeDamage(damage);
+                            pMovement.TakeDamage(damage);
                         }
                     }else {
-                        pHealth.TakeDamage(damage);
+                        Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
+                        if (destructable != null) {
+                        destructable.Interact(); 
+                        }
+                        ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                        ground.Play();
+                        Destroy(ground.gameObject, 0.5f);
                     }
-                }else {
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
-                    Destroy(ground.gameObject, 0.5f);
                 }
             }
         }
@@ -316,7 +346,7 @@ namespace Enemies {
             attackSound.Play();
             if (Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
-                    pMovement.AlertRadius(alertRadius);
+                    ToolMethods.AlertRadius(alertRadius, thePlayer.transform.position, pMovement.enemyMask);
                     hurtSound.Play();
                     Vector3 direction = thePlayer.transform.position - transform.position;
                     direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
@@ -328,12 +358,12 @@ namespace Enemies {
 
                         if (dotProduct < -0.9) {
                             if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
-                                pHealth.TakeDamage(damage);
+                                pMovement.TakeDamage(damage);
                             }else {
                                 CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
                                 pMovement.UsingStamina(damage * 10f);
                                 if (pMovement.isParrying) {
-                                    soundController.Play("Parry");
+                                    soundController.PlayOneShot("Parry");
                                     pMovement.StartParrying();
                                     TakeDamage(1f);
                                     if (Hand.transform.childCount > 1) {
@@ -346,12 +376,16 @@ namespace Enemies {
                                 }
                             }
                         }else {
-                            pHealth.TakeDamage(damage);
+                            pMovement.TakeDamage(damage);
                         }
                     }else {
-                        pHealth.TakeDamage(damage);
+                        pMovement.TakeDamage(damage);
                     }
                 }else {
+                    Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
+                    if (destructable != null) {
+                       destructable.Interact(); 
+                    }
                     ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     ground.Play();
                     Destroy(ground.gameObject, 0.5f);

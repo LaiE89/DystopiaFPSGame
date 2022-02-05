@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.AI;
 
 public class Food : Interactable {
-    float curPickUpTime = 0;
+    float curPickUpTime;
     [SerializeField] public float nutritionValue;
     [SerializeField] public float pickUpTime;
     [SerializeField] ParticleSystem eatingParticles;
@@ -17,6 +17,7 @@ public class Food : Interactable {
         if (isAlive) {
             this.enabled = false;
         }
+        curPickUpTime = 0;
     }
 
     public override void Interact() {
@@ -34,7 +35,7 @@ public class Food : Interactable {
                 StartCoroutine(EatingCooldown());
             }
             if (curPickUpTime >= pickUpTime) {
-                SceneController.Instance.soundController.Play("Death");
+                SceneController.Instance.soundController.PlayOneShot("Death");
                 player.playerHunger += nutritionValue;
                 if (player.playerHunger > player.maxPlayerHunger) {
                     player.playerHunger = player.maxPlayerHunger;

@@ -58,11 +58,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 0}
-  slider: {fileID: 0}
+  optionsMenu: {fileID: 0}
+  loadingSlider: {fileID: 0}
   progressText: {fileID: 0}
   savingText: {fileID: 0}
   bloodParticles: {fileID: 1283500811187906189}
   groundParticles: {fileID: 4992777128092075289}
+  isCutscene: 0
+  canvas: {fileID: 0}
   soundController: {fileID: 0}
   player: {fileID: 0}
   playerObject: {fileID: 0}

@@ -9,4 +9,14 @@ public class Dialogue {
 
     [TextArea(3, 10)]
     public string[] sentences;
+
+    [Header("Enemy Objectives Stuff")]
+    public bool isObjective;
+    public bool isTriggered;
+
+    [Header("Trigger Type")]
+    public bool onTarget;
+    public bool onDeath;
+    public bool onAttack;
+    public bool onMouse;
 }

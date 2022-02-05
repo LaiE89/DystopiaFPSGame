@@ -33,6 +33,25 @@ public class SoundController : MonoBehaviour {
         s.source.Play();
     }
 
+    public void PlayOneShot(string name) {
+        Sound s = Array.Find(specialSounds, sound => sound.name == name);
+        if (s == null) {
+            // Debug.LogWarning("Sound: " + name + " not found!");
+            return;
+        }
+        //s.source.Play();
+        s.source.PlayOneShot(s.source.clip);
+    }
+
+    public void PlayClipAtPoint(string name, Vector3 position) {
+        Sound s = Array.Find(specialSounds, sound => sound.name == name);
+        if (s == null) {
+            Debug.LogWarning("Sound: " + name + " not found!");
+            return;
+        }
+        AudioSource.PlayClipAtPoint(s.source.clip, position);
+    }
+
     public void Stop(string sound, float fadeTime) {
         Sound s = Array.Find(specialSounds, item => item.name == sound);
         if (s == null) {
@@ -60,6 +79,14 @@ public class SoundController : MonoBehaviour {
         foreach (AudioSource s in allSounds) {
             if (s != null) {
                 s.Stop();
+            }
+        }
+    }
+
+    public void PauseAll() {
+        foreach (AudioSource s in allSounds) {
+            if (s != null) {
+                s.Pause();
             }
         }
     }

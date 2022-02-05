@@ -8,8 +8,9 @@ namespace Player {
         float speed = 0.1f;
         Vector3 velocity = Vector3.zero;
 
-        void Update() {
-            transform.position = Vector3.SmoothDamp(transform.position, camPosition.position, ref velocity, speed);
+        void LateUpdate() {
+            //transform.position = Vector3.SmoothDamp(transform.position, camPosition.position, ref velocity, speed);
+            transform.position = Vector3.Lerp(transform.position, camPosition.position, Time.deltaTime * 50);
         }
     }
 }

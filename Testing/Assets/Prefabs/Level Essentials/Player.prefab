@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4708515010566225310}
   - component: {fileID: 4708515010566225311}
   - component: {fileID: 4708515010566225308}
-  - component: {fileID: 4708515010566225309}
   - component: {fileID: 4708515010566225306}
   m_Layer: 6
   m_Name: Player
@@ -67,23 +66,6 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0.8, z: 0}
---- !u!114 &4708515010566225309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4708515010566225307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5926ed52a90396e4aa774982005e91ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerHealth: 0
-  maxPlayerHealth: 5
-  healthSlider: {fileID: 0}
-  hurtScreen: {fileID: 0}
-  canvas: {fileID: 0}
 --- !u!114 &4708515010566225306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +86,7 @@ MonoBehaviour:
   rightKey: 100
   consumeKey: 101
   pickUpKey: 113
-  startingYRotation: 0
+  startingYRotation: 90
   mouseCam: {fileID: 0}
   orientation: {fileID: 4708515010818003553}
   groundMask:
@@ -118,14 +100,13 @@ MonoBehaviour:
   moveSpeed: 0
   walkSpeed: 2
   sprintSpeed: 4
-  staminaSlider: {fileID: 0}
+  playerHealth: 5
+  maxPlayerHealth: 5
   maxPlayerStamina: 100
   timeBeforeStamina: 1
-  hungerSlider: {fileID: 0}
   maxPlayerHunger: 100
   playerHunger: 100
   jumpForce: 7
-  bulletsTextBox: {fileID: 0}
   attackCam: {fileID: 0}
   weaponOverrideController: {fileID: 0}
   hand: {fileID: 0}
@@ -139,15 +120,21 @@ MonoBehaviour:
   myWeaponStats: {fileID: 0}
   weaponAnimator: {fileID: 0}
   playerDrugs: 1
-  drugsTextBox: {fileID: 0}
   isConsuming: 0
   pickUpRange: 3
-  interactTextBox: {fileID: 0}
-  holdInteractSlider: {fileID: 0}
   statusEffects: []
   damageMultiplier: 0
   attackSpeedMultiplier: 0
   staminaUsageMultiplier: 0
+  interactTextBox: {fileID: 0}
+  drugsTextBox: {fileID: 0}
+  bulletsTextBox: {fileID: 0}
+  holdInteractSlider: {fileID: 0}
+  hungerSlider: {fileID: 0}
+  staminaSlider: {fileID: 0}
+  healthSlider: {fileID: 0}
+  hurtScreen: {fileID: 0}
+  canvas: {fileID: 0}
   soundController: {fileID: 0}
   sceneIndex: 0
   rb: {fileID: 0}

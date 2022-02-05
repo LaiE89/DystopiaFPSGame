@@ -20,6 +20,8 @@ public class OptionsData {
     public int resolutionIndex;
     [DataMember]
     public bool isFullscreen;
+    [DataMember]
+    public float brightness;
     
     public OptionsData () {
         sens = OptionsMenu.sens;
@@ -27,5 +29,6 @@ public class OptionsData {
         volume = OptionsMenu.volume;
         resolutionIndex = OptionsMenu.resolutionIndex;
         isFullscreen = OptionsMenu.isFullscreen;
+        brightness = OptionsMenu.brightness;
     }
 }

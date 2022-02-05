@@ -29,7 +29,6 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] string myWeapon = "Fist";
 
     private void Awake() {
-        options.InitializeSettings();
         saving = false;
     }
 

@@ -21,7 +21,6 @@ namespace Player {
 
         [Header("Mouse Movement")]
         [SerializeField] float startingYRotation;
-        [SerializeField] Transform mouseCam;
         [SerializeField] Transform orientation;
         private static float sensX;
         private static float sensY;
@@ -33,7 +32,7 @@ namespace Player {
 
         [Header("Ground Detection")]
         [SerializeField] LayerMask groundMask;
-        [SerializeField] LayerMask enemyMask;
+        [SerializeField] public LayerMask enemyMask;
         [SerializeField] Transform groundCheck;
         [HideInInspector] public bool isGrounded;
         float groundDistance = 0.2f;
@@ -52,15 +51,17 @@ namespace Player {
         bool isMovingBackward;
         bool isRunning;
 
+        [Header("Health")]
+        [SerializeField] public float playerHealth;
+        [SerializeField] public float maxPlayerHealth;
+
         [Header("Stamina")]
-        [SerializeField] Slider staminaSlider;
         [SerializeField] float maxPlayerStamina = 100;
         [SerializeField] float timeBeforeStamina;
         float playerStamina;
         Coroutine isRegenStamina;
         
         [Header("Hunger")]
-        [SerializeField] public Slider hungerSlider;
         [SerializeField] public float maxPlayerHunger = 100;
         [SerializeField] public float playerHunger;
 
@@ -68,15 +69,11 @@ namespace Player {
         [SerializeField] public float jumpForce;
 
         [Header("Attacking")]
-        [SerializeField] public TextMeshProUGUI bulletsTextBox;
-        [SerializeField] public Camera attackCam;
-        [SerializeField] public AnimatorOverrideController weaponOverrideController;
-        [SerializeField] GameObject hand;
-        [SerializeField] GameObject firstPersonView;
         [SerializeField] Material injuredArmMaterial;
         [SerializeField] Material healedArmMaterial;
         [SerializeField] GameObject boneWeapon;
         [SerializeField] public GameObject myWeapon;
+        [HideInInspector] public AnimatorOverrideController weaponOverrideController;
         [HideInInspector] public bool isBlocking;
         [HideInInspector] public bool isParrying;
         [HideInInspector] public Weapons myWeaponStats;
@@ -90,13 +87,10 @@ namespace Player {
 
         [Header("Consume")]
         [SerializeField] public int playerDrugs;
-        [SerializeField] public TextMeshProUGUI drugsTextBox;
         [HideInInspector] public bool isConsuming;
 
         [Header("Interaction")]
         [SerializeField] public int pickUpRange;
-        [SerializeField] public TextMeshProUGUI interactTextBox;
-        [SerializeField] public Slider holdInteractSlider;
         int selectedWeapon;
 
         [Header("Status")]
@@ -105,11 +99,25 @@ namespace Player {
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float staminaUsageMultiplier;
 
-        [Header("Others")]
+        [Header("Gameobject Initialization")]
+        [SerializeField] public TextMeshProUGUI interactTextBox;
+        [SerializeField] public TextMeshProUGUI drugsTextBox;
+        [SerializeField] public TextMeshProUGUI bulletsTextBox;
+        [SerializeField] public Slider holdInteractSlider;
+        [SerializeField] public Slider hungerSlider;
+        [SerializeField] public Slider staminaSlider;
+        [SerializeField] public Slider healthSlider;
+        [SerializeField] public Image hurtScreen;
+        [SerializeField] public ingameMenus canvas;
+
+        [SerializeField] Transform mouseCam;
+        [SerializeField] public Camera attackCam;
+        [SerializeField] GameObject hand;
+        [SerializeField] GameObject firstPersonView;
+
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public int sceneIndex;
         [HideInInspector] public Rigidbody rb;
-        Health health;
         GameObject enemy;
         Enemies.Movement eMovement;
         Rigidbody eRb;
@@ -126,13 +134,46 @@ namespace Player {
             weaponAnimator.runtimeAnimatorController = weaponOverrideController;
 
             if (MainMenu.loading) {
-                Debug.Log("Hey: ");
                 LoadPlayer();
                 MainMenu.loading = false;
             }
         }
 
         private void Start() {
+
+            // Initializing Gameobjects
+            canvas = SceneController.Instance.canvas.GetComponent<ingameMenus>();
+            foreach (Transform child in canvas.inGameUI.transform) {
+                switch (child.name) {
+                    case "Hurt Image":
+                        hurtScreen = child.GetComponent<Image>();
+                        break;
+                    case "Health Bar":
+                        healthSlider = child.GetComponent<Slider>();
+                        break;
+                    case "Stamina Bar":
+                        staminaSlider = child.GetComponent<Slider>();
+                        break;
+                    case "Hunger Bar":
+                        hungerSlider = child.GetComponent<Slider>();
+                        break;
+                    case "Holding Bar":
+                        holdInteractSlider = child.GetComponent<Slider>();
+                        break;
+                    case "Drugs Text":
+                        drugsTextBox = child.GetComponent<TextMeshProUGUI>();
+                        break;
+                    case "Bullets Text":
+                        bulletsTextBox = child.GetComponent<TextMeshProUGUI>();
+                        break;
+                    case "Interact Text":
+                        interactTextBox = child.GetComponent<TextMeshProUGUI>();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             yRotation = startingYRotation;
             soundController = SceneController.Instance.soundController;
             Cursor.lockState = CursorLockMode.Locked;
@@ -148,7 +189,9 @@ namespace Player {
             selectedWeapon = 0;
             SwitchWeapon(selectedWeapon);
 
-            health = GetComponent<Player.Health>();
+            healthSlider.maxValue = maxPlayerHealth;
+            playerHealth = maxPlayerHealth;
+            healthSlider.value = playerHealth;
 
             staminaSlider.maxValue = maxPlayerStamina;
             playerStamina = maxPlayerStamina;
@@ -198,8 +241,39 @@ namespace Player {
         }
 
         private void FixedUpdate() {
-            MovePlayer();  
+            MovePlayer();
             transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+
+///// HEALTH AND STATUSES /////
+        public void TakeDamage(float amount) {
+            playerHealth -= amount;
+            healthSlider.value = playerHealth;
+            CameraShaker.Instance.ShakeOnce(amount*2, amount, 0.1f, 0.5f);
+            if (playerHealth <= 0) {
+                StartCoroutine(DeathDelay());
+            }
+            StartCoroutine(FadeBlood(true));
+        }
+
+        IEnumerator DeathDelay() {
+            yield return new WaitForSeconds(0.1f);
+            SceneController.Instance.soundController.StopAll();
+            canvas.ToggleDeathScreen();
+        }
+
+        IEnumerator FadeBlood(bool fadeAway) {
+            if (fadeAway) {
+                for (float i = 1; i >= 0; i -= Time.deltaTime) {
+                    hurtScreen.color = new Color(1, 1, 1, i);
+                    yield return null;
+                }
+            }else {
+                for (float i = 0; i <= 1; i += Time.deltaTime) {
+                    hurtScreen.color = new Color(1, 1, 1, i);
+                    yield return null;
+                }
+            }
         }
 
         public void UpdatingStatus(List<string> statusList) {
@@ -228,17 +302,9 @@ namespace Player {
             }
         }
 
-        public static void SettingChanges() {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            newSens = OptionsMenu.sens;
-            sensX = newSens;
-            sensY = newSens;
-        }
-
         public void UsingStamina(float amount) {
             playerStamina -= amount * staminaUsageMultiplier;
-            playerHunger -= amount * staminaUsageMultiplier * 0.25f;
+            playerHunger -= amount * staminaUsageMultiplier * 0.15f;
             if (playerStamina < 0) {
                 playerStamina = 0;
             }
@@ -269,75 +335,7 @@ namespace Player {
             isRegenStamina = null;
         }
 
-        private void MyInput() {
-            horizontalMovement = Input.GetAxisRaw("Horizontal");
-            verticalMovement = Input.GetAxisRaw("Vertical");
-
-            moveDirection = orientation.forward * verticalMovement + orientation.right * horizontalMovement;
-        }
-
-        void MouseInput() {
-            mouseX = Input.GetAxisRaw("Mouse X");
-            mouseY = Input.GetAxisRaw("Mouse Y");
-            yRotation += mouseX * sensX * 0.01f;
-            xRotation -= mouseY * sensY * 0.01f;
-
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-            mouseCam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-            orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        }
-
-        private void Jump() {
-            if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming) {
-                if (playerStamina >= 20f) {
-                    soundController.Stop("PlayerRun", 0.25f);
-                    soundController.Play("PlayerJump");
-                    UsingStamina(20f);
-                    //rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                    rb.velocity = ToolMethods.SettingVector(rb.velocity.x, 0, rb.velocity.z);
-                    rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-                    StartCoroutine(JumpDelay());
-                }
-            }
-        }
-
-        private IEnumerator JumpDelay() {
-            yield return new WaitForSeconds(0.1f);
-            isRunning = false;
-        }
-        
-        private void Movement() {
-            if (isGrounded && !isConsuming) {
-                if (Input.GetKey(sprintKey) && Input.GetKey(forwardKey)) {
-                    Sprint();
-                }else {
-                    Walk();
-                }
-            }
-        }
-
-        private void Walk() {
-            if (isRunning) {
-                soundController.Stop("PlayerRun", 0.25f);
-                isRunning = false;
-            }
-            // moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
-            moveSpeed = walkSpeed;
-        }
-
-        private void Sprint() {
-            if (playerStamina > 20f) {
-                if (!isRunning) {
-                    soundController.Play("PlayerRun");
-                    isRunning = true;
-                }
-                UsingStamina(Time.deltaTime * 20f); // 0.2f
-                moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
-            }else {
-                Walk();
-            }
-        }
-
+///// COMBAT /////
         private void Attack() {
             attackTimer += Time.deltaTime;
             if (Input.GetMouseButton(0) && !isConsuming) {
@@ -362,6 +360,35 @@ namespace Player {
             }
             if (attackTimer >= myWeaponStats.attackCooldown) {
                 isAttacking = false;
+            }
+        }
+
+        public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
+            Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            attackSound.Play();
+            if (Physics.Raycast(ray, out hit, range, playerLayers)) {
+                if (hit.collider.tag == "Enemy") {
+                    hurtSound.Play();
+                    enemy = hit.collider.gameObject;
+                    eMovement = enemy.GetComponent<Enemies.Movement>();
+                    eRb = enemy.GetComponent<Rigidbody>();
+                    ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    blood.Play();
+                    Destroy(blood.gameObject, 0.5f);
+                    eMovement.TakeDamage(damage);
+                    Vector3 eDirection = enemy.transform.position - transform.position;
+                    eDirection.y = (float)(Math.Sin(-xRotation * Math.PI/180) * knockback);
+                    eRb.AddForce(eDirection.normalized * knockback, ForceMode.Impulse);
+                }else {
+                    Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
+                    if (destructable != null) {
+                       destructable.Interact(); 
+                    }
+                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ground.Play();
+                    Destroy(ground.gameObject, 0.5f);
+                }
             }
         }
 
@@ -390,7 +417,7 @@ namespace Player {
             myWeaponStats.weaponHealth -= amount;
             if (!myWeaponStats.isDefaultItem) {
                 if (myWeaponStats.weaponHealth <= 0) {
-                    soundController.Play("Item Break");
+                    soundController.PlayOneShot("Item Break");
                     Destroy(myWeapon);
                     selectedWeapon = 0;
                     SwitchWeapon(selectedWeapon);
@@ -417,6 +444,40 @@ namespace Player {
             isParrying = false;
         }
 
+///// ITEMS /////
+        public void SwitchWeapon(int selectedWeapon) {
+            if (selectedWeapon > hand.transform.childCount - 1) {
+                selectedWeapon = 0;
+            }else if (selectedWeapon < 0) {
+                selectedWeapon = hand.transform.childCount - 1;
+            }
+            
+            int i = 0;
+            foreach (Transform weapon in hand.transform) {
+                if (i == selectedWeapon) {
+                    weapon.gameObject.SetActive(true);
+                    myWeapon = weapon.gameObject;
+                }else {
+                    weapon.gameObject.SetActive(false);
+                }
+                i++; 
+            }
+            myWeaponStats = myWeapon.GetComponent<Weapons>();
+
+            if (myWeaponStats.isGun) {
+                bulletsTextBox.text = ("BULLETS x" + myWeaponStats.bullets);
+                if (myWeaponStats.bullets > 0) {
+                    weaponOverrideController["Attack"] = myWeaponStats.fpShootAnimation;
+                }else {
+                    weaponOverrideController["Attack"] = myWeaponStats.fpAttackAnimation; 
+                }           
+            }else {
+                bulletsTextBox.text = ("");
+                weaponOverrideController["Attack"] = myWeaponStats.fpAttackAnimation;
+            }
+            weaponOverrideController["Block"] = myWeaponStats.fpBlockAnimation;
+        }
+
         private void Consume() {
             if (Input.GetKeyDown(consumeKey) && !isAttacking && !isConsuming && !isRunning && playerDrugs > 0) {
                 StopBlocking();
@@ -429,8 +490,9 @@ namespace Player {
             isConsuming = false;
             playerDrugs -= 1;
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
-            if (health.playerHealth < health.maxPlayerHealth) {
-                health.playerHealth += 1;
+            if (playerHealth < maxPlayerHealth) {
+                playerHealth += 1;
+                healthSlider.value = playerHealth;
             }
             if (statusEffects.Contains("isInjured")) {
                 statusEffects.Remove("isInjured");
@@ -484,28 +546,73 @@ namespace Player {
             return false;
         }
 
-        public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
-            Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            attackSound.Play();
-            if (Physics.Raycast(ray, out hit, range, playerLayers)) {
-                if (hit.collider.tag == "Enemy") {
-                    hurtSound.Play();
-                    enemy = hit.collider.gameObject;
-                    eMovement = enemy.GetComponent<Enemies.Movement>();
-                    eRb = enemy.GetComponent<Rigidbody>();
-                    ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    blood.Play();
-                    Destroy(blood.gameObject, 0.5f);
-                    eMovement.TakeDamage(damage);
-                    Vector3 eDirection = enemy.transform.position - transform.position;
-                    eDirection.y = (float)(Math.Sin(-xRotation * Math.PI/180) * knockback);
-                    eRb.AddForce(eDirection.normalized * knockback, ForceMode.Impulse);
-                }else {
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
-                    Destroy(ground.gameObject, 0.5f);
+///// MOVEMENT /////
+        private void MyInput() {
+            horizontalMovement = Input.GetAxisRaw("Horizontal");
+            verticalMovement = Input.GetAxisRaw("Vertical");
+
+            moveDirection = orientation.forward * verticalMovement + orientation.right * horizontalMovement;
+        }
+
+        void MouseInput() {
+            mouseX = Input.GetAxisRaw("Mouse X");
+            mouseY = Input.GetAxisRaw("Mouse Y");
+            yRotation += mouseX * sensX * 0.01f;
+            xRotation -= mouseY * sensY * 0.01f;
+
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            //mouseCam.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            mouseCam.rotation = Quaternion.Lerp(mouseCam.rotation, Quaternion.Euler(xRotation, yRotation, 0), Time.deltaTime * 50);
+            orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+
+        private void Jump() {
+            if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming) {
+                if (playerStamina >= 10f) {
+                    soundController.Stop("PlayerRun", 0.25f);
+                    soundController.PlayOneShot("PlayerJump");
+                    UsingStamina(10f);
+                    rb.velocity = ToolMethods.SettingVector(rb.velocity.x, 0, rb.velocity.z);
+                    rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+                    StartCoroutine(JumpDelay());
                 }
+            }
+        }
+
+        private IEnumerator JumpDelay() {
+            yield return new WaitForSeconds(0.1f);
+            isRunning = false;
+        }
+        
+        private void Movement() {
+            if (isGrounded && !isConsuming) {
+                if (Input.GetKey(sprintKey) && Input.GetKey(forwardKey)) {
+                    Sprint();
+                }else {
+                    Walk();
+                }
+            }
+        }
+
+        private void Walk() {
+            if (isRunning) {
+                soundController.Stop("PlayerRun", 0.25f);
+                isRunning = false;
+            }
+            // moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
+            moveSpeed = walkSpeed;
+        }
+
+        private void Sprint() {
+            if (playerStamina > 20f) {
+                if (!isRunning) {
+                    soundController.Play("PlayerRun");
+                    isRunning = true;
+                }
+                UsingStamina(Time.deltaTime * 20f); // 0.2f
+                moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
+            }else {
+                Walk();
             }
         }
 
@@ -546,57 +653,13 @@ namespace Player {
             }
         }
 
-        public void SwitchWeapon(int selectedWeapon) {
-            if (selectedWeapon > hand.transform.childCount - 1) {
-                selectedWeapon = 0;
-            }else if (selectedWeapon < 0) {
-                selectedWeapon = hand.transform.childCount - 1;
-            }
-            
-            int i = 0;
-            foreach (Transform weapon in hand.transform) {
-                if (i == selectedWeapon) {
-                    weapon.gameObject.SetActive(true);
-                    myWeapon = weapon.gameObject;
-                }else {
-                    weapon.gameObject.SetActive(false);
-                }
-                i++; 
-            }
-            myWeaponStats = myWeapon.GetComponent<Weapons>();
-
-            if (myWeaponStats.isGun) {
-                bulletsTextBox.text = ("BULLETS x" + myWeaponStats.bullets);
-                if (myWeaponStats.bullets > 0) {
-                    weaponOverrideController["Attack"] = myWeaponStats.fpShootAnimation;
-                }else {
-                    weaponOverrideController["Attack"] = myWeaponStats.fpAttackAnimation; 
-                }           
-            }else {
-                bulletsTextBox.text = ("");
-                weaponOverrideController["Attack"] = myWeaponStats.fpAttackAnimation;
-            }
-            weaponOverrideController["Block"] = myWeaponStats.fpBlockAnimation;
-        }
-
-        public void AlertEveryone() {
-            Enemies.Movement[] list = SceneController.Instance.listOfEnemies;
-            for (int i = 0; i < list.Length; i++) {
-                if (list[i] != null && list[i].agent.enabled) {
-                    list[i].agent.SetDestination(transform.position);
-                }
-            }
-        }
-
-        public void AlertRadius(float radius) {
-            Collider[] list = Physics.OverlapSphere(transform.position, radius, enemyMask);
-
-            for (int i = 0; i < list.Length; i++) {
-                Enemies.Movement enemyScript = list[i].GetComponent<Enemies.Movement>();
-                if (enemyScript != null && enemyScript.agent.enabled && !enemyScript.alreadyAttacked) {
-                    enemyScript.agent.SetDestination(transform.position);
-                }
-            } 
+///// SETTINGS /////
+        public static void SettingChanges() {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            newSens = OptionsMenu.sens;
+            sensX = newSens;
+            sensY = newSens;
         }
 
         public void SavePlayer() {
@@ -617,11 +680,5 @@ namespace Player {
                 savedWeapon = Instantiate(cloneWeapon, this.transform.position, transform.rotation) as GameObject; 
             }
         }
-
-        /*void OnDrawGizmos() {
-            Gizmos.color = Color.yellow;
-            //Gizmos.DrawWireSphere(transform.position, 10f);
-            Gizmos.DrawRay(attackCam.ScreenPointToRay(Input.mousePosition));
-        }*/
     }
 }

@@ -34,9 +34,9 @@ public class Holdable : Interactable {
 
             gameObject.SetActive(true);
 
-            gameObject.layer = LayerMask.NameToLayer("Default");
+            gameObject.layer = LayerMask.NameToLayer("Item");
             foreach (Transform child in transform) {
-                child.gameObject.layer = LayerMask.NameToLayer("Default");
+                child.gameObject.layer = LayerMask.NameToLayer("Item");
             }
 
             rb.AddForce(holder.forward, ForceMode.Impulse);
@@ -63,6 +63,7 @@ public class Holdable : Interactable {
     
     public override void Interact(Transform parent) {
         SceneController.Instance.player.interactTextBox.text = ("");
+        SceneController.Instance.soundController.PlayOneShot("Pick Up");
         transform.SetParent(parent);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.zero);

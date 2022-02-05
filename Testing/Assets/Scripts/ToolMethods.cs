@@ -1,5 +1,6 @@
-using System.Collections;
+using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,5 +22,17 @@ public class ToolMethods : MonoBehaviour {
         result.y = yValue;
         result.z = zValue;
         return result;
+    }
+
+    public static void AlertRadius(float radius, Vector3 position, LayerMask mask) {
+        Collider[] list = Physics.OverlapSphere(position, radius, mask);
+        //Debug.Log(string.Join<Collider>(", ", list));
+        for (int i = 0; i < list.Length; i++) {
+            Enemies.Movement enemyScript = list[i].GetComponent<Enemies.Movement>();
+            if (enemyScript != null && enemyScript.agent.enabled && !enemyScript.alreadyAttacked && enemyScript.isAlertable) {
+                //Debug.Log("Alerted: " + enemyScript);
+                enemyScript.agent.SetDestination(position);
+            }
+        } 
     }
 }

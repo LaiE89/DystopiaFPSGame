@@ -21,7 +21,7 @@ public class ingameMenus : MonoBehaviour {
 
     private void Update() {
         if (Input.GetKeyDown(pauseKey) && !pausedGame) {
-            SceneController.Instance.soundController.StopAll();
+            SceneController.Instance.soundController.PauseAll();
             inGameUI.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

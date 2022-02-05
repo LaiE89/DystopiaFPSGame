@@ -32,6 +32,7 @@ namespace Enemies {
             CapsuleCollider eCollider = gameObject.GetComponent<CapsuleCollider>() as CapsuleCollider;
             eCollider.center = ToolMethods.SettingVector(0, 0.35f, 0); 
             eCollider.height = 0.3f;
+            gameObject.layer = LayerMask.NameToLayer("Item");;
             enemyMovement.enabled = false;
             enemyMovement.agent.enabled = false;
         }

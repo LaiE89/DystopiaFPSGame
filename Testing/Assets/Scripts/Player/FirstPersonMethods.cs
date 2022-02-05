@@ -13,19 +13,19 @@ namespace Player {
         }
 
         public void Consuming() {
-            PlayerMovement.soundController.Play("Eating");
+            PlayerMovement.soundController.PlayOneShot("Eating");
             if (PlayerMovement.isConsuming) {
                 PlayerMovement.Consuming();
             }
         }
 
         public void AttackDamage() {
-            PlayerMovement.AlertRadius(PlayerMovement.myWeaponStats.alertRadius);
+            ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.alertRadius, transform.position, PlayerMovement.enemyMask);
             PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage * PlayerMovement.damageMultiplier, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound);   
         }
 
         public void ShootDamage() {
-            PlayerMovement.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius);
+            ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius, transform.position, PlayerMovement.enemyMask);
             PlayerMovement.myWeaponStats.bullets -= 1;
             PlayerMovement.bulletsTextBox.text = ("BULLETS x" + PlayerMovement.myWeaponStats.bullets);
             PlayerMovement.myWeaponStats.muzzleFlash.Play();

@@ -18,7 +18,7 @@ public class CutSceneMenu : MonoBehaviour {
 
     private void Update() {
         if (Input.GetKeyDown(pauseKey) && !pausedGame) {
-            CutSceneController.Instance.soundController.StopAll();
+            SceneController.Instance.soundController.PauseAll();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Pause();
@@ -49,11 +49,11 @@ public class CutSceneMenu : MonoBehaviour {
     IEnumerator LoadAsyncronously (int sceneIndex) {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
-        CutSceneController.Instance.loadingScreen.SetActive(true);
+        SceneController.Instance.loadingScreen.SetActive(true);
         while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / .9f);
-            CutSceneController.Instance.slider.value = progress;
-            CutSceneController.Instance.progressText.text = progress * 100f + "%";
+            SceneController.Instance.loadingSlider.value = progress;
+            SceneController.Instance.progressText.text = progress * 100f + "%";
             yield return null;
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,31 +10,28 @@ public class SceneController : MonoBehaviour {
     // Declare any public variables that you want to be able 
     // to access throughout your scene
     [SerializeField] public GameObject loadingScreen; 
-    [SerializeField] public Slider slider;
+    [SerializeField] public OptionsMenu optionsMenu;
+    [SerializeField] public Slider loadingSlider;
     [SerializeField] public TextMeshProUGUI progressText;
     [SerializeField] public TextMeshProUGUI savingText;
     [SerializeField] public ParticleSystem bloodParticles;
     [SerializeField] public ParticleSystem groundParticles;
+    [SerializeField] public bool isCutscene;
 
     [Header("Singletons")]
+    public GameObject canvas;
     public SoundController soundController;
+    public DialogueController dialogueController;
+    public DialogueController objectivesController;
     public Player.PlayerMovement player;
     public GameObject playerObject;
-    public Enemies.Movement[] listOfEnemies;
+    public List<Enemies.Movement> listOfEnemies;
+    //public Enemies.Movement[] listOfEnemies;
 
     public static int sceneIndex;
     public static SceneController Instance { get; private set; } // static singleton
 
     void Awake() {
-        Array.Clear(listOfEnemies, 0, listOfEnemies.Length);
-        // Scene begin stuff
-        if (MainMenu.saving) {
-            StartCoroutine(FadeOutSaving());
-            MainMenu.saving = false;
-        }
-        sceneIndex = SceneManager.GetActiveScene().buildIndex;
-        Debug.Log("Current Scene Index: " + sceneIndex);
-
         // Singleton Stuff
         if (Instance == null) { 
             Instance = this;
@@ -42,13 +40,48 @@ public class SceneController : MonoBehaviour {
         }
 
         // Cache references to all desired variables
+        canvas = GameObject.Find("Canvas");
         soundController = FindObjectOfType<SoundController>();
         player = FindObjectOfType<Player.PlayerMovement>();
         playerObject = GameObject.Find("Player");
+        dialogueController = GameObject.Find("Dialogue Controller").GetComponent<DialogueController>();
+        objectivesController = GameObject.Find("Objectives Controller").GetComponent<DialogueController>();
+
+        // Scene begin stuff
+        if (isCutscene) {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }else {
+            listOfEnemies.Clear();
+            //Array.Clear(listOfEnemies, 0, listOfEnemies.Length);
+            if (MainMenu.saving) {
+                StartCoroutine(FadeOutSaving());
+                MainMenu.saving = false;
+            }
+        }
+        sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        foreach (Transform child in canvas.transform) {
+            switch (child.name) {
+                case "Loading Screen":
+                    loadingScreen = child.gameObject;
+                    loadingSlider = loadingScreen.transform.GetComponentInChildren<Slider>();
+                    progressText = loadingScreen.transform.GetComponentInChildren<TextMeshProUGUI>();
+                    break;
+                case "Saving Text":
+                    savingText = child.GetComponent<TextMeshProUGUI>();
+                    break;
+                case "Options Menu":
+                    optionsMenu = child.GetComponent<OptionsMenu>();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     void Start() {
-        listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
+        optionsMenu.InitializeSettings();
+        //listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
     }
 
     IEnumerator LoadAsyncronously (int sceneIndex) {
@@ -56,7 +89,7 @@ public class SceneController : MonoBehaviour {
         loadingScreen.SetActive(true);
         while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / .9f);
-            slider.value = progress;
+            loadingSlider.value = progress;
             progressText.text = progress * 100f + "%";
             yield return null;
         }

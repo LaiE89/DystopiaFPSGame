@@ -327,4 +327,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Ladder
+  interactSound: Climb Ladder
   destination: {x: 9.95, y: 4, z: 8}

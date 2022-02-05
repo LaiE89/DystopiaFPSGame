@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5849fb121c7e64449a3f44ef5f3d9347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camPosition: {fileID: 7343175053142260713, guid: c64276fcf15eb2b4199f08b1f41a3aee, type: 3}
+  camPosition: {fileID: 0}
 --- !u!1 &8072787848100038498
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +322,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 251
+    m_Bits: 507
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

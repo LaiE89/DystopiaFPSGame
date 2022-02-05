@@ -15,6 +15,12 @@ public class DialogueTrigger : MonoBehaviour {
     }
 
     public void TriggerDialogue() {
-        FindObjectOfType<DialogueController>().StartDialogue(dialogue);
+        if (dialogue.isObjective) {
+            SceneController.Instance.objectivesController.StartDialogue(dialogue);
+        }else {
+            SceneController.Instance.dialogueController.StartDialogue(dialogue);
+        }
+        //dialogueController.StartDialogue(dialogue);
+        //FindObjectOfType<DialogueController>().StartDialogue(dialogue);
     }
 }

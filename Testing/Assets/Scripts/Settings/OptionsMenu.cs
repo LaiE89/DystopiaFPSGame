@@ -11,10 +11,12 @@ public class OptionsMenu : MonoBehaviour {
     public static float volume;
     public static int resolutionIndex;
     public static bool isFullscreen;
+    public static float brightness;
     Resolution[] resolutions;
     [SerializeField] Slider sensSlider;
     [SerializeField] TMP_Dropdown qualityDropdown;
     [SerializeField] Slider volumeSlider;
+    [SerializeField] Slider brightnessSlider;
     [SerializeField] TMP_Dropdown resolutionDropdown;
     [SerializeField] Toggle fullScreenToggle;
     [SerializeField] AudioMixer audioMixer;
@@ -31,7 +33,7 @@ public class OptionsMenu : MonoBehaviour {
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
         for (int i = 0; i < resolutions.Length; i++) {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
+            string option = resolutions[i].width + " x " + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz";
             options.Add(option);
 
             if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height) {
@@ -43,41 +45,7 @@ public class OptionsMenu : MonoBehaviour {
         resolutionDropdown.RefreshShownValue();
 
         // Loading settings
-        string path = Application.persistentDataPath + "/settings.dat";
-        if (File.Exists(path)) {
-            OptionsData settings = OptionsSaveSystem.LoadSettings();
-
-            sens = settings.sens;
-            sensSlider.value = settings.sens;
-
-            qualityIndex = settings.qualityIndex;
-            qualityDropdown.value = settings.qualityIndex;
-
-            volume = settings.volume;
-            volumeSlider.value = settings.volume;
-
-            resolutionIndex = settings.resolutionIndex;
-            resolutionDropdown.value = settings.resolutionIndex;
-
-            isFullscreen = settings.isFullscreen;
-            fullScreenToggle.isOn = settings.isFullscreen;
-
-        }else {
-            sens = 60;
-            sensSlider.value = 60;
-
-            qualityIndex = 2;
-            qualityDropdown.value = 2;
-
-            volume = 0;
-            volumeSlider.value = 0;
-
-            resolutionIndex = 0;
-            resolutionDropdown.value = 0;
-
-            isFullscreen = true;
-            fullScreenToggle.isOn = true;
-        }
+        LoadSettings();
     }
 
     public void SetVolume(float newVolume) {
@@ -100,6 +68,11 @@ public class OptionsMenu : MonoBehaviour {
         sens = newSens;
     }
 
+    public void SetBrightness(float newBrightness) {
+        brightness = newBrightness;
+        RenderSettings.ambientLight = new Color(brightness, brightness, brightness, 1.0f);
+    }
+
     public void ChangeQuality(int newIndex) {
         qualityIndex = newIndex;
         QualitySettings.SetQualityLevel(newIndex, false);
@@ -107,5 +80,55 @@ public class OptionsMenu : MonoBehaviour {
 
     public void SaveSettings() {
         OptionsSaveSystem.SaveSettings();
+    }
+
+    public void LoadSettings() {
+        string path = Application.persistentDataPath + "/settings.dat";
+        if (File.Exists(path)) {
+            OptionsData settings = OptionsSaveSystem.LoadSettings();
+
+            sens = settings.sens;
+            sensSlider.value = settings.sens;
+
+            qualityIndex = settings.qualityIndex;
+            qualityDropdown.value = settings.qualityIndex;
+
+            volume = settings.volume;
+            volumeSlider.value = settings.volume;
+
+            resolutionIndex = settings.resolutionIndex;
+            resolutionDropdown.value = settings.resolutionIndex;
+
+            isFullscreen = settings.isFullscreen;
+            fullScreenToggle.isOn = settings.isFullscreen;
+
+            brightness = settings.brightness;
+            brightnessSlider.value = settings.brightness;
+
+        }else {
+            sens = 60;
+            sensSlider.value = 60;
+
+            qualityIndex = 2;
+            qualityDropdown.value = 2;
+
+            volume = 0;
+            volumeSlider.value = 0;
+
+            resolutionIndex = 0;
+            resolutionDropdown.value = 0;
+
+            isFullscreen = true;
+            fullScreenToggle.isOn = true;
+
+            brightness = 0.5f;
+            brightnessSlider.value = 0.5f;
+        }
+        AdjustSensitivity(sens);
+        ChangeQuality(qualityIndex);
+        SetVolume(volume);
+        SetResolution(resolutionIndex);
+        SetFullscreen(isFullscreen);
+        SetBrightness(brightness);
     }
 }

@@ -4,13 +4,18 @@ using System.Collections;
 public abstract class Interactable : MonoBehaviour {
 
     [SerializeField] string itemName;
+    [SerializeField] string interactSound;
 
     public virtual void Interact(){
-
+        if (interactSound != null) {
+            SceneController.Instance.soundController.PlayOneShot(interactSound);
+        }
     }
     
     public virtual void Interact(Transform i){
-
+        if (interactSound != null) {
+            SceneController.Instance.soundController.PlayOneShot(interactSound);
+        }
     }
 
     public virtual void OnMouseOver() {
