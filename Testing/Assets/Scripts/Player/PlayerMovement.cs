@@ -18,6 +18,9 @@ namespace Player {
         [SerializeField] KeyCode rightKey = KeyCode.D;
         [SerializeField] KeyCode consumeKey = KeyCode.E;
         [SerializeField] KeyCode pickUpKey = KeyCode.Q;
+        [SerializeField] KeyCode skill1Key = KeyCode.Alpha1;
+        [SerializeField] KeyCode skill2Key = KeyCode.Alpha2;
+        [SerializeField] KeyCode skill3Key = KeyCode.Alpha3;
 
         [Header("Mouse Movement")]
         [SerializeField] float startingYRotation;
@@ -58,7 +61,7 @@ namespace Player {
         [Header("Stamina")]
         [SerializeField] float maxPlayerStamina = 100;
         [SerializeField] float timeBeforeStamina;
-        float playerStamina;
+        [HideInInspector] public float playerStamina;
         Coroutine isRegenStamina;
         
         [Header("Hunger")]
@@ -73,6 +76,7 @@ namespace Player {
         [SerializeField] Material healedArmMaterial;
         [SerializeField] GameObject boneWeapon;
         [SerializeField] public GameObject myWeapon;
+        [SerializeField] public SkillsObject[] skills;
         [HideInInspector] public AnimatorOverrideController weaponOverrideController;
         [HideInInspector] public bool isBlocking;
         [HideInInspector] public bool isParrying;
@@ -91,7 +95,7 @@ namespace Player {
 
         [Header("Interaction")]
         [SerializeField] public int pickUpRange;
-        int selectedWeapon;
+        [HideInInspector] public int selectedWeapon;
 
         [Header("Status")]
         [SerializeField] public List<string> statusEffects;
@@ -108,11 +112,17 @@ namespace Player {
         [SerializeField] public Slider staminaSlider;
         [SerializeField] public Slider healthSlider;
         [SerializeField] public Image hurtScreen;
+        public struct SkillIcon {
+            public Image skillImage;
+            public Image cooldownImage;
+            public KeyCode skillKey;
+        }
         [SerializeField] public ingameMenus canvas;
+        List<SkillIcon> listOfSkillIcons;
 
         [SerializeField] Transform mouseCam;
         [SerializeField] public Camera attackCam;
-        [SerializeField] GameObject hand;
+        [SerializeField] public GameObject hand;
         [SerializeField] GameObject firstPersonView;
 
         [HideInInspector] public SoundController soundController;
@@ -140,8 +150,9 @@ namespace Player {
         }
 
         private void Start() {
-
+            
             // Initializing Gameobjects
+            listOfSkillIcons = new List<SkillIcon>();
             canvas = SceneController.Instance.canvas.GetComponent<ingameMenus>();
             foreach (Transform child in canvas.inGameUI.transform) {
                 switch (child.name) {
@@ -169,11 +180,32 @@ namespace Player {
                     case "Interact Text":
                         interactTextBox = child.GetComponent<TextMeshProUGUI>();
                         break;
+                    case "Skill 1":
+                        SkillIcon skill1 = new SkillIcon();
+                        skill1.skillImage = child.GetComponent<Image>();
+                        skill1.cooldownImage = child.GetChild(0).GetComponent<Image>();
+                        //skill1.skillImage.GetComponentInChildren<Image>();
+                        skill1.skillKey = skill1Key;
+                        listOfSkillIcons.Add(skill1);
+                        break;
                     default:
                         break;
                 }
             }
 
+            for (int i = 0; i < skills.Length; i++) {
+                if (i == 0) {
+                    this.skills[i] = skills[i].CreateInstance(0.5f);
+                    this.skills[i].skillNumber = 1;
+                    Debug.Log("Skill Number: " + this.skills[i].skillNumber);
+                    listOfSkillIcons[0].skillImage.gameObject.SetActive(true);
+                    listOfSkillIcons[0].cooldownImage.gameObject.SetActive(true);
+                    listOfSkillIcons[0].cooldownImage.fillAmount = 1;
+                }
+            }
+            if (skills.Length > 0) {
+                StartCoroutine(SkillCheckRoutine());
+            }
             yRotation = startingYRotation;
             soundController = SceneController.Instance.soundController;
             Cursor.lockState = CursorLockMode.Locked;
@@ -336,6 +368,20 @@ namespace Player {
         }
 
 ///// COMBAT /////
+        private IEnumerator SkillCheckRoutine(){
+            //WaitForSeconds wait = new WaitForSeconds(0.2f);
+            while (true) {
+                yield return null;
+                for (int i = 0; i < skills.Length; i++) {
+                    listOfSkillIcons[skills[i].skillNumber - 1].cooldownImage.fillAmount = 1 - (Time.time - skills[i].useTime) / skills[i].cooldown;
+                    if (Input.GetKeyDown(listOfSkillIcons[skills[i].skillNumber - 1].skillKey) && skills[i].CanUseSkill(gameObject)) {
+                        skills[i].UseSkill(gameObject);
+                        listOfSkillIcons[skills[i].skillNumber - 1].cooldownImage.fillAmount = 1;
+                    }
+                }
+            }
+        }
+
         private void Attack() {
             attackTimer += Time.deltaTime;
             if (Input.GetMouseButton(0) && !isConsuming) {
@@ -372,14 +418,10 @@ namespace Player {
                     hurtSound.Play();
                     enemy = hit.collider.gameObject;
                     eMovement = enemy.GetComponent<Enemies.Movement>();
-                    eRb = enemy.GetComponent<Rigidbody>();
                     ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     blood.Play();
                     Destroy(blood.gameObject, 0.5f);
-                    eMovement.TakeDamage(damage);
-                    Vector3 eDirection = enemy.transform.position - transform.position;
-                    eDirection.y = (float)(Math.Sin(-xRotation * Math.PI/180) * knockback);
-                    eRb.AddForce(eDirection.normalized * knockback, ForceMode.Impulse);
+                    DealDamage(eMovement, enemy, damage, knockback);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
@@ -390,6 +432,13 @@ namespace Player {
                     Destroy(ground.gameObject, 0.5f);
                 }
             }
+        }
+
+        public void DealDamage(Enemies.Movement enemyScript, GameObject enemyObject, float damage, float knockback) {
+            enemyScript.TakeDamage(damage);
+            Vector3 eDirection = enemyObject.transform.position - transform.position;
+            eDirection.y = (float)(Math.Sin(-xRotation * Math.PI/180) * knockback);
+            enemyScript.rb.AddForce(eDirection.normalized * knockback, ForceMode.Impulse);
         }
 
         private void Block() {

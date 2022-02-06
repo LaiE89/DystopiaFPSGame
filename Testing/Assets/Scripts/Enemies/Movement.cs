@@ -10,18 +10,18 @@ namespace Enemies {
         [SerializeField] Transform groundCheck;
         [SerializeField] public NavMeshAgent agent;
         [SerializeField] public Rigidbody rb;
-        [SerializeField] LayerMask whatIsGround, whatIsPlayer;
-        [SerializeField] float height;
+        [SerializeField] public LayerMask whatIsGround, whatIsPlayer;
+        [SerializeField] public float height;
         [SerializeField] GameObject Hand;
         [SerializeField] public AudioSource walkSound;
         [SerializeField] public AudioSource runSound;
         [HideInInspector] public GameObject thePlayer;
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public AnimatorOverrideController animatorOverrideController;
-        LayerMask enemyLayers;
-        float groundDistance = 0.2f;
+        [HideInInspector] public Animator animator;
+        [HideInInspector] public LayerMask enemyLayers;
+        float groundDistance = 0.1f; // original groundDistance = 0.2, original groundposition - 0.15
         bool isGrounded;
-        Animator animator;
         Player.PlayerMovement pMovement;
 
         [Header("=====STATS=====", order=0)]
@@ -35,25 +35,25 @@ namespace Enemies {
         [SerializeField] Vector3[] destinations;
         [HideInInspector] bool playerInSightRange;
         [HideInInspector] bool playerInAttackRange;
-        [HideInInspector] bool isKnockedDown;
         [HideInInspector] public bool isKnockedBack;
         [HideInInspector] public bool canSeePlayer;
         [HideInInspector] public bool targetLocked;
+        [HideInInspector] public float angleToPlayerHorz;
+        [HideInInspector] public Vector3 directionToTarget;
         bool isRunning;
         bool isWalking;
         int destPoint;
         float angleToPlayer;
-        float angleToPlayerHorz;
         float distanceToTarget;
-        Vector3 directionToTarget;
         
         [Header("Attacking Variables")]
         [SerializeField] float timeBetweenAttacks;
         [SerializeField] float shootingAccuracyAngle;
         [SerializeField] float meleeAccuracyAngle = 180;
         [SerializeField] float rotationDegPerSec;
-        [SerializeField] float alertRadius;
+        [SerializeField] public float alertRadius;
         [SerializeField] public float enemyHealth;
+        [SerializeField] public SkillsObject[] skills;
         [HideInInspector] public Weapons eWeaponStats;
         [HideInInspector] public bool isRotating;
         [HideInInspector] public bool alreadyAttacked;
@@ -78,6 +78,10 @@ namespace Enemies {
                 if (weapon.GetComponent<Weapons>().isDefaultItem) {
                     weapon.SetAsLastSibling();
                 }
+            }
+
+            for (int i = 0; i < skills.Length; i++) {
+                this.skills[i] = skills[i].CreateInstance(1);
             }
             
             // Initializing Variables
@@ -104,6 +108,9 @@ namespace Enemies {
                 GoNextPoint();
             }
             StartCoroutine(FOVRoutine());
+            if (skills.Length > 0) {
+                StartCoroutine(SkillCheckRoutine());
+            }
         }
         
         private void Update() {
@@ -113,10 +120,12 @@ namespace Enemies {
                 if (targetLocked) {
                     Running();
                     if (!alreadyAttacked) {
-                        if (agent.isStopped) {
-                            agent.isStopped = false;
+                        if (agent.isActiveAndEnabled) {
+                            agent.SetDestination(thePlayer.transform.position);
+                            if (agent.isStopped) {
+                                agent.isStopped = false;
+                            }
                         }
-                        agent.SetDestination(thePlayer.transform.position);
                     }
                     if (isInitialRotation) {
                         if (canSeePlayer && eWeaponStats.isGun && eWeaponStats.bullets > 0) {
@@ -153,7 +162,7 @@ namespace Enemies {
                 }else {
                     if (!isIdle) {
                         Walking();
-                        if (!agent.pathPending && agent.remainingDistance <= 1f) {
+                        if (agent.isActiveAndEnabled && !agent.pathPending && agent.remainingDistance <= 1f) {
                             GoNextPoint();
                         }
                     }else {
@@ -167,7 +176,7 @@ namespace Enemies {
                             animator.SetBool("isRunning", false);
                             awayFromIdlePos = false;
                         }*/
-                        if (!agent.pathPending && agent.remainingDistance <= 1f) {
+                        if (agent.isActiveAndEnabled && !agent.pathPending && agent.remainingDistance <= 1f) {
                             animator.SetBool("isWalking", false);
                             animator.SetBool("isRunning", false);
                         }else {
@@ -196,7 +205,8 @@ namespace Enemies {
                 angleToPlayerHorz = Vector3.Angle(transform.forward, ToolMethods.SettingVector(directionToTarget.x, 0, directionToTarget.z));
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 if (angleToPlayer < viewAngle / 2) {
-                    if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, 0.75f, 0), directionToTarget, distanceToTarget, whatIsGround)){
+                    // Height used to be 0.75f
+                    if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), directionToTarget, distanceToTarget, whatIsGround)){
                         if (!targetLocked) {
                             isInitialRotation = true;
                         }
@@ -256,13 +266,27 @@ namespace Enemies {
         
 
 // Combat Methods
+        private IEnumerator SkillCheckRoutine(){
+            WaitForSeconds wait = new WaitForSeconds(0.2f);
+            while (true) {
+                yield return wait;
+                for (int i = 0; i < skills.Length; i++) {
+                    if (skills[i].CanUseSkill(gameObject)) {
+                        Debug.Log("Using skill: " + skills[i]);
+                        skills[i].UseSkill(gameObject, thePlayer);
+                    }
+                }
+            }
+        }
 
         private void AttackPlayer() {
             if (!alreadyAttacked) {
                 // Attack code here
                 // agent.SetDestination(transform.position);
                 agent.velocity = Vector3.zero;
-                agent.isStopped = true;
+                if (agent.isActiveAndEnabled) {
+                    agent.isStopped = true;
+                }
                 animator.SetTrigger("isAttacking");
                 alreadyAttacked = true;
                 if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
@@ -289,41 +313,7 @@ namespace Enemies {
             if (hits.Length > 0) {
                 foreach (RaycastHit hit in hits) {
                     if (hit.collider.tag == "Player") {
-                        ToolMethods.AlertRadius(alertRadius, thePlayer.transform.position, pMovement.enemyMask);
-                        hurtSound.Play();
-                        Vector3 direction = thePlayer.transform.position - transform.position;
-                        direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
-                        pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
-                        if (pMovement.isBlocking) {
-                            var forward = transform.TransformDirection(Vector3.forward);
-                            var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
-                            var dotProduct = Vector3.Dot(forward, playerForward);
-
-                            if (dotProduct < -0.9) {
-                                if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
-                                    pMovement.TakeDamage(damage);
-                                }else {
-                                    CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
-                                    pMovement.UsingStamina(damage * 10f);
-                                    if (pMovement.isParrying) {
-                                        soundController.PlayOneShot("Parry");
-                                        pMovement.StartParrying();
-                                        TakeDamage(1f);
-                                        if (Hand.transform.childCount > 1) {
-                                            eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
-                                            selectedWeapon = 1;
-                                            SwitchWeapon(selectedWeapon);
-                                        }
-                                    }else {
-                                        pMovement.BlockingDamage(damage);
-                                    }
-                                }
-                            }else {
-                                pMovement.TakeDamage(damage);
-                            }
-                        }else {
-                            pMovement.TakeDamage(damage);
-                        }
+                        CombatCalculation(damage, knockback, hurtSound);
                     }else {
                         Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                         if (destructable != null) {
@@ -346,41 +336,7 @@ namespace Enemies {
             attackSound.Play();
             if (Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {
                 if (hit.collider.tag == "Player") {
-                    ToolMethods.AlertRadius(alertRadius, thePlayer.transform.position, pMovement.enemyMask);
-                    hurtSound.Play();
-                    Vector3 direction = thePlayer.transform.position - transform.position;
-                    direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
-                    pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
-                    if (pMovement.isBlocking) {
-                        var forward = transform.TransformDirection(Vector3.forward);
-                        var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
-                        var dotProduct = Vector3.Dot(forward, playerForward);
-
-                        if (dotProduct < -0.9) {
-                            if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
-                                pMovement.TakeDamage(damage);
-                            }else {
-                                CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
-                                pMovement.UsingStamina(damage * 10f);
-                                if (pMovement.isParrying) {
-                                    soundController.PlayOneShot("Parry");
-                                    pMovement.StartParrying();
-                                    TakeDamage(1f);
-                                    if (Hand.transform.childCount > 1) {
-                                        eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
-                                        selectedWeapon = 1;
-                                        SwitchWeapon(selectedWeapon);
-                                    }
-                                }else {
-                                    pMovement.BlockingDamage(damage);
-                                }
-                            }
-                        }else {
-                            pMovement.TakeDamage(damage);
-                        }
-                    }else {
-                        pMovement.TakeDamage(damage);
-                    }
+                    CombatCalculation(damage, knockback, hurtSound);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
@@ -414,11 +370,7 @@ namespace Enemies {
 
         public void TakeDamage(float amount) {
             enemyHealth -= amount;
-            alreadyAttacked = false;
-            if (!targetLocked) {
-                isInitialRotation = true;
-            }
-            isRotating = true;
+            turnNonKinematic();
             animator.ResetTrigger("isAttacking");
             animator.SetTrigger("isDamaged");
             if (enemyHealth <= 0) {
@@ -429,9 +381,57 @@ namespace Enemies {
                 isDying = true;
                 StartCoroutine(GroundCheckDelay());
             }
+            print(gameObject.name + " took some damage. Current Health: " + enemyHealth);
+        }
+
+        public void CombatCalculation(float damage, float knockback, AudioSource hurtSound) {
+            ToolMethods.AlertRadius(alertRadius, thePlayer.transform.position, pMovement.enemyMask);
+            if (hurtSound != null) {
+                hurtSound.Play();
+            }
+            Vector3 direction = thePlayer.transform.position - transform.position;
+            direction.y = (float)(Math.Sin(-transform.rotation.x * Math.PI/180) * knockback);
+            pMovement.rb.AddForce(direction.normalized * knockback, ForceMode.Impulse);
+            if (pMovement.isBlocking) {
+                var forward = transform.TransformDirection(Vector3.forward);
+                var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);
+                var dotProduct = Vector3.Dot(forward, playerForward);
+
+                if (dotProduct < -0.9) {
+                    if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
+                        pMovement.TakeDamage(damage);
+                    }else {
+                        CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
+                        pMovement.UsingStamina(damage * 10f);
+                        if (pMovement.isParrying) {
+                            soundController.PlayOneShot("Parry");
+                            pMovement.StartParrying();
+                            TakeDamage(1f);
+                            if (Hand.transform.childCount > 1) {
+                                eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+                                selectedWeapon = 1;
+                                SwitchWeapon(selectedWeapon);
+                            }
+                        }else {
+                            pMovement.BlockingDamage(damage);
+                        }
+                    }
+                }else {
+                    pMovement.TakeDamage(damage);
+                }
+            }else {
+                pMovement.TakeDamage(damage);
+            }
+        }
+
+        public void turnNonKinematic() {
+            alreadyAttacked = false;
+            if (!targetLocked) {
+                isInitialRotation = true;
+            }
+            isRotating = true;
             rb.isKinematic = false;
             isKnockedBack = true;
-            print(gameObject.name + " took some damage. Current Health: " + enemyHealth);
         }
 
         private void SwitchWeapon(int selectedWeapon) {

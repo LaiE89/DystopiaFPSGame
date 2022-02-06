@@ -19,4 +19,5 @@ public class Dialogue {
     public bool onDeath;
     public bool onAttack;
     public bool onMouse;
+    public bool onHurt;
 }

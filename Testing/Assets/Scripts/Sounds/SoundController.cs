@@ -24,6 +24,15 @@ public class SoundController : MonoBehaviour {
         allSounds = FindObjectsOfType<AudioSource>() as AudioSource[];
     }
 
+    public AudioSource GetSound(string sound) {
+        Sound s = Array.Find(specialSounds, item => item.name == sound);
+        if (s == null) {
+            Debug.LogWarning("Sound: " + name + " not found!");
+            return null;
+        }
+        return s.source;
+    }
+
     public void Play(string name) {
         Sound s = Array.Find(specialSounds, sound => sound.name == name);
         if (s == null) {

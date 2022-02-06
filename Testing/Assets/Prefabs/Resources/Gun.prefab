@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: M9 Pistol
+  interactSound: 
 --- !u!114 &7254307353726391384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +101,7 @@ MonoBehaviour:
   shootRange: 15
   shootCooldown: 0.5
   shootKnockback: 1
-  maxBullets: 100
+  maxBullets: 5
   bullets: 5
   shootAlertRadius: 20
   muzzleFlash: {fileID: 4945823519645007402}

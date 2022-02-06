@@ -48,5 +48,15 @@ namespace Enemies {
                 enemyMovement.animatorOverrideController["Punch"] = enemyMovement.eWeaponStats.attackAnimation;
             }
         }
+
+        public void RightHook() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(RightHookSkill)) {
+                    Debug.Log("LETS GO!!!!");
+                    RightHookSkill hook = skills as RightHookSkill;
+                    hook.EnemyRightHook(enemyMovement, SceneController.Instance.player);
+                }
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace Enemies {
         public Dialogue[] dialogues;
         [SerializeField] GameObject objectiveBlock;
         [SerializeField] Movement enemyScript;
+        Dialogue hurt;
         Dialogue attack;
         Dialogue target;
         Dialogue death;
@@ -26,6 +27,9 @@ namespace Enemies {
                 }
                 if (dialogue.onMouse) {
                     mouse = dialogue;
+                }
+                if (dialogue.onHurt) {
+                    hurt = dialogue;
                 }
             }
             StartCoroutine(checkDialogueRoutine());
@@ -75,6 +79,18 @@ namespace Enemies {
                             SceneController.Instance.objectivesController.StartDialogue(attack);
                         }else {
                             SceneController.Instance.dialogueController.StartDialogue(attack);
+                        }
+                    }
+                }
+            }
+            if (hurt != null) {
+                if (enemyScript.isKnockedBack) {
+                    if (!hurt.isTriggered) {
+                        hurt.isTriggered = true;
+                        if (hurt.isObjective) {
+                            SceneController.Instance.objectivesController.StartDialogue(hurt);
+                        }else {
+                            SceneController.Instance.dialogueController.StartDialogue(hurt);
                         }
                     }
                 }
