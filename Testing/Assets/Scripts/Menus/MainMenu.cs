@@ -97,7 +97,7 @@ public class MainMenu : MonoBehaviour {
         Debug.Log(Application.persistentDataPath);
         string path = Application.persistentDataPath + "/player.dat";
 
-        Player.PlayerData data = new Player.PlayerData(playerHunger, walkSpeed, sprintSpeed, jumpForce, playerDrugs, pickUpRange, sceneIndex, statusEffects, myWeapon);
+        Player.PlayerData data = new Player.PlayerData(playerHealth, playerHunger, walkSpeed, sprintSpeed, jumpForce, playerDrugs, pickUpRange, sceneIndex, statusEffects, myWeapon);
         
         var serializer = new DataContractSerializer(typeof(Player.PlayerData));
         var settings = new XmlWriterSettings()

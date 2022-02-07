@@ -18,7 +18,7 @@ namespace Enemies {
         }
 
         public void PlayerDamage() {
-            enemyMovement.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
+            enemyMovement.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
         }
 
         public void StartRotation() {
@@ -40,7 +40,7 @@ namespace Enemies {
         public void ShootDamage() {
             enemyMovement.eWeaponStats.bullets -= 1;
             enemyMovement.eWeaponStats.muzzleFlash.Play();
-            enemyMovement.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
+            enemyMovement.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
         }
 
         public void ShootDamageEnd() {
@@ -52,7 +52,6 @@ namespace Enemies {
         public void RightHook() {
             foreach (SkillsObject skills in enemyMovement.skills) {
                 if (skills.GetType() == typeof(RightHookSkill)) {
-                    Debug.Log("LETS GO!!!!");
                     RightHookSkill hook = skills as RightHookSkill;
                     hook.EnemyRightHook(enemyMovement, SceneController.Instance.player);
                 }

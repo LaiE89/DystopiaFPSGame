@@ -51,7 +51,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!136 &4708515010566225308
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -86,8 +86,10 @@ MonoBehaviour:
   rightKey: 100
   consumeKey: 101
   pickUpKey: 113
+  skill1Key: 49
+  skill2Key: 50
+  skill3Key: 51
   startingYRotation: 90
-  mouseCam: {fileID: 0}
   orientation: {fileID: 4708515010818003553}
   groundMask:
     serializedVersion: 2
@@ -104,17 +106,17 @@ MonoBehaviour:
   maxPlayerHealth: 5
   maxPlayerStamina: 100
   timeBeforeStamina: 1
+  playerStamina: 0
   maxPlayerHunger: 100
   playerHunger: 100
   jumpForce: 7
-  attackCam: {fileID: 0}
-  weaponOverrideController: {fileID: 0}
-  hand: {fileID: 0}
-  firstPersonView: {fileID: 0}
   injuredArmMaterial: {fileID: 2100000, guid: 432d204c2e1df3d43924eb96a9183723, type: 2}
   healedArmMaterial: {fileID: 2100000, guid: 3b8bfc1e34bae454c9f7e39c3e28971a, type: 2}
   boneWeapon: {fileID: 8156657424821227449, guid: b620cc849656ec343a3cb81d407efd95, type: 3}
   myWeapon: {fileID: 0}
+  skills:
+  - {fileID: 0}
+  weaponOverrideController: {fileID: 0}
   isBlocking: 0
   isParrying: 0
   myWeaponStats: {fileID: 0}
@@ -122,10 +124,12 @@ MonoBehaviour:
   playerDrugs: 1
   isConsuming: 0
   pickUpRange: 3
+  selectedWeapon: 0
   statusEffects: []
   damageMultiplier: 0
   attackSpeedMultiplier: 0
   staminaUsageMultiplier: 0
+  speedMultiplier: 0
   interactTextBox: {fileID: 0}
   drugsTextBox: {fileID: 0}
   bulletsTextBox: {fileID: 0}
@@ -134,7 +138,12 @@ MonoBehaviour:
   staminaSlider: {fileID: 0}
   healthSlider: {fileID: 0}
   hurtScreen: {fileID: 0}
+  berserkScreen: {fileID: 0}
   canvas: {fileID: 0}
+  mouseCam: {fileID: 0}
+  attackCam: {fileID: 0}
+  hand: {fileID: 0}
+  firstPersonView: {fileID: 0}
   soundController: {fileID: 0}
   sceneIndex: 0
   rb: {fileID: 0}

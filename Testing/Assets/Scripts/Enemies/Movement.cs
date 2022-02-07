@@ -66,6 +66,9 @@ namespace Enemies {
         [SerializeField] bool isIdle;
         [SerializeField] public bool isAlertable;
         [SerializeField] AnimationClip idleAnimation;
+        [HideInInspector] public float damageMultiplier;
+        [HideInInspector] public float attackSpeedMultiplier;
+        [HideInInspector] public float speedMultiplier;
 
         private void Awake() {
             agent = GetComponent<NavMeshAgent>();
@@ -83,6 +86,8 @@ namespace Enemies {
             for (int i = 0; i < skills.Length; i++) {
                 this.skills[i] = skills[i].CreateInstance(1);
             }
+
+            UpdatingStatus();
             
             // Initializing Variables
             isWalking = false;
@@ -246,7 +251,7 @@ namespace Enemies {
             if (!isRunning) {
                 animator.SetBool("isRunning", true);
                 animator.SetBool("isWalking", false);
-                agent.speed = runningSpeed;
+                agent.speed = runningSpeed * speedMultiplier;
                 //agent.acceleration = runningSpeed + 5;
                 isWalking = false;
                 isRunning = true;
@@ -257,7 +262,7 @@ namespace Enemies {
             if (!isWalking) {
                 animator.SetBool("isRunning", false);
                 animator.SetBool("isWalking", true);
-                agent.speed = walkingSpeed;
+                agent.speed = walkingSpeed * speedMultiplier;
                 //agent.acceleration = walkingSpeed + 5;
                 isRunning = false;
                 isWalking = true;
@@ -266,6 +271,12 @@ namespace Enemies {
         
 
 // Combat Methods
+        public void UpdatingStatus() {
+            attackSpeedMultiplier = 1;
+            damageMultiplier = 1;
+            speedMultiplier = 1;
+        }
+
         private IEnumerator SkillCheckRoutine(){
             WaitForSeconds wait = new WaitForSeconds(0.2f);
             while (true) {
@@ -290,11 +301,11 @@ namespace Enemies {
                 animator.SetTrigger("isAttacking");
                 alreadyAttacked = true;
                 if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
-                    animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.shootCooldown);
-                    Invoke(nameof(ResetAttack), eWeaponStats.shootCooldown + timeBetweenAttacks);
+                    animator.SetFloat("AttackMultiplier", 1 / (eWeaponStats.shootCooldown * attackSpeedMultiplier));
+                    Invoke(nameof(ResetAttack), eWeaponStats.shootCooldown * attackSpeedMultiplier + timeBetweenAttacks);
                 }else {
-                    animator.SetFloat("AttackMultiplier", 1 / eWeaponStats.attackCooldown);
-                    Invoke(nameof(ResetAttack), eWeaponStats.attackCooldown + timeBetweenAttacks);
+                    animator.SetFloat("AttackMultiplier", 1 / (eWeaponStats.attackCooldown * attackSpeedMultiplier));
+                    Invoke(nameof(ResetAttack), eWeaponStats.attackCooldown * attackSpeedMultiplier + timeBetweenAttacks);
                 }
             }
         }

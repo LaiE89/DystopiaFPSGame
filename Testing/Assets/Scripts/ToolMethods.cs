@@ -35,4 +35,13 @@ public class ToolMethods : MonoBehaviour {
             }
         } 
     }
+
+    public static bool checkInArray (object item, object[] list) {
+        foreach(object i in list) {
+            if (i == item) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

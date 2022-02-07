@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7642750824301278898}
   - component: {fileID: 7642750824301278897}
   - component: {fileID: 7642750824301278896}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ammunition Case
   m_TagString: Food
   m_Icon: {fileID: 0}

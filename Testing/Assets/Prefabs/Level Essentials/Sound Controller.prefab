@@ -146,7 +146,7 @@ MonoBehaviour:
   - name: Dash
     clip: {fileID: 8300000, guid: c7905b90ff9049347899584921467055, type: 3}
     volume: 0.5
-    pitch: 0.75
+    pitch: 0.5
     spatialBlend: 1
     loop: 0
     music: 0
@@ -155,8 +155,26 @@ MonoBehaviour:
   - name: Impact
     clip: {fileID: 8300000, guid: 147bcf4b38845c549be6f3182b85cafd, type: 3}
     volume: 1
-    pitch: 0.5
+    pitch: 0.75
     spatialBlend: 1
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Berserk
+    clip: {fileID: 8300000, guid: 25afb99b8bbad094398669aea064b449, type: 3}
+    volume: 0.5
+    pitch: 3
+    spatialBlend: 1
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: UI Click
+    clip: {fileID: 8300000, guid: 43d0cd7ff55992e48815c561e204e4bb, type: 3}
+    volume: 1
+    pitch: 0.75
+    spatialBlend: 0
     loop: 0
     music: 0
     group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}

@@ -16,6 +16,7 @@ MonoBehaviour:
   damage: 1
   isActivating: 0
   skillNumber: 0
+  icon: {fileID: 21300000, guid: 4feae5385b8b0f54896ac08039f71097, type: 3}
   useTime: 0
   initialParticle: {fileID: 2473760799489893067, guid: 71d4fc1e3f5ecc0468277d843d4bc8a9, type: 3}
   chargeSpeed: 10

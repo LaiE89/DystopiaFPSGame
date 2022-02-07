@@ -34,6 +34,8 @@ namespace Player {
     [DataContract]
     public class PlayerData {
         [DataMember]
+        public float playerHealth;
+        [DataMember]
         public float playerHunger;
         [DataMember]
         public float walkSpeed;
@@ -50,15 +52,11 @@ namespace Player {
         [DataMember]
         public List<string> statusEffects;
         [DataMember]
-        //public GameObject myWeapon;
         public string myWeapon;
 
-        /*public GameObject weapon{
-            get { return myWeapon; }
-            set { myWeapon = value; }
-        }*/
         
         public PlayerData (Player.PlayerMovement player) {
+            playerHealth = player.playerHealth;
             playerHunger = player.playerHunger;
             walkSpeed = player.walkSpeed;
             sprintSpeed = player.sprintSpeed;
@@ -70,7 +68,8 @@ namespace Player {
             myWeapon = player.myWeapon.name.Replace("(Clone)", "");
         }
 
-        public PlayerData (float playerHunger, float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int pickUpRange, int sceneIndex, List<string> statusEffects, string myWeapon) {
+        public PlayerData (float playerHealth, float playerHunger, float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int pickUpRange, int sceneIndex, List<string> statusEffects, string myWeapon) {
+            this.playerHealth = playerHealth;
             this.playerHunger = playerHunger;
             this.walkSpeed = walkSpeed;
             this.sprintSpeed = sprintSpeed;

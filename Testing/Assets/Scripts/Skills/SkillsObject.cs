@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillsObject : ScriptableObject {
     public float cooldown = 10f;
     public float damage = 1;
-
     public bool isActivating = false;
-
     public int skillNumber;
+    public Sprite icon;
+    [TextArea(15, 20)]
+    public string description;
     [HideInInspector] public float useTime = 0;
 
     public virtual SkillsObject CreateInstance(float multiplier) {
@@ -20,6 +22,7 @@ public class SkillsObject : ScriptableObject {
         instance.name = name;
         instance.cooldown = cooldown * multiplier;
         instance.damage = damage;
+        instance.icon = icon;
         instance.useTime = 0;
         instance.isActivating = false;
     }

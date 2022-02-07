@@ -42,7 +42,7 @@ public class RightHookSkill : SkillsObject {
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {
-                    CombatCalculation(enemy, player, damage, knockback, enemy.eWeaponStats.hurtSound);
+                    CombatCalculation(enemy, player, damage * enemy.damageMultiplier, knockback, enemy.eWeaponStats.hurtSound);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {

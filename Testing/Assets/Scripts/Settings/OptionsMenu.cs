@@ -112,8 +112,8 @@ public class OptionsMenu : MonoBehaviour {
             qualityIndex = 2;
             qualityDropdown.value = 2;
 
-            volume = 0;
-            volumeSlider.value = 0;
+            volume = 1;
+            volumeSlider.value = 1;
 
             resolutionIndex = 0;
             resolutionDropdown.value = 0;
@@ -121,8 +121,8 @@ public class OptionsMenu : MonoBehaviour {
             isFullscreen = true;
             fullScreenToggle.isOn = true;
 
-            brightness = 0.5f;
-            brightnessSlider.value = 0.5f;
+            brightness = 0.1f;
+            brightnessSlider.value = 0.1f;
         }
         AdjustSensitivity(sens);
         ChangeQuality(qualityIndex);

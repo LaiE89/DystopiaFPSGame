@@ -70,7 +70,7 @@ public class ChargeSkill : SkillsObject {
         while (!enemy.rb.isKinematic && isCharging) {
             if (Vector3.Distance(enemy.transform.position, player.transform.position) < 1f) {
                 enemy.turnNonKinematic();
-                enemy.CombatCalculation(damage, knockback, SceneController.Instance.soundController.GetSound("Impact"));
+                enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback, SceneController.Instance.soundController.GetSound("Impact"));
                 enemy.rb.AddForce(-enemy.rb.velocity.normalized * knockback, ForceMode.Impulse);
                 isCharging = false;
             }
@@ -91,8 +91,8 @@ public class ChargeSkill : SkillsObject {
             foreach (Movement enemy in SceneController.Instance.listOfEnemies) {
                 if (enemy != null && Vector3.Distance(enemy.transform.position, player.transform.position) < 1f) {
                     SceneController.Instance.soundController.PlayClipAtPoint("Impact", player.transform.position);
-                    player.DealDamage(enemy, enemy.gameObject, damage, 0);
-                    CameraShaker.Instance.ShakeOnce(damage*8, damage*4, 0.1f, 0.5f);
+                    player.DealDamage(enemy, enemy.gameObject, damage * player.damageMultiplier, 0);
+                    CameraShaker.Instance.ShakeOnce(damage * player.damageMultiplier * 8, damage * player.damageMultiplier * 4, 0.1f, 0.5f);
                     enemy.rb.AddForce(player.rb.velocity.normalized * knockback, ForceMode.Impulse);
                     player.rb.AddForce(-player.rb.velocity.normalized * knockback, ForceMode.Impulse);
                     isCharging = false;

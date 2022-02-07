@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using EZCameraShake;
+using System.Linq;
 
 namespace Player {
     public class PlayerMovement : MonoBehaviour {
@@ -102,6 +103,7 @@ namespace Player {
         [HideInInspector] public float damageMultiplier;
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float staminaUsageMultiplier;
+        [HideInInspector] public float speedMultiplier;
 
         [Header("Gameobject Initialization")]
         [SerializeField] public TextMeshProUGUI interactTextBox;
@@ -112,12 +114,13 @@ namespace Player {
         [SerializeField] public Slider staminaSlider;
         [SerializeField] public Slider healthSlider;
         [SerializeField] public Image hurtScreen;
+        [SerializeField] public Image berserkScreen;
+        [SerializeField] public ingameMenus canvas;
         public struct SkillIcon {
             public Image skillImage;
             public Image cooldownImage;
             public KeyCode skillKey;
         }
-        [SerializeField] public ingameMenus canvas;
         List<SkillIcon> listOfSkillIcons;
 
         [SerializeField] Transform mouseCam;
@@ -152,12 +155,18 @@ namespace Player {
         private void Start() {
             
             // Initializing Gameobjects
+            Debug.Log("Starting Player");
             listOfSkillIcons = new List<SkillIcon>();
+            SkillsObject[] currentSkillsNoNull = EquipmentManager.instance.currentSkills.Where(item => item != null).ToArray();
+            skills = currentSkillsNoNull;
             canvas = SceneController.Instance.canvas.GetComponent<ingameMenus>();
             foreach (Transform child in canvas.inGameUI.transform) {
                 switch (child.name) {
                     case "Hurt Image":
                         hurtScreen = child.GetComponent<Image>();
+                        break;
+                    case "Berserk Image":
+                        berserkScreen = child.GetComponent<Image>();
                         break;
                     case "Health Bar":
                         healthSlider = child.GetComponent<Slider>();
@@ -184,9 +193,22 @@ namespace Player {
                         SkillIcon skill1 = new SkillIcon();
                         skill1.skillImage = child.GetComponent<Image>();
                         skill1.cooldownImage = child.GetChild(0).GetComponent<Image>();
-                        //skill1.skillImage.GetComponentInChildren<Image>();
                         skill1.skillKey = skill1Key;
                         listOfSkillIcons.Add(skill1);
+                        break;
+                    case "Skill 2":
+                        SkillIcon skill2 = new SkillIcon();
+                        skill2.skillImage = child.GetComponent<Image>();
+                        skill2.cooldownImage = child.GetChild(0).GetComponent<Image>();
+                        skill2.skillKey = skill2Key;
+                        listOfSkillIcons.Add(skill2);
+                        break;
+                    case "Skill 3":
+                        SkillIcon skill3 = new SkillIcon();
+                        skill3.skillImage = child.GetComponent<Image>();
+                        skill3.cooldownImage = child.GetChild(0).GetComponent<Image>();
+                        skill3.skillKey = skill3Key;
+                        listOfSkillIcons.Add(skill3);
                         break;
                     default:
                         break;
@@ -197,10 +219,19 @@ namespace Player {
                 if (i == 0) {
                     this.skills[i] = skills[i].CreateInstance(0.5f);
                     this.skills[i].skillNumber = 1;
-                    Debug.Log("Skill Number: " + this.skills[i].skillNumber);
-                    listOfSkillIcons[0].skillImage.gameObject.SetActive(true);
-                    listOfSkillIcons[0].cooldownImage.gameObject.SetActive(true);
-                    listOfSkillIcons[0].cooldownImage.fillAmount = 1;
+                    Debug.Log(listOfSkillIcons[i].skillImage.name);
+                    listOfSkillIcons[i].skillImage.sprite = this.skills[i].icon;
+                    listOfSkillIcons[i].cooldownImage.fillAmount = 1;
+                }else if (i == 1) {
+                    this.skills[i] = skills[i].CreateInstance(0.5f);
+                    this.skills[i].skillNumber = 2;
+                    listOfSkillIcons[i].skillImage.sprite = this.skills[i].icon;
+                    listOfSkillIcons[i].cooldownImage.fillAmount = 1;
+                }else if (i == 2) {
+                    this.skills[i] = skills[i].CreateInstance(0.5f);
+                    this.skills[i].skillNumber = 3;
+                    listOfSkillIcons[i].skillImage.sprite = this.skills[i].icon;
+                    listOfSkillIcons[i].cooldownImage.fillAmount = 1;
                 }
             }
             if (skills.Length > 0) {
@@ -208,8 +239,8 @@ namespace Player {
             }
             yRotation = startingYRotation;
             soundController = SceneController.Instance.soundController;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
 
             sceneIndex = SceneController.sceneIndex + 1;
             
@@ -222,7 +253,6 @@ namespace Player {
             SwitchWeapon(selectedWeapon);
 
             healthSlider.maxValue = maxPlayerHealth;
-            playerHealth = maxPlayerHealth;
             healthSlider.value = playerHealth;
 
             staminaSlider.maxValue = maxPlayerStamina;
@@ -242,6 +272,10 @@ namespace Player {
                 savedWeapon.GetComponent<Interactable>().Interact(hand.transform);
                 SwitchWeapon(savedWeapon.transform.GetSiblingIndex());
             }
+        }
+
+        public void PlayerStartManually() {
+            Start();
         }
 
         private void Update() {
@@ -312,6 +346,7 @@ namespace Player {
             damageMultiplier = 1;
             attackSpeedMultiplier = 1;
             staminaUsageMultiplier = 1;
+            speedMultiplier = 1;
             if (statusList.Count > 0) {
                 foreach (string status in statusList) {
                     switch (status) {
@@ -649,7 +684,7 @@ namespace Player {
                 isRunning = false;
             }
             // moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
-            moveSpeed = walkSpeed;
+            moveSpeed = walkSpeed * speedMultiplier;
         }
 
         private void Sprint() {
@@ -659,7 +694,7 @@ namespace Player {
                     isRunning = true;
                 }
                 UsingStamina(Time.deltaTime * 20f); // 0.2f
-                moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
+                moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed * speedMultiplier, acceleration * Time.deltaTime);
             }else {
                 Walk();
             }
@@ -704,8 +739,10 @@ namespace Player {
 
 ///// SETTINGS /////
         public static void SettingChanges() {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            if (!InventoryManager.instance.gameObject.activeSelf) {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
             newSens = OptionsMenu.sens;
             sensX = newSens;
             sensY = newSens;
@@ -717,6 +754,7 @@ namespace Player {
 
         public void LoadPlayer() {
             PlayerData data = SaveSystem.LoadPlayer();
+            playerHealth = data.playerHealth;
             playerHunger = data.playerHunger;
             walkSpeed = data.walkSpeed;
             sprintSpeed = data.sprintSpeed;
