@@ -35,7 +35,7 @@ namespace Player {
         public static float newSens;
 
         [Header("Ground Detection")]
-        [SerializeField] LayerMask groundMask;
+        [SerializeField] public LayerMask groundMask;
         [SerializeField] public LayerMask enemyMask;
         [SerializeField] Transform groundCheck;
         [HideInInspector] public bool isGrounded;
@@ -155,7 +155,6 @@ namespace Player {
         private void Start() {
             
             // Initializing Gameobjects
-            Debug.Log("Starting Player");
             listOfSkillIcons = new List<SkillIcon>();
             SkillsObject[] currentSkillsNoNull = EquipmentManager.instance.currentSkills.Where(item => item != null).ToArray();
             skills = currentSkillsNoNull;
@@ -322,6 +321,15 @@ namespace Player {
             StartCoroutine(FadeBlood(true));
         }
 
+        public IEnumerator TakeFireDamage(int numberOfTicks) {
+            for (int i = 0; i < numberOfTicks; i++) {
+                TakeDamage(1f);
+                ParticleSystem fire = Instantiate(SceneController.Instance.burningParticles, transform.position, transform.rotation) as ParticleSystem;
+                fire.Play();
+                yield return new WaitForSeconds(1f);
+            }
+        }
+
         IEnumerator DeathDelay() {
             yield return new WaitForSeconds(0.1f);
             SceneController.Instance.soundController.StopAll();
@@ -455,7 +463,6 @@ namespace Player {
                     eMovement = enemy.GetComponent<Enemies.Movement>();
                     ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     blood.Play();
-                    Destroy(blood.gameObject, 0.5f);
                     DealDamage(eMovement, enemy, damage, knockback);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
@@ -464,7 +471,6 @@ namespace Player {
                     }
                     ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     ground.Play();
-                    Destroy(ground.gameObject, 0.5f);
                 }
             }
         }

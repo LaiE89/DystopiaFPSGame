@@ -17,20 +17,24 @@ public class Explodable : Destructable {
             base.Interact();
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
             foreach (Collider nearbyObject in colliders) {
-                Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
-                if (rb != null && rb != this.GetComponent<Rigidbody>()) {
-                    Enemies.Movement eMovement = nearbyObject.GetComponent<Enemies.Movement>();
-                    Player.PlayerMovement pMovement = nearbyObject.GetComponent<Player.PlayerMovement>();
-                    if (eMovement != null) {
-                        eMovement.TakeDamage(damage);
-                    }else if (pMovement != null) {
-                        pMovement.TakeDamage(damage);
+                Vector3 directionToTarget = (ToolMethods.OffsetPosition(nearbyObject.gameObject.transform.position, 0, 0.2f, 0) - ToolMethods.OffsetPosition(transform.position, 0, 0.2f, 0)).normalized;
+                float distanceToTarget = Vector3.Distance(ToolMethods.OffsetPosition(transform.position, 0, 0.2f, 0), ToolMethods.OffsetPosition(nearbyObject.gameObject.transform.position, 0, 0.2f, 0));
+                if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, 0.2f, 0), directionToTarget, distanceToTarget, groundMask)) {
+                    Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+                    if (rb != null && rb != this.GetComponent<Rigidbody>()) {
+                        Enemies.Movement eMovement = nearbyObject.GetComponent<Enemies.Movement>();
+                        Player.PlayerMovement pMovement = nearbyObject.GetComponent<Player.PlayerMovement>();
+                        if (eMovement != null) {
+                            eMovement.TakeDamage(damage);
+                        }else if (pMovement != null) {
+                            pMovement.TakeDamage(damage);
+                        }
+                        rb.AddExplosionForce(horizontalForce, transform.position, radius, verticalForce, ForceMode.Impulse);
                     }
-                    rb.AddExplosionForce(horizontalForce, transform.position, radius, verticalForce, ForceMode.Impulse);
-                }
-                Destructable destructable = nearbyObject.GetComponent<Destructable>();
-                if (destructable != null) {
-                    destructable.Interact();
+                    Destructable destructable = nearbyObject.GetComponent<Destructable>();
+                    if (destructable != null && destructable != this) {
+                        destructable.Interact();
+                    }
                 }
             }
             Destroy(gameObject);

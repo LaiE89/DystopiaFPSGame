@@ -17,6 +17,9 @@ MonoBehaviour:
   isActivating: 0
   skillNumber: 0
   icon: {fileID: 21300000, guid: 8e877589d0f522b40a98a05034b708d7, type: 3}
+  title: BERSERK
+  description: Temporarily gain speed, damage, attackspeed, and reduced stamina usage.
+    Costs hunger.
   useTime: 0
   initialParticle: {fileID: 580945606245989265, guid: 103e3580c015d564f91646c7d9ca367c, type: 3}
   damageMultiplier: 2

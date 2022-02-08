@@ -16,6 +16,7 @@ public class SceneController : MonoBehaviour {
     [SerializeField] public TextMeshProUGUI savingText;
     [SerializeField] public ParticleSystem bloodParticles;
     [SerializeField] public ParticleSystem groundParticles;
+    [SerializeField] public ParticleSystem burningParticles;
     [SerializeField] public bool isCutscene;
 
     [Header("Singletons")]

@@ -42,7 +42,8 @@ public class Holdable : Interactable {
             rb.AddForce(holder.forward, ForceMode.Impulse);
             rb.AddForce(holder.up * 2, ForceMode.Impulse);
             float random = Random.Range(-1f,1f);
-            rb.AddTorque(new Vector3(random,random,random) * 10);
+            // new Vector3(random,random,random)
+            rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10);
         }
     }
 
@@ -58,7 +59,7 @@ public class Holdable : Interactable {
         rb.AddForce(location.forward, ForceMode.Impulse);
         rb.AddForce(location.up * 2, ForceMode.Impulse);
         float random = Random.Range(-1f,1f);
-        rb.AddTorque(new Vector3(random,random,random) * 10);
+        rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10);
     }
     
     public override void Interact(Transform parent) {

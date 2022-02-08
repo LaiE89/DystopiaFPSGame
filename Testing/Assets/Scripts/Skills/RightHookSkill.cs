@@ -42,7 +42,7 @@ public class RightHookSkill : SkillsObject {
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {
-                    CombatCalculation(enemy, player, damage * enemy.damageMultiplier, knockback, enemy.eWeaponStats.hurtSound);
+                    CombatCalculation(enemy, player, enemy.eWeaponStats.attackDamage * enemy.damageMultiplier, knockback, enemy.eWeaponStats.hurtSound);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
@@ -50,7 +50,6 @@ public class RightHookSkill : SkillsObject {
                     }
                     ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     ground.Play();
-                    Destroy(ground.gameObject, 0.5f);
                 }
             }
         }

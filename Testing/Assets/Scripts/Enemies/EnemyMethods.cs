@@ -57,5 +57,23 @@ namespace Enemies {
                 }
             }
         }
+
+        public void Slam() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(SlamSkill)) {
+                    SlamSkill slam = skills as SlamSkill;
+                    slam.EnemySlam(enemyMovement, SceneController.Instance.player);
+                }
+            }
+        }
+
+        public void Molotov() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(MolotovSkill)) {
+                    MolotovSkill molotov = skills as MolotovSkill;
+                    molotov.EnemyMolotov(enemyMovement, SceneController.Instance.player);
+                }
+            }
+        }
     }
 }

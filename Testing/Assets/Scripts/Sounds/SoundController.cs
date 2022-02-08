@@ -4,6 +4,7 @@ using UnityEngine.Audio;
 using UnityEngine;
 
 public class SoundController : MonoBehaviour {
+    public AudioMixerGroup master;
     public Sound[] specialSounds;
     public AudioSource[] allSounds;
 
@@ -58,7 +59,19 @@ public class SoundController : MonoBehaviour {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
-        AudioSource.PlayClipAtPoint(s.source.clip, position);
+        var sound = PlayClipAt(s.source.clip, position);
+        sound.outputAudioMixerGroup = master;
+    }
+
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos) {
+        var tempGO = new GameObject("TempAudio"); // create the temp object
+        tempGO.transform.position = pos; // set its position
+        var aSource = tempGO.AddComponent<AudioSource>(); // add an audio source
+        aSource.clip = clip; // define the clip
+        // set other aSource properties here, if desired
+        aSource.Play(); // start the sound
+        Destroy(tempGO, clip.length); // destroy object after clip duration
+        return aSource; // return the AudioSource reference
     }
 
     public void Stop(string sound, float fadeTime) {

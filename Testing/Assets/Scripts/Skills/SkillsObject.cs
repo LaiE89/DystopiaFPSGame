@@ -9,7 +9,9 @@ public class SkillsObject : ScriptableObject {
     public bool isActivating = false;
     public int skillNumber;
     public Sprite icon;
-    [TextArea(15, 20)]
+    [TextArea(1, 1)]
+    public string title;
+    [TextArea(3, 3)]
     public string description;
     [HideInInspector] public float useTime = 0;
 

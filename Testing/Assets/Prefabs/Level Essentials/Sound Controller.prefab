@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18f7ae7600b986e47b7b9b0e3e19a2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  master: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
   specialSounds:
   - name: PlayerRun
     clip: {fileID: 8300000, guid: 6da235e2573048249bcbe608f984ff48, type: 3}
@@ -172,6 +173,15 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: UI Click
     clip: {fileID: 8300000, guid: 43d0cd7ff55992e48815c561e204e4bb, type: 3}
+    volume: 1
+    pitch: 0.75
+    spatialBlend: 0
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Molotov
+    clip: {fileID: 8300000, guid: 3bfdb2580a3c56f46a771ce095f24122, type: 3}
     volume: 1
     pitch: 0.75
     spatialBlend: 0

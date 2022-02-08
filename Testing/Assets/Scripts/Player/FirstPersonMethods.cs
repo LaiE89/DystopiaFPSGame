@@ -37,5 +37,23 @@ namespace Player {
                 PlayerMovement.weaponOverrideController["Attack"] = PlayerMovement.myWeaponStats.fpAttackAnimation;
             }
         }
+
+        public void Slam() {
+            foreach (SkillsObject skills in PlayerMovement.skills) {
+                if (skills.GetType() == typeof(SlamSkill)) {
+                    SlamSkill slam = skills as SlamSkill;
+                    slam.PlayerSlam(PlayerMovement);
+                }
+            }
+        }
+
+        public void Molotov() {
+            foreach (SkillsObject skills in PlayerMovement.skills) {
+                if (skills.GetType() == typeof(MolotovSkill)) {
+                    MolotovSkill molotov = skills as MolotovSkill;
+                    molotov.PlayerMolotov(PlayerMovement);
+                }
+            }
+        }
     }
 }

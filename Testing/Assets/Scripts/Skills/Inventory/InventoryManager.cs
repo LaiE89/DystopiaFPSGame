@@ -4,7 +4,7 @@ public class InventoryManager : MonoBehaviour {
 
     public SkillsInventory inventory;
     public Transform slotsParent;
-    InventorySlot[] slots;
+    public InventorySlot[] slots;
 
     public static InventoryManager instance;
     

@@ -27,7 +27,8 @@ public class CutSceneMenu : MonoBehaviour {
 
     public void Resume() {
         pauseMenuUI.SetActive(false);
-        Player.PlayerMovement.SettingChanges();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Time.timeScale = 1;
         pausedGame = false;
     }

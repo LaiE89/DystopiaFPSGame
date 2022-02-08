@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 958260322265487145}
   - component: {fileID: 3929658785608190944}
   - component: {fileID: -5448607539991435403}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Oil Drum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,6 +111,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactSound: Explosion
   interactParticle: {fileID: 580945606245989265, guid: 103e3580c015d564f91646c7d9ca367c, type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
   radius: 5
   horizontalForce: 15
   verticalForce: 0

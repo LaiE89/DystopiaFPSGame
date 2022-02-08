@@ -10,7 +10,7 @@ namespace Enemies {
         [SerializeField] Transform groundCheck;
         [SerializeField] public NavMeshAgent agent;
         [SerializeField] public Rigidbody rb;
-        [SerializeField] public LayerMask whatIsGround, whatIsPlayer;
+        [SerializeField] public LayerMask groundMask, playerMask;
         [SerializeField] public float height;
         [SerializeField] GameObject Hand;
         [SerializeField] public AudioSource walkSound;
@@ -102,7 +102,7 @@ namespace Enemies {
             animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
             animator.runtimeAnimatorController = animatorOverrideController;
             rb.freezeRotation = true;
-            enemyLayers = whatIsGround | whatIsPlayer;
+            enemyLayers = groundMask | playerMask;
             pMovement = thePlayer.GetComponent<Player.PlayerMovement>();
             selectedWeapon = 0;
             SwitchWeapon(selectedWeapon);
@@ -202,7 +202,7 @@ namespace Enemies {
         }
 
         private void FieldOfViewCheck(){
-            Collider[] rangeChecks = Physics.OverlapSphere(transform.position, sightRange, whatIsPlayer);
+            Collider[] rangeChecks = Physics.OverlapSphere(transform.position, sightRange, playerMask);
             if (rangeChecks.Length != 0) {
                 Transform target = rangeChecks[0].transform;
                 directionToTarget = (target.position - transform.position).normalized;
@@ -211,7 +211,7 @@ namespace Enemies {
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 if (angleToPlayer < viewAngle / 2) {
                     // Height used to be 0.75f
-                    if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), directionToTarget, distanceToTarget, whatIsGround)){
+                    if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), directionToTarget, distanceToTarget, groundMask)){
                         if (!targetLocked) {
                             isInitialRotation = true;
                         }
@@ -286,6 +286,8 @@ namespace Enemies {
                         Debug.Log("Using skill: " + skills[i]);
                         skills[i].UseSkill(gameObject, thePlayer);
                     }
+                    //float sum = (skills[i].useTime + skills[i].cooldown);
+                    //Debug.Log("Using skill: " + skills[i] + ", UseCD Time: " + sum + ", Current Time: " + Time.time);
                 }
             }
         }
@@ -332,7 +334,6 @@ namespace Enemies {
                         }
                         ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                         ground.Play();
-                        Destroy(ground.gameObject, 0.5f);
                     }
                 }
             }
@@ -355,13 +356,12 @@ namespace Enemies {
                     }
                     ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
                     ground.Play();
-                    Destroy(ground.gameObject, 0.5f);
                 }
             }
         }
 
         private void CheckGround() {
-            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround);
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
             if (isGrounded && isKnockedBack) {
                 animator.ResetTrigger("isDamaged");
                 rb.isKinematic = true;
@@ -393,6 +393,15 @@ namespace Enemies {
                 StartCoroutine(GroundCheckDelay());
             }
             print(gameObject.name + " took some damage. Current Health: " + enemyHealth);
+        }
+
+        public IEnumerator TakeFireDamage(int numberOfTicks) {
+            for (int i = 0; i < numberOfTicks; i++) {
+                TakeDamage(1f);
+                ParticleSystem fire = Instantiate(SceneController.Instance.burningParticles, transform.position, transform.rotation) as ParticleSystem;
+                fire.Play();
+                yield return new WaitForSeconds(1f);
+            }
         }
 
         public void CombatCalculation(float damage, float knockback, AudioSource hurtSound) {

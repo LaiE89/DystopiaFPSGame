@@ -6,7 +6,6 @@ public class Food : Interactable {
     float curPickUpTime;
     [SerializeField] public float nutritionValue;
     [SerializeField] public float pickUpTime;
-    [SerializeField] ParticleSystem eatingParticles;
     [SerializeField] public bool isAlive;
     bool isEating = false;
     bool isConsuming = false;
@@ -56,7 +55,8 @@ public class Food : Interactable {
         isEating = true;
         player.weaponAnimator.SetTrigger("isConsuming");
         yield return new WaitForSeconds(0.7f);
-        eatingParticles.Play();
+        ParticleSystem eatParticles = Instantiate(SceneController.Instance.bloodParticles, transform.position, transform.rotation);
+        eatParticles.Play();
         yield return new WaitForSeconds(1);
         isEating = false;
     }

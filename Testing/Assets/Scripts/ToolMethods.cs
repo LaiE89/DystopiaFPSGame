@@ -24,6 +24,16 @@ public class ToolMethods : MonoBehaviour {
         return result;
     }
 
+    public static Quaternion SettingQuaternion(float xValue, float yValue, float zValue, float wValue) {
+        Quaternion result;
+        result.x = xValue;
+        result.y = yValue;
+        result.z = zValue;
+        result.w = wValue;
+        return result;
+    }
+
+
     public static void AlertRadius(float radius, Vector3 position, LayerMask mask) {
         Collider[] list = Physics.OverlapSphere(position, radius, mask);
         //Debug.Log(string.Join<Collider>(", ", list));

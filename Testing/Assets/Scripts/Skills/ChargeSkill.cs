@@ -34,7 +34,6 @@ public class ChargeSkill : SkillsObject {
         base.UseSkill(user, target);
         ParticleSystem startParticle = Instantiate(initialParticle, user.transform.position, user.transform.rotation);
         startParticle.Play();
-        Destroy(startParticle.gameObject, 0.5f);
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
             isEnemy.animator.SetTrigger("isUsingSkills");
@@ -49,7 +48,6 @@ public class ChargeSkill : SkillsObject {
         base.UseSkill(user);
         ParticleSystem startParticle = Instantiate(initialParticle, user.transform.position, user.transform.rotation);
         startParticle.Play();
-        Destroy(startParticle.gameObject, 0.5f);
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
         if (isPlayer) {
             isPlayer.UsingStamina(staminaCost);

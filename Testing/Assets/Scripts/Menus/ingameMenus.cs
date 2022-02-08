@@ -9,8 +9,10 @@ public class ingameMenus : MonoBehaviour {
     public GameObject inGameUI;
     public GameObject deathScreenUI;
     public static bool pausedGame = false;
+    InventoryManager inventoryManager;
 
     private void Start() {
+        inventoryManager = FindObjectOfType<InventoryManager>();
         pauseMenuUI.SetActive(false);
         optionsMenuUI.SetActive(false);
         deathScreenUI.SetActive(false);
@@ -21,6 +23,11 @@ public class ingameMenus : MonoBehaviour {
 
     private void Update() {
         if (Input.GetKeyDown(pauseKey) && !pausedGame) {
+            if (inventoryManager != null && InventoryManager.instance.gameObject.activeSelf) {
+                foreach (InventorySlot slot in InventoryManager.instance.slots) {
+                    slot.descriptionBox.gameObject.SetActive(false);
+                }
+            }
             SceneController.Instance.soundController.PauseAll();
             inGameUI.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
