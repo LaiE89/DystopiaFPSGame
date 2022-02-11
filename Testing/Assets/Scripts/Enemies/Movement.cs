@@ -69,6 +69,7 @@ namespace Enemies {
         [HideInInspector] public float damageMultiplier;
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float speedMultiplier;
+        [HideInInspector] public bool isChoking;
 
         private void Awake() {
             agent = GetComponent<NavMeshAgent>();

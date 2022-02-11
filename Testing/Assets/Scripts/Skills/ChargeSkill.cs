@@ -10,6 +10,7 @@ public class ChargeSkill : SkillsObject {
     public float chargeSpeed = 1;
     public float staminaCost = 10;
     public float knockback = 5;
+    public float minDistance = 5;
 
     public override SkillsObject CreateInstance(float multiplier) {
         ChargeSkill instance = CreateInstance<ChargeSkill>();
@@ -17,17 +18,18 @@ public class ChargeSkill : SkillsObject {
         instance.initialParticle = initialParticle;
         instance.chargeSpeed = chargeSpeed;
         instance.knockback = knockback;
+        instance.minDistance = minDistance;
         return instance;
     }
 
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isActivating && isEnemy.angleToPlayerHorz < 30 && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time;
+            return !isActivating && isEnemy.angleToPlayerHorz < 30 && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance && !isEnemy.isChoking;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
-        return !isActivating && isPlayer.playerStamina > staminaCost && useTime + cooldown < Time.time;
+        return !isActivating && isPlayer.playerStamina > staminaCost && useTime + cooldown < Time.time && !isPlayer.isChoking;
     }
 
     public override void UseSkill(GameObject user, GameObject target) {

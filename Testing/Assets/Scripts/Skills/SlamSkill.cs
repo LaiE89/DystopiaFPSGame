@@ -30,11 +30,11 @@ public class SlamSkill : SkillsObject {
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance;
+            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance && !isEnemy.isChoking;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
-        return !isActivating && isPlayer.playerStamina > staminaCost && useTime + cooldown < Time.time;
+        return !isActivating && isPlayer.playerStamina > staminaCost && useTime + cooldown < Time.time && !isPlayer.isChoking;
     }
 
     public override void UseSkill(GameObject user, GameObject target) {
@@ -49,7 +49,6 @@ public class SlamSkill : SkillsObject {
             isEnemy.animator.SetTrigger("isSlamming");
         }
         useTime = Time.time;
-        Debug.Log("Slam CD: " + useTime);
         isActivating = false;
     }
 
@@ -91,6 +90,7 @@ public class SlamSkill : SkillsObject {
             enemy.agent.isStopped = false;
         }
         enemy.alreadyAttacked = false;
+        enemy.animator.ResetTrigger("isUsingSkills");
         enemy.animator.ResetTrigger("isSlamming");
     }
 

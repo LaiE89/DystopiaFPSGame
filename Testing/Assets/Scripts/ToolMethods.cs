@@ -54,4 +54,12 @@ public class ToolMethods : MonoBehaviour {
         }
         return false;
     }
+
+    public static void ResetAllAnimatorTriggers(Animator animator) {
+        foreach (var trigger in animator.parameters) {
+            if (trigger.type == AnimatorControllerParameterType.Trigger) {
+                animator.ResetTrigger(trigger.name);
+            }
+        }
+    }
 }

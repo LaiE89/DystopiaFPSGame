@@ -30,10 +30,10 @@ public class MolotovSkill : SkillsObject {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
             float distance = Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position);
-            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + cooldown < Time.time && distance > minDistance && distance <= maxDistance;
+            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + cooldown < Time.time && distance > minDistance && distance <= maxDistance && !isEnemy.isChoking;
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
-        return !isActivating && isPlayer.playerStamina > staminaCost && useTime + cooldown < Time.time;
+        return !isActivating && isPlayer.playerStamina > staminaCost && useTime + cooldown < Time.time && !isPlayer.isChoking;
     }
 
     public override void UseSkill(GameObject user, GameObject target) {
@@ -71,6 +71,8 @@ public class MolotovSkill : SkillsObject {
         if (enemy.agent.isActiveAndEnabled) {
             enemy.agent.isStopped = false;
         }
+        enemy.animator.ResetTrigger("isUsingSkills");
+        enemy.animator.ResetTrigger("isThrowingMolotov");
     }
 
     public void PlayerMolotov(PlayerMovement player) {

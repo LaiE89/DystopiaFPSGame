@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0b78bcf2a51794b8dd84014d673302, type: 3}
+  m_Name: Ambush Skill
+  m_EditorClassIdentifier: 
+  cooldown: 5
+  damage: 3
+  isActivating: 0
+  skillNumber: 0
+  icon: {fileID: 21300000, guid: b76cc4976ce44934fa5c6abf8a1f879e, type: 3}
+  title: AMBUSH
+  description: Ambushes an enemy from behind. Only works if you are behind an enemy.
+    Costs stamina.
+  useTime: 0
+  staminaCost: 10
+  range: 2

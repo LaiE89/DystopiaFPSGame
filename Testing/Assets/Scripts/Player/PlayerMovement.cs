@@ -83,7 +83,7 @@ namespace Player {
         [HideInInspector] public bool isParrying;
         [HideInInspector] public Weapons myWeaponStats;
         [HideInInspector] public Animator weaponAnimator;
-        LayerMask playerLayers;
+        [HideInInspector] public LayerMask playerLayers;
         SkinnedMeshRenderer armMeshRenderer;
         Weapons defaultWeaponStats;
         float attackTimer;
@@ -104,6 +104,7 @@ namespace Player {
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float staminaUsageMultiplier;
         [HideInInspector] public float speedMultiplier;
+        [HideInInspector] public bool isChoking;
 
         [Header("Gameobject Initialization")]
         [SerializeField] public TextMeshProUGUI interactTextBox;
@@ -126,7 +127,7 @@ namespace Player {
         [SerializeField] Transform mouseCam;
         [SerializeField] public Camera attackCam;
         [SerializeField] public GameObject hand;
-        [SerializeField] GameObject firstPersonView;
+        [SerializeField] public GameObject firstPersonView;
 
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public int sceneIndex;
