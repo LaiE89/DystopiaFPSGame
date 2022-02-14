@@ -58,9 +58,11 @@ namespace Enemies {
         [HideInInspector] public bool isRotating;
         [HideInInspector] public bool alreadyAttacked;
         [HideInInspector] public bool isDying;
+        [HideInInspector ]public Coroutine skillLagRoutine;
         int selectedWeapon;
         GameObject eWeapon;
         bool isInitialRotation;
+        float timeNotSeeing;
 
         [Header("States Variables")]
         [SerializeField] bool isIdle;
@@ -127,7 +129,32 @@ namespace Enemies {
                     Running();
                     if (!alreadyAttacked) {
                         if (agent.isActiveAndEnabled) {
-                            agent.SetDestination(thePlayer.transform.position);
+                            if (agent.pathStatus == NavMeshPathStatus.PathPartial) {
+                                NavMeshHit hit;
+                                if (NavMesh.SamplePosition(thePlayer.transform.position, out hit, 3.0f, groundMask)) {
+                                    agent.SetDestination(hit.position);
+                                }
+                                if (agent.remainingDistance < 0.5f) {
+                                    targetLocked = false;
+                                    GoNextPoint();
+                                }
+                            }else {
+                                if (canSeePlayer) {
+                                    if (timeNotSeeing > 0) {
+                                        timeNotSeeing = 0;
+                                    }
+                                    agent.SetDestination(thePlayer.transform.position);
+                                }else { 
+                                    agent.SetDestination(thePlayer.transform.position);
+                                    timeNotSeeing += Time.deltaTime;
+                                    if (timeNotSeeing > 2) {
+                                        targetLocked = false;
+                                        Debug.Log(this.name + " stopped following at " + Time.time);
+                                        timeNotSeeing = 0;
+                                    }
+                                }
+                            }
+                            // agent.SetDestination(thePlayer.transform.position);
                             if (agent.isStopped) {
                                 agent.isStopped = false;
                             }
@@ -159,10 +186,9 @@ namespace Enemies {
                             }
                         }
                     }
-                    if (isRotating) {
+                    if (isRotating && Mathf.Abs(gameObject.transform.position.y - thePlayer.transform.position.y) < 1f) {
                         Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
                         Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
-                        //new Vector3(direction.x, 0, direction.z)
                         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
                     }
                 }else {
@@ -172,16 +198,6 @@ namespace Enemies {
                             GoNextPoint();
                         }
                     }else {
-                        /*if (Vector3.Distance(transform.position, destinations[0]) > 0.2f && !awayFromIdlePos) {
-                            GoNextPoint();
-                            Walking();
-                            awayFromIdlePos = true;
-                        }else if (Vector3.Distance(transform.position, destinations[0]) <= 0.2f && awayFromIdlePos){
-                            transform.rotation = Quaternion.Euler(0, startingYRotation, 0);
-                            animator.SetBool("isWalking", false);
-                            animator.SetBool("isRunning", false);
-                            awayFromIdlePos = false;
-                        }*/
                         if (agent.isActiveAndEnabled && !agent.pathPending && agent.remainingDistance <= 1f) {
                             animator.SetBool("isWalking", false);
                             animator.SetBool("isRunning", false);
@@ -228,6 +244,10 @@ namespace Enemies {
             }
             if (!targetLocked && canSeePlayer) {
                 targetLocked = true;
+                if (agent.isActiveAndEnabled) {
+                    timeNotSeeing = 0;
+                    agent.SetDestination(thePlayer.transform.position);
+                }
             }else if (targetLocked && !canSeePlayer && rangeChecks.Length == 0){
                 if (agent.isActiveAndEnabled && agent.isStopped) {
                     agent.isStopped = false;
@@ -284,7 +304,6 @@ namespace Enemies {
                 yield return wait;
                 for (int i = 0; i < skills.Length; i++) {
                     if (skills[i].CanUseSkill(gameObject)) {
-                        Debug.Log("Using skill: " + skills[i]);
                         skills[i].UseSkill(gameObject, thePlayer);
                     }
                     //float sum = (skills[i].useTime + skills[i].cooldown);
@@ -318,9 +337,6 @@ namespace Enemies {
         }
 
         public void SpherecastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
-            //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
-            //new Vector3(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z)
-            //Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingPosition(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), Color.green, 3);
             attackSound.Play();
             isRotating = false;
             RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), range, enemyLayers);
@@ -382,9 +398,13 @@ namespace Enemies {
 
         public void TakeDamage(float amount) {
             enemyHealth -= amount;
-            turnNonKinematic();
             animator.ResetTrigger("isAttacking");
             animator.SetTrigger("isDamaged");
+            ResetSpeed();
+            turnNonKinematic();
+            if (skillLagRoutine != null) {
+                StopCoroutine(skillLagRoutine);
+            }
             if (enemyHealth <= 0) {
                 if (Hand.transform.childCount > 1) {
                     eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
@@ -393,7 +413,7 @@ namespace Enemies {
                 isDying = true;
                 StartCoroutine(GroundCheckDelay());
             }
-            print(gameObject.name + " took some damage. Current Health: " + enemyHealth);
+            Debug.Log(gameObject.name + " took some damage. Current Health: " + enemyHealth);
         }
 
         public IEnumerator TakeFireDamage(int numberOfTicks) {
@@ -481,16 +501,25 @@ namespace Enemies {
             }
         }
 
-        /*public void AlertOthers() {
-            Movement[] list = SceneController.Instance.listOfEnemies;
-            for (int i = 0; i < list.Length; i++) {
-                Debug.Log("listOfEnemies[i] : " + SceneController.Instance.listOfEnemies[i]);
-                Debug.Log("This: " + this);
-                if (list[i] != this && list[i] != null && list[i].agent.enabled) {
-                    list[i].agent.SetDestination(thePlayer.transform.position);
-                }
+        public IEnumerator SkillEndingLag(float time, float speed) {
+            var instruction = new WaitForEndOfFrame();
+            // This needs fixing so it works for dynamic speed multiplier
+            float curSpeed = 1;
+            this.isRunning = false;
+            this.speedMultiplier *= speed;
+            while (time > 0) {
+                time -= Time.deltaTime;
+                yield return instruction;
             }
-        }*/
+            this.isRunning = false;
+            this.speedMultiplier = curSpeed;
+        }
+
+        public void ResetSpeed() {
+            this.isRunning = false;
+            // Make this dynamic
+            this.speedMultiplier = 1;
+        }
 
         /*void OnDrawGizmos() {
             Gizmos.color = Color.yellow;

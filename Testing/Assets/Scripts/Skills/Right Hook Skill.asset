@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded6c93a09feb26469d7f10b26ca1e2f, type: 3}
   m_Name: Right Hook Skill
   m_EditorClassIdentifier: 
-  cooldown: 3
+  cooldown: 5
   damage: 1
   isActivating: 0
+  skillNumber: 0
+  icon: {fileID: 0}
+  title: 
+  description: 
+  useTime: 0
   knockback: 3

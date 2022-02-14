@@ -26,14 +26,16 @@ namespace Player {
 
         public void ShootDamage() {
             ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius, transform.position, PlayerMovement.enemyMask);
-            PlayerMovement.myWeaponStats.bullets -= 1;
+            if (PlayerMovement.myWeaponStats.bullets > 0) {
+                PlayerMovement.myWeaponStats.bullets -= 1;
+            }
             PlayerMovement.bulletsTextBox.text = ("BULLETS x" + PlayerMovement.myWeaponStats.bullets);
             PlayerMovement.myWeaponStats.muzzleFlash.Play();
             PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound); 
         }
 
         public void ShootDamageEnd() {
-            if (PlayerMovement.myWeaponStats.bullets == 0) {
+            if (PlayerMovement.myWeaponStats.bullets <= 0) {
                 PlayerMovement.weaponOverrideController["Attack"] = PlayerMovement.myWeaponStats.fpAttackAnimation;
             }
         }

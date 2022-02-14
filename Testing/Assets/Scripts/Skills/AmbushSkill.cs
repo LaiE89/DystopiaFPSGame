@@ -69,28 +69,31 @@ public class AmbushSkill : SkillsObject {
     }
 
     public IEnumerator PlayerChoke(PlayerMovement player, GameObject enemy, Movement eMovement, Vector3 originalPosition, Quaternion originalRotation, float originalSpeed) {
+        var instruction = new WaitForEndOfFrame();
         eMovement.isRotating = false;
+        eMovement.rb.isKinematic = true;
+        eMovement.agent.enabled = false;
+        yield return instruction;
+        eMovement.rb.velocity = Vector3.zero;
+        eMovement.rb.angularVelocity = Vector3.zero; 
+        yield return instruction;
         enemy.transform.localPosition = Vector3.zero;
         enemy.transform.localRotation = Quaternion.identity;
         enemy.transform.localScale = Vector3.one;
         enemy.GetComponent<CapsuleCollider>().enabled = false;
-        eMovement.rb.velocity = Vector3.zero;
-        eMovement.rb.angularVelocity = Vector3.zero; 
-        eMovement.rb.isKinematic = true;
-        eMovement.agent.enabled = false;
         yield return new WaitForSeconds(1.5f);
         ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, ToolMethods.OffsetPosition(player.firstPersonView.transform.GetChild(player.firstPersonView.transform.childCount - 1).transform.position, 0, 0.65f, 0.6f), Quaternion.identity);
         blood.Play();
         SceneController.Instance.soundController.PlayClipAtPoint("Death", enemy.transform.position);
+        enemy.layer = LayerMask.NameToLayer("Enemy");
         foreach (Transform child in enemy.transform) {        
             child.gameObject.layer = LayerMask.NameToLayer("Default");
         }
         eMovement.animator.SetBool("isChoking", false);
+        eMovement.animator.ResetTrigger("isUsingSkills");
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Ignore Raycast"), LayerMask.NameToLayer("Player"), false);
         enemy.transform.SetParent(null);
-        enemy.layer = LayerMask.NameToLayer("Enemy");
         enemy.GetComponent<CapsuleCollider>().enabled = true;
-        eMovement.rb.isKinematic = false;
         eMovement.agent.enabled = true;
         enemy.transform.position = originalPosition;
         enemy.transform.rotation = originalRotation;

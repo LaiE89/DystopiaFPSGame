@@ -13,6 +13,7 @@ public class SkillsObject : ScriptableObject {
     public string title;
     [TextArea(3, 3)]
     public string description;
+
     [HideInInspector] public float useTime = 0;
 
     public virtual SkillsObject CreateInstance(float multiplier) {

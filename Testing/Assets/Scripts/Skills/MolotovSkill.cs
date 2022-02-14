@@ -40,9 +40,10 @@ public class MolotovSkill : SkillsObject {
         base.UseSkill(user, target);
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            if (isEnemy.agent.isActiveAndEnabled) {
-                isEnemy.agent.isStopped = true;
+            if (isEnemy.skillLagRoutine != null) {
+                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
             }
+            isEnemy.skillLagRoutine = isEnemy.StartCoroutine(isEnemy.SkillEndingLag(1, 0f));
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isThrowingMolotov");
         }
@@ -68,9 +69,6 @@ public class MolotovSkill : SkillsObject {
         rb.AddForce(ToolMethods.SettingVector(enemy.transform.forward.x * force, enemy.transform.forward.y + verticalForce, enemy.transform.forward.z * force), ForceMode.Impulse);
         float random = Random.Range(-100f,100f);
         rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 50); 
-        if (enemy.agent.isActiveAndEnabled) {
-            enemy.agent.isStopped = false;
-        }
         enemy.animator.ResetTrigger("isUsingSkills");
         enemy.animator.ResetTrigger("isThrowingMolotov");
     }

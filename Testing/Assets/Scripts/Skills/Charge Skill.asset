@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8b91a77d8d5b748b9851e689c1a99b, type: 3}
   m_Name: Charge Skill
   m_EditorClassIdentifier: 
-  cooldown: 8
+  cooldown: 7
   damage: 1
   isActivating: 0
   skillNumber: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   chargeSpeed: 10
   staminaCost: 10
   knockback: 10
+  minDistance: 5

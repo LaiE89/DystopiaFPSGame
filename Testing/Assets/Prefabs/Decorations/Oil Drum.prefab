@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 958260322265487145}
   - component: {fileID: 3929658785608190944}
   - component: {fileID: -5448607539991435403}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Oil Drum
   m_TagString: Untagged
   m_Icon: {fileID: 0}

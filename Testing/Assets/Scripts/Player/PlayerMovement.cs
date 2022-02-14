@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using EZCameraShake;
 using System.Linq;
+using UnityEngine.AI;
 
 namespace Player {
     public class PlayerMovement : MonoBehaviour {
@@ -37,6 +38,7 @@ namespace Player {
         [Header("Ground Detection")]
         [SerializeField] public LayerMask groundMask;
         [SerializeField] public LayerMask enemyMask;
+        [SerializeField] public LayerMask destructableMask;
         [SerializeField] Transform groundCheck;
         [HideInInspector] public bool isGrounded;
         float groundDistance = 0.2f;
@@ -264,7 +266,7 @@ namespace Player {
 
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
 
-            playerLayers = groundMask | enemyMask;
+            playerLayers = groundMask | enemyMask | destructableMask;
 
             UpdatingStatus(this.statusEffects);
 
@@ -585,6 +587,11 @@ namespace Player {
                 playerHealth += 1;
                 healthSlider.value = playerHealth;
             }
+            playerStamina += 50;
+            if (playerStamina > 100) {
+                playerStamina = 100;
+            }
+            staminaSlider.value = playerStamina;
             if (statusEffects.Contains("isInjured")) {
                 statusEffects.Remove("isInjured");
                 UpdatingStatus(this.statusEffects);

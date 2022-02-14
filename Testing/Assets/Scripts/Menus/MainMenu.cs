@@ -19,9 +19,9 @@ public class MainMenu : MonoBehaviour {
     [Header("Player Default Values")]
     [SerializeField] float playerHealth = 5;
     [SerializeField] float playerHunger = 100;
-    [SerializeField] float walkSpeed = 2.5f;
-    [SerializeField] float sprintSpeed = 4f;
-    [SerializeField] float jumpForce = 5f;
+    [SerializeField] float walkSpeed = 2f;
+    [SerializeField] float sprintSpeed = 6f;
+    [SerializeField] float jumpForce = 7f;
     [SerializeField] int playerDrugs = 1;
     [SerializeField] int pickUpRange = 3;
     [SerializeField] int sceneIndex = 1;

@@ -4056,7 +4056,7 @@ MonoBehaviour:
   playerHealth: 5
   playerHunger: 100
   walkSpeed: 2
-  sprintSpeed: 4
+  sprintSpeed: 6
   jumpForce: 7
   playerDrugs: 1
   pickUpRange: 3

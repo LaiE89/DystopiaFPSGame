@@ -38,6 +38,10 @@ public class ChargeSkill : SkillsObject {
         startParticle.Play();
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
+            if (isEnemy.skillLagRoutine != null) {
+                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
+            }
+            isEnemy.ResetSpeed();
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isCharging");
             isEnemy.StartCoroutine(EnemyCharge(isEnemy, target.GetComponent<PlayerMovement>()));
@@ -89,7 +93,7 @@ public class ChargeSkill : SkillsObject {
         while (isCharging) {
             chargingTime += Time.deltaTime; 
             foreach (Movement enemy in SceneController.Instance.listOfEnemies) {
-                if (enemy != null && Vector3.Distance(enemy.transform.position, player.transform.position) < 1f) {
+                if (enemy != null && !enemy.isChoking && Vector3.Distance(enemy.transform.position, player.transform.position) < 1f) {
                     SceneController.Instance.soundController.PlayClipAtPoint("Impact", player.transform.position);
                     player.DealDamage(enemy, enemy.gameObject, damage * player.damageMultiplier, 0);
                     CameraShaker.Instance.ShakeOnce(damage * player.damageMultiplier * 8, damage * player.damageMultiplier * 4, 0.1f, 0.5f);

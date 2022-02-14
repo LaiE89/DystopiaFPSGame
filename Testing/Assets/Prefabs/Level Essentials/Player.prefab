@@ -97,11 +97,14 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 128
+  destructableMask:
+    serializedVersion: 2
+    m_Bits: 512
   groundCheck: {fileID: 4708515010587764783}
   isGrounded: 0
   moveSpeed: 0
   walkSpeed: 2
-  sprintSpeed: 4
+  sprintSpeed: 6
   playerHealth: 5
   maxPlayerHealth: 5
   maxPlayerStamina: 100
@@ -121,6 +124,9 @@ MonoBehaviour:
   isParrying: 0
   myWeaponStats: {fileID: 0}
   weaponAnimator: {fileID: 0}
+  playerLayers:
+    serializedVersion: 2
+    m_Bits: 0
   playerDrugs: 1
   isConsuming: 0
   pickUpRange: 3
@@ -130,6 +136,7 @@ MonoBehaviour:
   attackSpeedMultiplier: 0
   staminaUsageMultiplier: 0
   speedMultiplier: 0
+  isChoking: 0
   interactTextBox: {fileID: 0}
   drugsTextBox: {fileID: 0}
   bulletsTextBox: {fileID: 0}

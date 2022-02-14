@@ -2086,6 +2086,7 @@ GameObject:
   - component: {fileID: 4877149249930582027}
   - component: {fileID: 9066324130578269708}
   - component: {fileID: 1676814798444786032}
+  - component: {fileID: -6962908274318720976}
   m_Layer: 7
   m_Name: Raider
   m_TagString: Enemy
@@ -2223,6 +2224,7 @@ MonoBehaviour:
   damageMultiplier: 0
   attackSpeedMultiplier: 0
   speedMultiplier: 0
+  isChoking: 0
 --- !u!195 &4877149249930582016
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2238,7 +2240,7 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 1080
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.5
@@ -2275,7 +2277,6 @@ MonoBehaviour:
   interactSound: 
   nutritionValue: 20
   pickUpTime: 5
-  eatingParticles: {fileID: 0}
   isAlive: 1
 --- !u!114 &1676814798444786032
 MonoBehaviour:
@@ -2292,6 +2293,55 @@ MonoBehaviour:
   dialogues: []
   objectiveBlock: {fileID: 0}
   enemyScript: {fileID: 4877149249930582017}
+--- !u!114 &-6962908274318720976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5723640505134087103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ce7a59de5bf0745bac24075c2e74a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Method: 3
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &5840044975472178512
 GameObject:
   m_ObjectHideFlags: 0

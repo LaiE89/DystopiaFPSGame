@@ -14,6 +14,7 @@ public class SlamSkill : SkillsObject {
     public float horizontalForce;
     public float verticalForce;
     public float minDistance = 5;
+    
 
     public override SkillsObject CreateInstance(float multiplier) {
         SlamSkill instance = CreateInstance<SlamSkill>();
@@ -41,10 +42,10 @@ public class SlamSkill : SkillsObject {
         base.UseSkill(user, target);
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            if (isEnemy.agent.isActiveAndEnabled) {
-                isEnemy.agent.isStopped = true;
-                isEnemy.alreadyAttacked = true;
+            if (isEnemy.skillLagRoutine != null) {
+                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
             }
+            isEnemy.skillLagRoutine = isEnemy.StartCoroutine(isEnemy.SkillEndingLag(0.25f, 0));
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isSlamming");
         }
@@ -85,9 +86,6 @@ public class SlamSkill : SkillsObject {
                     destructable.Interact();
                 }
             }
-        }
-        if (enemy.agent.isActiveAndEnabled) {
-            enemy.agent.isStopped = false;
         }
         enemy.alreadyAttacked = false;
         enemy.animator.ResetTrigger("isUsingSkills");

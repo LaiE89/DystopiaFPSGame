@@ -28,6 +28,10 @@ public class RightHookSkill : SkillsObject {
         base.UseSkill(user, target);
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
+            if (isEnemy.skillLagRoutine != null) {
+                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
+            }
+            isEnemy.skillLagRoutine = isEnemy.StartCoroutine(isEnemy.SkillEndingLag(1.25f, 0.25f));
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isRightHooking");
         }
