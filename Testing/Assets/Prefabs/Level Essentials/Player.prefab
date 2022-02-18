@@ -106,7 +106,7 @@ MonoBehaviour:
   walkSpeed: 2
   sprintSpeed: 6
   playerHealth: 5
-  maxPlayerHealth: 5
+  maxPlayerHealth: 10
   maxPlayerStamina: 100
   timeBeforeStamina: 1
   playerStamina: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   playerLayers:
     serializedVersion: 2
     m_Bits: 0
-  playerDrugs: 1
+  playerDrugs: 0
   isConsuming: 0
   pickUpRange: 3
   selectedWeapon: 0
