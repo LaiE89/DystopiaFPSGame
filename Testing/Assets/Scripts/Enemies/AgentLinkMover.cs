@@ -15,24 +15,24 @@ public class AgentLinkMover : MonoBehaviour
 {
     public OffMeshLinkMoveMethod m_Method = OffMeshLinkMoveMethod.Parabola;
     public AnimationCurve m_Curve = new AnimationCurve();
-    public LayerMask playerMask;
+    // public LayerMask playerMask;
 
     IEnumerator Start()
     {
+        // Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Player"), true);
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.autoTraverseOffMeshLink = false;
-        while (true)
-        {
-            if (agent.isOnOffMeshLink)
-            {
-                OffMeshLinkData offMeshLinkData = agent.currentOffMeshLinkData;
-                if (!Physics.CheckSphere(offMeshLinkData.endPos, 1f, playerMask)) {
-                    if (m_Method == OffMeshLinkMoveMethod.NormalSpeed)
-                        yield return StartCoroutine(NormalSpeed(agent));
-                    else if (m_Method == OffMeshLinkMoveMethod.Parabola)
-                        yield return StartCoroutine(Parabola(agent, 2.0f, 0.5f));
-                    else if (m_Method == OffMeshLinkMoveMethod.Curve)
-                        yield return StartCoroutine(Curve(agent, 0.5f));
+        while (true) {
+            if (agent.isOnOffMeshLink) {
+                //OffMeshLinkData offMeshLinkData = agent.currentOffMeshLinkData;
+                //if (!Physics.CheckSphere(offMeshLinkData.endPos, 0.5f, playerMask)) {
+                if (m_Method == OffMeshLinkMoveMethod.NormalSpeed)
+                    yield return StartCoroutine(NormalSpeed(agent));
+                else if (m_Method == OffMeshLinkMoveMethod.Parabola)
+                    yield return StartCoroutine(Parabola(agent, 2.0f, 0.5f));
+                else if (m_Method == OffMeshLinkMoveMethod.Curve)
+                    yield return StartCoroutine(Curve(agent, 0.5f));
+                if (agent.isActiveAndEnabled) {
                     agent.CompleteOffMeshLink();
                 }
             }
@@ -72,6 +72,9 @@ public class AgentLinkMover : MonoBehaviour
         Vector3 startPos = agent.transform.position;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
         float normalizedTime = 0.0f;
+        Vector3 direction = (endPos - startPos).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
+        agent.transform.rotation = lookRotation;
         while (normalizedTime < 1.0f)
         {
             float yOffset = m_Curve.Evaluate(normalizedTime);

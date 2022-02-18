@@ -20,8 +20,8 @@ namespace Enemies {
         [HideInInspector] public AnimatorOverrideController animatorOverrideController;
         [HideInInspector] public Animator animator;
         [HideInInspector] public LayerMask enemyLayers;
-        float groundDistance = 0.1f; // original groundDistance = 0.2, original groundposition - 0.15
         bool isGrounded;
+        float groundDistance = 0.1f; // original groundDistance = 0.2, original groundposition - 0.15
         Player.PlayerMovement pMovement;
 
         [Header("=====STATS=====", order=0)]
@@ -109,6 +109,7 @@ namespace Enemies {
             pMovement = thePlayer.GetComponent<Player.PlayerMovement>();
             selectedWeapon = 0;
             SwitchWeapon(selectedWeapon);
+            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy"), true);
             Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Item"), LayerMask.NameToLayer("Enemy"), true);
             if (isIdle) {
                 animatorOverrideController["Idle"] = idleAnimation;
@@ -390,7 +391,7 @@ namespace Enemies {
             }
         }
 
-        private IEnumerator GroundCheckDelay() {
+        public IEnumerator GroundCheckDelay() {
             agent.enabled = false;
             yield return new WaitForSeconds(0.2f);
             CheckGround();

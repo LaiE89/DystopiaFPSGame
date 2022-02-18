@@ -2339,9 +2339,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  playerMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &5840044975472178512
 GameObject:
   m_ObjectHideFlags: 0

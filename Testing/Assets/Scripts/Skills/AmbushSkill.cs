@@ -53,7 +53,7 @@ public class AmbushSkill : SkillsObject {
                         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Ignore Raycast"), LayerMask.NameToLayer("Player"), true);
                         enemy.transform.SetParent(isPlayer.firstPersonView.transform.GetChild(isPlayer.firstPersonView.transform.childCount - 1));
                         eMovement.animator.SetTrigger("isUsingSkills");
-                        eMovement.animator.SetBool("isChoking", true);
+                        eMovement.animator.SetTrigger("isChoking");
                         float originalSpeed = isPlayer.speedMultiplier;
                         isPlayer.speedMultiplier = 0;
                         isPlayer.weaponAnimator.SetTrigger("isUsingSkills");
@@ -89,8 +89,6 @@ public class AmbushSkill : SkillsObject {
         foreach (Transform child in enemy.transform) {        
             child.gameObject.layer = LayerMask.NameToLayer("Default");
         }
-        eMovement.animator.SetBool("isChoking", false);
-        eMovement.animator.ResetTrigger("isUsingSkills");
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Ignore Raycast"), LayerMask.NameToLayer("Player"), false);
         enemy.transform.SetParent(null);
         enemy.GetComponent<CapsuleCollider>().enabled = true;
@@ -98,9 +96,9 @@ public class AmbushSkill : SkillsObject {
         enemy.transform.position = originalPosition;
         enemy.transform.rotation = originalRotation;
         enemy.transform.localScale = Vector3.one;
-        eMovement.TakeDamage(player.myWeaponStats.attackDamage * player.damageMultiplier + damage);
         player.speedMultiplier = originalSpeed;
         eMovement.isChoking = false;
         player.isChoking = false;
+        eMovement.TakeDamage(player.myWeaponStats.attackDamage * player.damageMultiplier + damage);
     }
 }
