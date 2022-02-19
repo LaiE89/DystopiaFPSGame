@@ -72,12 +72,12 @@ public class AgentLinkMover : MonoBehaviour
         Vector3 startPos = agent.transform.position;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
         float normalizedTime = 0.0f;
-        Vector3 direction = (endPos - startPos).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
-        agent.transform.rotation = lookRotation;
         while (normalizedTime < 1.0f)
         {
             float yOffset = m_Curve.Evaluate(normalizedTime);
+            Vector3 direction = (endPos - startPos).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
+            agent.transform.rotation = lookRotation;
             agent.transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
             normalizedTime += Time.deltaTime / duration;
             yield return null;

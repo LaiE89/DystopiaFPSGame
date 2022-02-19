@@ -72,6 +72,8 @@ namespace Enemies {
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float speedMultiplier;
         [HideInInspector] public bool isChoking;
+        Quaternion startingRotation;
+        bool isGoingBack;
 
         private void Awake() {
             agent = GetComponent<NavMeshAgent>();
@@ -93,6 +95,7 @@ namespace Enemies {
             UpdatingStatus();
             
             // Initializing Variables
+            startingRotation = gameObject.transform.rotation;
             isWalking = false;
             isInitialRotation = false;
             isDying = false;
@@ -150,6 +153,10 @@ namespace Enemies {
                                     timeNotSeeing += Time.deltaTime;
                                     if (timeNotSeeing > 2) {
                                         targetLocked = false;
+                                        if (isIdle && Vector3.Distance(gameObject.transform.position, destinations[0]) > 0.5f) {
+                                            // GoNextPoint();
+                                            isGoingBack = true;
+                                        }
                                         Debug.Log(this.name + " stopped following at " + Time.time);
                                         timeNotSeeing = 0;
                                     }
@@ -199,9 +206,17 @@ namespace Enemies {
                             GoNextPoint();
                         }
                     }else {
-                        if (agent.isActiveAndEnabled && !agent.pathPending && agent.remainingDistance <= 1f) {
-                            animator.SetBool("isWalking", false);
-                            animator.SetBool("isRunning", false);
+                        if (agent.isActiveAndEnabled && !agent.pathPending && agent.remainingDistance <= 0.05f) {
+                            if (Vector3.Distance(gameObject.transform.position, destinations[0]) > 0.05f) {
+                                GoNextPoint();
+                            }else {
+                                animator.SetBool("isWalking", false);
+                                animator.SetBool("isRunning", false);
+                                if (isGoingBack) {
+                                    gameObject.transform.rotation = startingRotation;
+                                    isGoingBack = false;
+                                }
+                            }
                         }else {
                             Walking();
                         }
