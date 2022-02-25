@@ -6,13 +6,10 @@ public class AmmoConsumable : Interactable {
     
     public override void Interact() {
         Player.PlayerMovement playerInstance = SceneController.Instance.player;
-        if (playerInstance.myWeaponStats.isGun) {
-            base.Interact();
-            playerInstance.myWeaponStats.bullets = playerInstance.myWeaponStats.maxBullets;
-            playerInstance.weaponOverrideController["Attack"] = playerInstance.myWeaponStats.fpShootAnimation;
-            playerInstance.bulletsTextBox.text = ("BULLETS x" + playerInstance.myWeaponStats.bullets);
-            playerInstance.interactTextBox.text = ("");
-            Destroy(gameObject);
-        }
+        base.Interact();
+        playerInstance.playerAmmo += 1;
+        playerInstance.ammoTextBox.text = ("AMMO x " + playerInstance.playerAmmo);
+        playerInstance.interactTextBox.text = ("");
+        Destroy(gameObject);
     }
 }

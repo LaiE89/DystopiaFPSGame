@@ -40,7 +40,7 @@ public class AmbushSkill : SkillsObject {
                     GameObject enemy = hit.collider.gameObject;
                     Vector3 playerRelativeToEnemy = enemy.transform.InverseTransformPoint(isPlayer.transform.position);
                     Movement eMovement = enemy.GetComponent<Enemies.Movement>();
-                    if (playerRelativeToEnemy.z <= 0) {
+                    if (playerRelativeToEnemy.z <= 0 && (eMovement.agent.isActiveAndEnabled && !eMovement.agent.isOnOffMeshLink || !eMovement.agent.isActiveAndEnabled)) {
                         isPlayer.isChoking = true;
                         eMovement.isChoking = true;
                         Vector3 enemyOriginalPosition = enemy.transform.position;

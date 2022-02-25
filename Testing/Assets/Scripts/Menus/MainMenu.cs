@@ -23,6 +23,7 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] float sprintSpeed = 6f;
     [SerializeField] float jumpForce = 7f;
     [SerializeField] int playerDrugs = 1;
+    [SerializeField] int playerAmmo = 0;
     [SerializeField] int pickUpRange = 3;
     [SerializeField] int sceneIndex = 1;
     [SerializeField] List<string> statusEffects = new List<string>();
@@ -97,7 +98,7 @@ public class MainMenu : MonoBehaviour {
         Debug.Log(Application.persistentDataPath);
         string path = Application.persistentDataPath + "/player.dat";
 
-        Player.PlayerData data = new Player.PlayerData(playerHealth, playerHunger, walkSpeed, sprintSpeed, jumpForce, playerDrugs, pickUpRange, sceneIndex, statusEffects, myWeapon);
+        Player.PlayerData data = new Player.PlayerData(playerHealth, playerHunger, walkSpeed, sprintSpeed, jumpForce, playerDrugs, playerAmmo, pickUpRange, sceneIndex, statusEffects, myWeapon);
         
         var serializer = new DataContractSerializer(typeof(Player.PlayerData));
         var settings = new XmlWriterSettings()

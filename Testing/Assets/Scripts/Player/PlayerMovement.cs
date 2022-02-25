@@ -19,6 +19,7 @@ namespace Player {
         [SerializeField] KeyCode backwardKey = KeyCode.S;
         [SerializeField] KeyCode rightKey = KeyCode.D;
         [SerializeField] KeyCode consumeKey = KeyCode.E;
+        [SerializeField] KeyCode reloadKey = KeyCode.R;
         [SerializeField] KeyCode pickUpKey = KeyCode.Q;
         [SerializeField] KeyCode skill1Key = KeyCode.Alpha1;
         [SerializeField] KeyCode skill2Key = KeyCode.Alpha2;
@@ -96,6 +97,10 @@ namespace Player {
         [SerializeField] public int playerDrugs;
         [HideInInspector] public bool isConsuming;
 
+        [Header("Reload")]
+        [SerializeField] public int playerAmmo;
+        [HideInInspector] public bool isReloading;
+
         [Header("Interaction")]
         [SerializeField] public int pickUpRange;
         [HideInInspector] public int selectedWeapon;
@@ -111,6 +116,7 @@ namespace Player {
         [Header("Gameobject Initialization")]
         [SerializeField] public TextMeshProUGUI interactTextBox;
         [SerializeField] public TextMeshProUGUI drugsTextBox;
+        [SerializeField] public TextMeshProUGUI ammoTextBox;
         [SerializeField] public TextMeshProUGUI bulletsTextBox;
         [SerializeField] public Slider holdInteractSlider;
         [SerializeField] public Slider hungerSlider;
@@ -184,6 +190,9 @@ namespace Player {
                         break;
                     case "Drugs Text":
                         drugsTextBox = child.GetComponent<TextMeshProUGUI>();
+                        break;
+                    case "Ammo Text":
+                        ammoTextBox = child.GetComponent<TextMeshProUGUI>();
                         break;
                     case "Bullets Text":
                         bulletsTextBox = child.GetComponent<TextMeshProUGUI>();
@@ -265,6 +274,7 @@ namespace Player {
             hungerSlider.value = playerHunger;
 
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
+            ammoTextBox.text = ("AMMO x " + playerAmmo);
 
             playerLayers = groundMask | enemyMask | destructableMask;
 
@@ -296,6 +306,7 @@ namespace Player {
                 Attack();
                 Block();
                 Consume();
+                Reload();
                 PickUp();
 
                 // Faster Falling 
@@ -430,7 +441,7 @@ namespace Player {
 
         private void Attack() {
             attackTimer += Time.deltaTime;
-            if (Input.GetMouseButton(0) && !isConsuming) {
+            if (Input.GetMouseButton(0) && !isConsuming && !isReloading) {
                 if (myWeaponStats.isGun && myWeaponStats.bullets > 0) {
                     if (attackTimer >= myWeaponStats.shootCooldown * attackSpeedMultiplier) {
                         isAttacking = true;
@@ -486,7 +497,7 @@ namespace Player {
         }
 
         private void Block() {
-            if (Input.GetMouseButton(1) && !Input.GetMouseButton(0) && !isAttacking && !isConsuming) {
+            if (Input.GetMouseButton(1) && !Input.GetMouseButton(0) && !isAttacking && !isConsuming && !isReloading) {
                 if (!isBlocking) {
                     isParrying = true;
                 }
@@ -572,7 +583,7 @@ namespace Player {
         }
 
         private void Consume() {
-            if (Input.GetKeyDown(consumeKey) && !isAttacking && !isConsuming && !isRunning && playerDrugs > 0) {
+            if (Input.GetKeyDown(consumeKey) && !isAttacking && !isConsuming && !isReloading && !isRunning && playerDrugs > 0) {
                 StopBlocking();
                 isConsuming = true; 
                 weaponAnimator.SetTrigger("isConsuming");
@@ -598,6 +609,23 @@ namespace Player {
                 armMeshRenderer.material = healedArmMaterial;
                 defaultWeaponStats.weaponHealth = defaultWeaponStats.maxWeaponHealth;
             }
+        }
+
+        private void Reload() {
+            if (Input.GetKeyDown(reloadKey) && myWeaponStats.isGun && !isAttacking && !isConsuming && !isReloading && !isRunning && playerAmmo > 0) {
+                StopBlocking();
+                isReloading = true; 
+                weaponAnimator.SetTrigger("isReloading");
+            }
+        }
+
+        public void Reloading() {
+            isReloading = false;
+            playerAmmo -= 1;
+            ammoTextBox.text = ("AMMO x " + playerAmmo);
+            myWeaponStats.bullets = myWeaponStats.maxBullets;
+            weaponOverrideController["Attack"] = myWeaponStats.fpShootAnimation;
+            bulletsTextBox.text = ("BULLETS x " + myWeaponStats.bullets);
         }
 
         private void PickUp() {
@@ -665,7 +693,7 @@ namespace Player {
         }
 
         private void Jump() {
-            if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming) {
+            if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming && !isReloading) {
                 if (playerStamina >= 10f) {
                     soundController.Stop("PlayerRun", 0.25f);
                     soundController.PlayOneShot("PlayerJump");
@@ -683,7 +711,7 @@ namespace Player {
         }
         
         private void Movement() {
-            if (isGrounded && !isConsuming) {
+            if (isGrounded && !isConsuming && !isReloading) {
                 if (Input.GetKey(sprintKey) && Input.GetKey(forwardKey)) {
                     Sprint();
                 }else {
@@ -774,6 +802,7 @@ namespace Player {
             sprintSpeed = data.sprintSpeed;
             jumpForce = data.jumpForce;
             playerDrugs = data.playerDrugs;
+            playerAmmo = data.playerAmmo;
             pickUpRange = data.pickUpRange;
             statusEffects = data.statusEffects;
             GameObject cloneWeapon = (GameObject)Resources.Load(data.myWeapon, typeof(GameObject));

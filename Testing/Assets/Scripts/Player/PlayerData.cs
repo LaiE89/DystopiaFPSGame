@@ -46,6 +46,8 @@ namespace Player {
         [DataMember]
         public int playerDrugs;
         [DataMember]
+        public int playerAmmo;
+        [DataMember]
         public int pickUpRange;
         [DataMember]
         public int sceneIndex;
@@ -62,13 +64,14 @@ namespace Player {
             sprintSpeed = player.sprintSpeed;
             jumpForce = player.jumpForce;
             playerDrugs = player.playerDrugs;
+            playerAmmo = player.playerAmmo;
             pickUpRange = player.pickUpRange;
             sceneIndex = player.sceneIndex;
             statusEffects = player.statusEffects;
             myWeapon = player.myWeapon.name.Replace("(Clone)", "");
         }
 
-        public PlayerData (float playerHealth, float playerHunger, float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int pickUpRange, int sceneIndex, List<string> statusEffects, string myWeapon) {
+        public PlayerData (float playerHealth, float playerHunger, float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int playerAmmo, int pickUpRange, int sceneIndex, List<string> statusEffects, string myWeapon) {
             this.playerHealth = playerHealth;
             this.playerHunger = playerHunger;
             this.walkSpeed = walkSpeed;

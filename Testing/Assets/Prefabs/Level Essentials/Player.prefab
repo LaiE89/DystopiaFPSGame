@@ -105,7 +105,7 @@ MonoBehaviour:
   moveSpeed: 0
   walkSpeed: 2
   sprintSpeed: 6
-  playerHealth: 5
+  playerHealth: 10
   maxPlayerHealth: 10
   maxPlayerStamina: 100
   timeBeforeStamina: 1
@@ -117,8 +117,7 @@ MonoBehaviour:
   healedArmMaterial: {fileID: 2100000, guid: 3b8bfc1e34bae454c9f7e39c3e28971a, type: 2}
   boneWeapon: {fileID: 8156657424821227449, guid: b620cc849656ec343a3cb81d407efd95, type: 3}
   myWeapon: {fileID: 0}
-  skills:
-  - {fileID: 0}
+  skills: []
   weaponOverrideController: {fileID: 0}
   isBlocking: 0
   isParrying: 0

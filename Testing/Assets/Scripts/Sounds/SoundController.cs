@@ -92,8 +92,7 @@ public class SoundController : MonoBehaviour {
             s.source.volume -= startVolume * Time.deltaTime / fadeTime;
             yield return null;
         }
- 
-        s.source.Stop ();
+        s.source.Stop();
         s.source.volume = startVolume;
     }
 

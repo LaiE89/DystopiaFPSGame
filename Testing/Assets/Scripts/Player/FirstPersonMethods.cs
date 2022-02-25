@@ -19,6 +19,14 @@ namespace Player {
             }
         }
 
+        public void Reloading() {
+            // PlayerMovement.soundController.PlayOneShot("Eating");
+            PlayerMovement.myWeaponStats.reloadSound.Play();
+            if (PlayerMovement.isReloading) {
+                PlayerMovement.Reloading();
+            }
+        }
+
         public void AttackDamage() {
             ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.alertRadius, transform.position, PlayerMovement.enemyMask);
             PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage * PlayerMovement.damageMultiplier, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound);   
@@ -29,7 +37,7 @@ namespace Player {
             if (PlayerMovement.myWeaponStats.bullets > 0) {
                 PlayerMovement.myWeaponStats.bullets -= 1;
             }
-            PlayerMovement.bulletsTextBox.text = ("BULLETS x" + PlayerMovement.myWeaponStats.bullets);
+            PlayerMovement.bulletsTextBox.text = ("BULLETS x " + PlayerMovement.myWeaponStats.bullets);
             PlayerMovement.myWeaponStats.muzzleFlash.Play();
             PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound); 
         }

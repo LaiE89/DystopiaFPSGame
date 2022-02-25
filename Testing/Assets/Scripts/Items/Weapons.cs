@@ -36,5 +36,6 @@ public class Weapons : MonoBehaviour {
     public AnimationClip fpShootAnimation;
     public AudioSource shootSound;
     public AudioSource shootHurtSound;
+    public AudioSource reloadSound;
 }
         
