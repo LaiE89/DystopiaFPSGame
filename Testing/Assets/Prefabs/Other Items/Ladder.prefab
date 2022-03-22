@@ -328,4 +328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Ladder
   interactSound: Climb Ladder
-  destination: {x: 9.95, y: 4, z: 8}
+  topDestination: {x: 0, y: 0, z: 0}
+  baseDestination: {x: 0, y: 0, z: 0}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128

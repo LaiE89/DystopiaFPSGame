@@ -68,7 +68,7 @@ public class ChargeSkill : SkillsObject {
     private IEnumerator EnemyCharge(Movement enemy, PlayerMovement player) {
         bool isCharging = true;
         enemy.turnNonKinematic();
-        SceneController.Instance.soundController.PlayClipAtPoint("Dash", enemy.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Dash", enemy.transform.position, 1, 0.5f);
         Vector3 eDirection = player.transform.position - enemy.transform.position;
         enemy.rb.AddForce(ToolMethods.SettingVector(eDirection.x, 0, eDirection.z).normalized * chargeSpeed, ForceMode.Impulse);
         while (!enemy.rb.isKinematic && isCharging) {
@@ -88,13 +88,13 @@ public class ChargeSkill : SkillsObject {
     private IEnumerator PlayerCharge(PlayerMovement player) {
         float chargingTime = 0;
         bool isCharging = true;
-        SceneController.Instance.soundController.PlayClipAtPoint("Dash", player.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Dash", player.transform.position, 1, 0.5f);
         player.rb.AddForce(ToolMethods.SettingVector(player.transform.forward.x, 0, player.transform.forward.z).normalized * chargeSpeed, ForceMode.Impulse);
         while (isCharging) {
             chargingTime += Time.deltaTime; 
             foreach (Movement enemy in SceneController.Instance.listOfEnemies) {
                 if (enemy != null && !enemy.isChoking && Vector3.Distance(enemy.transform.position, player.transform.position) < 1f) {
-                    SceneController.Instance.soundController.PlayClipAtPoint("Impact", player.transform.position);
+                    SceneController.Instance.soundController.PlayClipAtPoint("Impact", player.transform.position, 1, 1);
                     player.DealDamage(enemy, enemy.gameObject, damage * player.damageMultiplier, 0);
                     CameraShaker.Instance.ShakeOnce(damage * player.damageMultiplier * 8, damage * player.damageMultiplier * 4, 0.1f, 0.5f);
                     enemy.rb.AddForce(player.rb.velocity.normalized * knockback, ForceMode.Impulse);

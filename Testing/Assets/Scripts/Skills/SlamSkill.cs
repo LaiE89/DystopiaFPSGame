@@ -68,7 +68,7 @@ public class SlamSkill : SkillsObject {
     public void EnemySlam(Movement enemy, PlayerMovement player) {
         ParticleSystem startParticle = Instantiate(initialParticle, ToolMethods.OffsetPosition(enemy.transform.position, 0, 0.3f, 0), enemy.transform.rotation);
         startParticle.Play();
-        SceneController.Instance.soundController.PlayClipAtPoint("Impact", enemy.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Impact", enemy.transform.position, 1, 1);
         Collider[] colliders = Physics.OverlapSphere(enemy.transform.position, radius);
         foreach (Collider nearbyObject in colliders) {
             Vector3 directionToTarget = (ToolMethods.OffsetPosition(nearbyObject.gameObject.transform.position, 0, 0.2f, 0) - ToolMethods.OffsetPosition(enemy.transform.position, 0, 0.2f, 0)).normalized;
@@ -96,7 +96,7 @@ public class SlamSkill : SkillsObject {
         ParticleSystem startParticle = Instantiate(initialParticle, ToolMethods.OffsetPosition(player.transform.position, 0, 0.3f, 0), player.transform.rotation);
         startParticle.Play();
         CameraShaker.Instance.ShakeOnce(damage * player.damageMultiplier * 4, damage * player.damageMultiplier * 2, 0.1f, 0.5f);
-        SceneController.Instance.soundController.PlayClipAtPoint("Impact", player.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Impact", player.transform.position, 1, 1);
         Collider[] colliders = Physics.OverlapSphere(player.transform.position, radius);
         foreach (Collider nearbyObject in colliders) {
             Vector3 directionToTarget = (ToolMethods.OffsetPosition(nearbyObject.gameObject.transform.position, 0, 0.2f, 0) - ToolMethods.OffsetPosition(player.transform.position, 0, 0.2f, 0)).normalized;

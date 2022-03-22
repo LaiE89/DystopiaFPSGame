@@ -1,33 +1,91 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPooling : MonoBehaviour {
-    public static ObjectPooling SharedInstance;
-    public List<GameObject> pooledObjects;
-    public GameObject objectToPool;
-    public int amountToPool;
+public class ObjectPooling : MonoBehaviour
+{
+	[SerializeField]
+	[Tooltip("The prefab for the bullet hole")]
+	private GameObject bulletHoleDecalPrefab;
 
-    void Awake() {
-        SharedInstance = this; 
-    } 
+	[SerializeField]
+	[Tooltip("The number of decals to keep alive at a time.  After this number are around, old ones will be replaced.")]
+	private int maxConcurrentDecals = 10;
 
-    void Start() {
-        pooledObjects = new List<GameObject>();
-        GameObject tmp;
-        for(int i = 0; i < amountToPool; i++) {
-            tmp = Instantiate(objectToPool);
-            tmp.SetActive(false);
-            pooledObjects.Add(tmp);
-        }
-    }
+	private Queue<GameObject> decalsInPool;
+    	private Queue<GameObject> decalsActiveInWorld;
 
-    public GameObject GetPooledObject() {
-        for(int i = 0; i < amountToPool; i++) {
-            if(!pooledObjects[i].activeInHierarchy) {
-                return pooledObjects[i];
-            }
-        }
-        return null;
-    }
+	private void Awake()
+	{
+		InitializeDecals();
+	}
+
+	private void InitializeDecals()
+	{
+		decalsInPool = new Queue<GameObject>();
+		decalsActiveInWorld = new Queue<GameObject>();
+
+		for (int i = 0; i < maxConcurrentDecals; i++)
+		{
+			InstantiateDecal();
+		}
+	}
+
+	private void InstantiateDecal()
+	{
+		var spawned = GameObject.Instantiate(bulletHoleDecalPrefab);
+		spawned.transform.SetParent(this.transform);
+
+		decalsInPool.Enqueue(spawned);
+		spawned.SetActive(false);
+	}
+
+	public void SpawnDecal(Vector3 forward, Vector3 position, Vector3 scale)
+	{
+		GameObject decal = GetNextAvailableDecal();
+		if (decal != null)
+		{
+			decal.transform.forward = forward;
+            decal.transform.position = position;
+            decal.transform.localScale = scale;
+            decal.transform.RotateAround(position, decal.transform.forward, Random.Range(0, 360));
+
+			decal.SetActive(true);
+
+			decalsActiveInWorld.Enqueue(decal);
+		}
+	}
+
+	private GameObject GetNextAvailableDecal()
+	{
+		if (decalsInPool.Count > 0)
+			return decalsInPool.Dequeue();
+
+		var oldestActiveDecal = decalsActiveInWorld.Dequeue();
+		return oldestActiveDecal;
+	}
+
+#if UNITY_EDITOR
+
+	private void Update()
+	{
+		if (transform.childCount < maxConcurrentDecals)
+			InstantiateDecal();
+		else if (ShoudlRemoveDecal())
+			DestroyExtraDecal();
+	}
+
+	private bool ShoudlRemoveDecal()
+	{
+		return transform.childCount > maxConcurrentDecals;
+	}
+
+	private void DestroyExtraDecal()
+	{
+		if (decalsInPool.Count > 0)
+			Destroy(decalsInPool.Dequeue());
+		else if (ShoudlRemoveDecal() && decalsActiveInWorld.Count > 0)
+			Destroy(decalsActiveInWorld.Dequeue());
+	}
+
+#endif
 }

@@ -569,7 +569,7 @@ namespace Player {
             myWeaponStats = myWeapon.GetComponent<Weapons>();
 
             if (myWeaponStats.isGun) {
-                bulletsTextBox.text = ("BULLETS x" + myWeaponStats.bullets);
+                bulletsTextBox.text = ("BULLETS x " + myWeaponStats.bullets);
                 if (myWeaponStats.bullets > 0) {
                     weaponOverrideController["Attack"] = myWeaponStats.fpShootAnimation;
                 }else {

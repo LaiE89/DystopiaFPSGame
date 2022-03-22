@@ -84,7 +84,7 @@ public class AmbushSkill : SkillsObject {
         yield return new WaitForSeconds(1.5f);
         ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, ToolMethods.OffsetPosition(player.firstPersonView.transform.GetChild(player.firstPersonView.transform.childCount - 1).transform.position, 0, 0.65f, 0.6f), Quaternion.identity);
         blood.Play();
-        SceneController.Instance.soundController.PlayClipAtPoint("Death", enemy.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Death", enemy.transform.position, 1, 1);
         enemy.layer = LayerMask.NameToLayer("Enemy");
         foreach (Transform child in enemy.transform) {        
             child.gameObject.layer = LayerMask.NameToLayer("Default");

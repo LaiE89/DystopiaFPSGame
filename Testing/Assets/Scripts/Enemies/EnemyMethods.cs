@@ -75,5 +75,14 @@ namespace Enemies {
                 }
             }
         }
+
+        public void Shit() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(ShitSkill)) {
+                    ShitSkill shit = skills as ShitSkill;
+                    shit.EnemyShit(enemyMovement, SceneController.Instance.player);
+                }
+            }
+        }
     }
 }

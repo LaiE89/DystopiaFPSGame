@@ -66,7 +66,7 @@ public class BerserkSkill : SkillsObject {
     }
 
     private IEnumerator playerBerserk(PlayerMovement player) {
-        SceneController.Instance.soundController.PlayClipAtPoint("Berserk", player.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Berserk", player.transform.position, 0.5f, 1);
         player.damageMultiplier *= damageMultiplier;
         player.attackSpeedMultiplier /= attackSpeedMultiplier;  
         player.staminaUsageMultiplier /= staminaUsageMultiplier;
@@ -78,7 +78,7 @@ public class BerserkSkill : SkillsObject {
     }
 
     private IEnumerator enemyBerserk(Movement enemy) {
-        SceneController.Instance.soundController.PlayClipAtPoint("Berserk", enemy.transform.position);
+        SceneController.Instance.soundController.PlayClipAtPoint("Berserk", enemy.transform.position, 0.5f, 1);
         enemy.damageMultiplier *= damageMultiplier;
         enemy.attackSpeedMultiplier /= attackSpeedMultiplier;  
         enemy.speedMultiplier *= speedMultiplier;

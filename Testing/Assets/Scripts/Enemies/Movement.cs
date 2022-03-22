@@ -194,10 +194,18 @@ namespace Enemies {
                             }
                         }
                     }
-                    if (isRotating && Mathf.Abs(gameObject.transform.position.y - thePlayer.transform.position.y) < 1f) {
-                        Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
-                        Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
-                        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
+                    if (isRotating) {
+                        if (eWeaponStats.isGun && eWeaponStats.bullets > 0) {
+                            Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
+                            Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
+                            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
+                        }else {
+                            if (Mathf.Abs(gameObject.transform.position.y - thePlayer.transform.position.y) < 1f) {
+                                Vector3 direction = (thePlayer.transform.position - transform.position).normalized;
+                                Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
+                                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationDegPerSec);
+                            }
+                        }
                     }
                 }else {
                     if (!isIdle) {
@@ -376,7 +384,7 @@ namespace Enemies {
             RaycastHit hit;
             //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
             //new Vector3(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z)
-            //Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingPosition(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), Color.green, 3);
+            Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z) * 20, Color.green, 3);
             isRotating = false;
             attackSound.Play();
             if (Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {

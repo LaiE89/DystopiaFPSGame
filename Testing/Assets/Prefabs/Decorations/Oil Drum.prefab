@@ -110,6 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactSound: Explosion
+  soundPitch: 1
+  soundVolume: 1
   interactParticle: {fileID: 580945606245989265, guid: 103e3580c015d564f91646c7d9ca367c, type: 3}
   groundMask:
     serializedVersion: 2

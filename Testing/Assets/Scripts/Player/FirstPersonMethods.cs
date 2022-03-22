@@ -65,5 +65,14 @@ namespace Player {
                 }
             }
         }
+
+        public void Shit() {
+            foreach (SkillsObject skills in PlayerMovement.skills) {
+                if (skills.GetType() == typeof(ShitSkill)) {
+                    ShitSkill shit = skills as ShitSkill;
+                    shit.PlayerShit(PlayerMovement);
+                }
+            }
+        }
     }
 }

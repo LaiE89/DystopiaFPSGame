@@ -9,6 +9,8 @@ using EZCameraShake;
 [CreateAssetMenu(fileName = "Molotov Skill", menuName = "ScriptableObject/Skills/Molotov")]
 public class MolotovSkill : SkillsObject {
     public GameObject molotovPrefab;
+    public AnimationClip molotovThrowing;
+    public AnimationClip enemyMolotovThrowing;
     public float force = 10f;
     public float verticalForce = 5f;
     public float staminaCost = 50;
@@ -19,9 +21,12 @@ public class MolotovSkill : SkillsObject {
         MolotovSkill instance = CreateInstance<MolotovSkill>();
         SettingBaseValues(instance, multiplier);
         instance.force = force;
+        instance.molotovThrowing = molotovThrowing;
+        instance.enemyMolotovThrowing = enemyMolotovThrowing;
         instance.verticalForce = verticalForce;
         instance.minDistance = minDistance;
         instance.maxDistance = maxDistance;
+        instance.staminaCost = staminaCost;
         instance.molotovPrefab = molotovPrefab;
         return instance;
     }
@@ -45,7 +50,8 @@ public class MolotovSkill : SkillsObject {
             }
             isEnemy.skillLagRoutine = isEnemy.StartCoroutine(isEnemy.SkillEndingLag(1, 0f));
             isEnemy.animator.SetTrigger("isUsingSkills");
-            isEnemy.animator.SetTrigger("isThrowingMolotov");
+            isEnemy.animatorOverrideController["ThrowMolotov"] = enemyMolotovThrowing;
+            isEnemy.animator.SetTrigger("isThrowing");
         }
         useTime = Time.time;
         isActivating = false;
@@ -57,7 +63,8 @@ public class MolotovSkill : SkillsObject {
         if (isPlayer) {
             isPlayer.UsingStamina(staminaCost);
             isPlayer.weaponAnimator.SetTrigger("isUsingSkills");
-            isPlayer.weaponAnimator.SetTrigger("isThrowingMolotov");
+            isPlayer.weaponOverrideController["ThrowMolotov"] = molotovThrowing;
+            isPlayer.weaponAnimator.SetTrigger("isThrowing");
         }
         useTime = Time.time;
         isActivating = false;
@@ -67,17 +74,17 @@ public class MolotovSkill : SkillsObject {
         GameObject molotov = Instantiate(molotovPrefab, ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.25f, 0f) + enemy.transform.forward, enemy.transform.rotation);
         Rigidbody rb = molotov.GetComponent<Rigidbody>();
         rb.AddForce(ToolMethods.SettingVector(enemy.transform.forward.x * force, enemy.transform.forward.y + verticalForce, enemy.transform.forward.z * force), ForceMode.Impulse);
-        float random = Random.Range(-100f,100f);
-        rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 50); 
+        float random = Random.Range(-1f,1f);
+        rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10);
         enemy.animator.ResetTrigger("isUsingSkills");
-        enemy.animator.ResetTrigger("isThrowingMolotov");
+        enemy.animator.ResetTrigger("isThrowing");
     }
 
     public void PlayerMolotov(PlayerMovement player) {
         GameObject molotov = Instantiate(molotovPrefab, ToolMethods.OffsetPosition(player.transform.position, 0, 1.25f, 0f) + player.transform.forward, player.transform.rotation);
         Rigidbody rb = molotov.GetComponent<Rigidbody>();
         rb.AddForce(ToolMethods.SettingVector(player.attackCam.transform.forward.x * force, player.attackCam.transform.forward.y * force, player.attackCam.transform.forward.z * force), ForceMode.Impulse);
-        float random = Random.Range(-100f,100f);
-        rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 50);  
+        float random = Random.Range(-1f,1f);
+        rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10); 
     }
 }

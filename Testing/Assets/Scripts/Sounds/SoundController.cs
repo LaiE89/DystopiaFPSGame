@@ -53,13 +53,16 @@ public class SoundController : MonoBehaviour {
         s.source.PlayOneShot(s.source.clip);
     }
 
-    public void PlayClipAtPoint(string name, Vector3 position) {
+    public void PlayClipAtPoint(string name, Vector3 position, float pitch, float volume) {
         Sound s = Array.Find(specialSounds, sound => sound.name == name);
         if (s == null) {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
         var sound = PlayClipAt(s.source.clip, position);
+        sound.pitch = pitch;
+        sound.volume = volume;
+        sound.spatialBlend = 1;
         sound.outputAudioMixerGroup = master;
     }
 

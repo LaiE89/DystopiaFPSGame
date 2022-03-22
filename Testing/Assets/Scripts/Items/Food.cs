@@ -34,6 +34,7 @@ public class Food : Interactable {
                 StartCoroutine(EatingCooldown());
             }
             if (curPickUpTime >= pickUpTime) {
+                player.weaponAnimator.ResetTrigger("isConsuming");
                 SceneController.Instance.soundController.PlayOneShot("Death");
                 player.playerHunger += nutritionValue;
                 if (player.playerHunger > player.maxPlayerHunger) {
@@ -57,7 +58,8 @@ public class Food : Interactable {
         yield return new WaitForSeconds(0.7f);
         ParticleSystem eatParticles = Instantiate(SceneController.Instance.bloodParticles, transform.position, transform.rotation);
         eatParticles.Play();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForEndOfFrame();
+        player.weaponAnimator.ResetTrigger("isConsuming");
         isEating = false;
     }
 

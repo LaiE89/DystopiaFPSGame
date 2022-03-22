@@ -85,6 +85,7 @@ MonoBehaviour:
   backwardKey: 115
   rightKey: 100
   consumeKey: 101
+  reloadKey: 114
   pickUpKey: 113
   skill1Key: 49
   skill2Key: 50
@@ -126,8 +127,10 @@ MonoBehaviour:
   playerLayers:
     serializedVersion: 2
     m_Bits: 0
-  playerDrugs: 0
+  playerDrugs: 3
   isConsuming: 0
+  playerAmmo: 3
+  isReloading: 0
   pickUpRange: 3
   selectedWeapon: 0
   statusEffects: []
@@ -138,6 +141,7 @@ MonoBehaviour:
   isChoking: 0
   interactTextBox: {fileID: 0}
   drugsTextBox: {fileID: 0}
+  ammoTextBox: {fileID: 0}
   bulletsTextBox: {fileID: 0}
   holdInteractSlider: {fileID: 0}
   hungerSlider: {fileID: 0}

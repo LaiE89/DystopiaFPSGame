@@ -27,6 +27,7 @@ public class SceneController : MonoBehaviour {
     public Player.PlayerMovement player;
     public GameObject playerObject;
     public List<Enemies.Movement> listOfEnemies;
+    public ObjectPooling bloodPool;
     //public Enemies.Movement[] listOfEnemies;
 
     public static int sceneIndex;
