@@ -8,13 +8,17 @@ public abstract class Interactable : MonoBehaviour {
 
     public virtual void Interact(){
         if (interactSound != null) {
-            SceneController.Instance.soundController.PlayOneShot(interactSound);
+            // SceneController.Instance.soundController.PlayOneShot(interactSound);
+            AudioSource source = SceneController.Instance.soundController.GetSound(interactSound);
+            SceneController.Instance.soundController.PlayClipAtPoint(interactSound, gameObject.transform.position, source.pitch, source.volume);
         }
     }
     
     public virtual void Interact(Transform i){
         if (interactSound != null) {
-            SceneController.Instance.soundController.PlayOneShot(interactSound);
+            // SceneController.Instance.soundController.PlayOneShot(interactSound);
+            AudioSource source = SceneController.Instance.soundController.GetSound(interactSound);
+            SceneController.Instance.soundController.PlayClipAtPoint(interactSound, gameObject.transform.position, source.pitch, source.volume);
         }
     }
 

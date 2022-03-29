@@ -46,6 +46,10 @@ public class ToolMethods : MonoBehaviour {
         } 
     }
 
+    public static int LayerMaskToLayer(LayerMask layerMask) {
+        return (int) Mathf.Log(layerMask.value, 2);
+    }
+
     public static bool checkInArray (object item, object[] list) {
         foreach(object i in list) {
             if (i == item) {
