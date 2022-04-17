@@ -115,8 +115,8 @@ public class OptionsMenu : MonoBehaviour {
             volume = 1;
             volumeSlider.value = 1;
 
-            resolutionIndex = 0;
-            resolutionDropdown.value = 0;
+            resolutionIndex = resolutions.Length;
+            resolutionDropdown.value = resolutions.Length;
 
             isFullscreen = true;
             fullScreenToggle.isOn = true;

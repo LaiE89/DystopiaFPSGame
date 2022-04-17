@@ -19,6 +19,7 @@ public class ChargeSkill : SkillsObject {
         instance.chargeSpeed = chargeSpeed;
         instance.knockback = knockback;
         instance.minDistance = minDistance;
+        instance.staminaCost = staminaCost;
         return instance;
     }
 

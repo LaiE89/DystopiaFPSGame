@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Breakable : Destructable {
     [SerializeField] float radius;
-    [SerializeField] float damage;
+    [SerializeField] public float damage;
     [SerializeField] float horizontalForce;
     [SerializeField] float verticalForce;
     [SerializeField] float alertRadius;
-    [SerializeField] float breakTime;
     [SerializeField] Rigidbody rb;
     bool isBreaking;
     bool isBroken;
@@ -19,7 +18,7 @@ public class Breakable : Destructable {
 
     IEnumerator breakDelay() {
         isBreaking = false;
-        yield return new WaitForSeconds(breakTime);
+        yield return new WaitForEndOfFrame();
         isBreaking = true;
 
     }

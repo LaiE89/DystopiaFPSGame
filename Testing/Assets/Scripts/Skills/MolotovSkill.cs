@@ -11,6 +11,7 @@ public class MolotovSkill : SkillsObject {
     public GameObject molotovPrefab;
     public AnimationClip molotovThrowing;
     public AnimationClip enemyMolotovThrowing;
+    public float animationSpeed = 1f;
     public float force = 10f;
     public float verticalForce = 5f;
     public float staminaCost = 50;
@@ -21,6 +22,7 @@ public class MolotovSkill : SkillsObject {
         MolotovSkill instance = CreateInstance<MolotovSkill>();
         SettingBaseValues(instance, multiplier);
         instance.force = force;
+        instance.animationSpeed = animationSpeed;
         instance.molotovThrowing = molotovThrowing;
         instance.enemyMolotovThrowing = enemyMolotovThrowing;
         instance.verticalForce = verticalForce;
@@ -63,6 +65,7 @@ public class MolotovSkill : SkillsObject {
         if (isPlayer) {
             isPlayer.UsingStamina(staminaCost);
             isPlayer.weaponAnimator.SetTrigger("isUsingSkills");
+            isPlayer.weaponAnimator.SetFloat("ThrowMultiplier", animationSpeed);
             isPlayer.weaponOverrideController["ThrowMolotov"] = molotovThrowing;
             isPlayer.weaponAnimator.SetTrigger("isThrowing");
         }

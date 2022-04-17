@@ -420,6 +420,16 @@ namespace Enemies {
             CheckGround();
         }
 
+        public IEnumerator LoopingGroundCheckDelay() {
+            agent.enabled = false;
+            isGrounded = false;
+            yield return new WaitForSeconds(0.2f);
+            while (!isGrounded) {
+                yield return new WaitForEndOfFrame();
+                CheckGround();
+            }
+        }
+
         public void TakeDamage(float amount) {
             enemyHealth -= amount;
             animator.ResetTrigger("isAttacking");
@@ -435,7 +445,7 @@ namespace Enemies {
                 }
                 animator.SetTrigger("isDying");
                 isDying = true;
-                StartCoroutine(GroundCheckDelay());
+                StartCoroutine(LoopingGroundCheckDelay());
             }
             Debug.Log(gameObject.name + " took some damage. Current Health: " + enemyHealth);
         }

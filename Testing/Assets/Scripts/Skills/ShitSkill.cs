@@ -11,6 +11,8 @@ public class ShitSkill : SkillsObject {
     public GameObject shitPrefab;
     public AnimationClip shitThrowing;
     public AnimationClip enemyShitThrowing;
+    public float enemyCooldown = 5f;
+    public float animationSpeed = 2f;
     public float force = 10f;
     public float verticalForce = 5f;
     public float hungerCost = 5;
@@ -20,6 +22,8 @@ public class ShitSkill : SkillsObject {
     public override SkillsObject CreateInstance(float multiplier) {
         ShitSkill instance = CreateInstance<ShitSkill>();
         SettingBaseValues(instance, multiplier);
+        instance.animationSpeed = animationSpeed;
+        instance.enemyCooldown = enemyCooldown;
         instance.force = force;
         instance.shitThrowing = shitThrowing;
         instance.enemyShitThrowing = enemyShitThrowing;
@@ -35,7 +39,7 @@ public class ShitSkill : SkillsObject {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
             float distance = Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position);
-            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + cooldown < Time.time && distance > minDistance && distance <= maxDistance && !isEnemy.isChoking;
+            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + enemyCooldown < Time.time && distance > minDistance && distance <= maxDistance && !isEnemy.isChoking;
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
         return !isActivating && isPlayer.playerHunger > hungerCost && useTime + cooldown < Time.time && !isPlayer.isChoking;
@@ -64,6 +68,7 @@ public class ShitSkill : SkillsObject {
             isPlayer.playerHunger -= hungerCost;
             isPlayer.hungerSlider.value = isPlayer.playerHunger;
             isPlayer.weaponAnimator.SetTrigger("isUsingSkills");
+            isPlayer.weaponAnimator.SetFloat("ThrowMultiplier", animationSpeed);
             isPlayer.weaponOverrideController["ThrowMolotov"] = shitThrowing;
             isPlayer.weaponAnimator.SetTrigger("isThrowing");
         }
@@ -74,6 +79,8 @@ public class ShitSkill : SkillsObject {
     public void EnemyShit(Movement enemy, PlayerMovement player) {
         GameObject molotov = Instantiate(shitPrefab, ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.25f, 0f) + enemy.transform.forward, enemy.transform.rotation);
         Rigidbody rb = molotov.GetComponent<Rigidbody>();
+        Breakable shitScript = molotov.GetComponent<Breakable>();
+        shitScript.damage = 1f;
         rb.AddForce(ToolMethods.SettingVector(enemy.transform.forward.x * force, enemy.transform.forward.y + verticalForce, enemy.transform.forward.z * force), ForceMode.Impulse);
         float random = Random.Range(-1f,1f);
         rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10);

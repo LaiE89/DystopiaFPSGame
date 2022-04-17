@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a762e2d7fbf94374d893ef472ef90b6c, type: 3}
   m_Name: Shit Skill
   m_EditorClassIdentifier: 
-  cooldown: 3
+  cooldown: 1
   damage: 1
   isActivating: 0
   skillNumber: 0
@@ -23,8 +23,10 @@ MonoBehaviour:
   shitPrefab: {fileID: 7501861526096164943, guid: 1e31c13c5b64d374fb1f5ce0ac7639e1, type: 3}
   shitThrowing: {fileID: -5712735678446892123, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
   enemyShitThrowing: {fileID: -5712735678446892123, guid: b076720bba6593045915887e8637b497, type: 3}
+  enemyCooldown: 5
+  animationSpeed: 2
   force: 20
   verticalForce: 0
-  hungerCost: 10
+  hungerCost: 3
   minDistance: 5
   maxDistance: 20
