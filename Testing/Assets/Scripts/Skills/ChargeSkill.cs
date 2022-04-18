@@ -26,7 +26,7 @@ public class ChargeSkill : SkillsObject {
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isActivating && isEnemy.angleToPlayerHorz < 30 && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance && !isEnemy.isChoking;
+            return !isEnemy.isPassive && !isActivating && isEnemy.angleToPlayerHorz < 30 && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance && !isEnemy.isChoking;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();

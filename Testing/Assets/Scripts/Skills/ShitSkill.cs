@@ -39,7 +39,7 @@ public class ShitSkill : SkillsObject {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
             float distance = Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position);
-            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + enemyCooldown < Time.time && distance > minDistance && distance <= maxDistance && !isEnemy.isChoking;
+            return !isEnemy.isPassive && !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && !isEnemy.alreadyAttacked && useTime + enemyCooldown < Time.time && distance > minDistance && distance <= maxDistance && !isEnemy.isChoking;
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
         return !isActivating && isPlayer.playerHunger > hungerCost && useTime + cooldown < Time.time && !isPlayer.isChoking;

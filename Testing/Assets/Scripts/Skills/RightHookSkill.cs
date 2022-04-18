@@ -20,7 +20,7 @@ public class RightHookSkill : SkillsObject {
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isActivating && !isEnemy.alreadyAttacked && isEnemy.canSeePlayer && isEnemy.angleToPlayerHorz < 30 && !isEnemy.isDying && useTime + cooldown < Time.time && !isEnemy.isChoking && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance;
+            return !isEnemy.isPassive && !isActivating && !isEnemy.alreadyAttacked && isEnemy.canSeePlayer && isEnemy.angleToPlayerHorz < 30 && !isEnemy.isDying && useTime + cooldown < Time.time && !isEnemy.isChoking && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         return !isActivating && useTime + cooldown < Time.time;

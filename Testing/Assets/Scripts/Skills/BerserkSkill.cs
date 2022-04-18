@@ -30,7 +30,7 @@ public class BerserkSkill : SkillsObject {
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time;
+            return !isEnemy.isPassive && !isActivating && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();

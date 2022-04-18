@@ -18,7 +18,7 @@ public class QuickAttackSkill : SkillsObject {
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isActivating && isEnemy.angleToPlayerHorz < 30 && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < isEnemy.eWeaponStats.attackRange + 1 && !isEnemy.isChoking;
+            return !isEnemy.isPassive && !isActivating && isEnemy.angleToPlayerHorz < 30 && isEnemy.canSeePlayer && !isEnemy.isDying && useTime + cooldown < Time.time && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < isEnemy.eWeaponStats.attackRange + 1 && !isEnemy.isChoking;
         }
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
         return !isActivating && isPlayer.playerStamina > isPlayer.myWeaponStats.staminaCost + addedStaminaCost && useTime + cooldown < Time.time && !isPlayer.isChoking;

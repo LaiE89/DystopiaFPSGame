@@ -596,6 +596,9 @@ namespace Player {
             drugsTextBox.text = ("DRUGS x " + playerDrugs);
             if (playerHealth < maxPlayerHealth) {
                 playerHealth += 1;
+                if (playerHealth > maxPlayerHealth) {
+                    playerHealth = maxPlayerHealth;
+                }
                 healthSlider.value = playerHealth;
             }
             playerStamina += 50;

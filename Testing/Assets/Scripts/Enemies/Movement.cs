@@ -67,6 +67,7 @@ namespace Enemies {
         [Header("States Variables")]
         [SerializeField] bool isIdle;
         [SerializeField] public bool isAlertable;
+        [SerializeField] public bool isPassive;
         [SerializeField] AnimationClip idleAnimation;
         [HideInInspector] public float damageMultiplier;
         [HideInInspector] public float attackSpeedMultiplier;
@@ -266,7 +267,7 @@ namespace Enemies {
             }else if (canSeePlayer) {
                 canSeePlayer = false;
             }
-            if (!targetLocked && canSeePlayer) {
+            if (!targetLocked && canSeePlayer && !isPassive) {
                 targetLocked = true;
                 if (agent.isActiveAndEnabled) {
                     timeNotSeeing = 0;
@@ -432,6 +433,9 @@ namespace Enemies {
 
         public void TakeDamage(float amount) {
             enemyHealth -= amount;
+            if (isPassive) {
+                isPassive = false;
+            }
             animator.ResetTrigger("isAttacking");
             animator.SetTrigger("isDamaged");
             ResetSpeed();

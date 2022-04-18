@@ -146,10 +146,10 @@ MonoBehaviour:
   isDefaultItem: 0
   isGun: 0
   attackDamage: 2
-  attackRange: 3
-  attackCooldown: 1.5
+  attackRange: 2.5
+  attackCooldown: 1.25
   staminaCost: 20
-  attackKnockback: 10
+  attackKnockback: 8
   maxWeaponHealth: 2
   weaponHealth: 2
   alertRadius: 5
@@ -173,6 +173,7 @@ MonoBehaviour:
   fpShootAnimation: {fileID: 0}
   shootSound: {fileID: 0}
   shootHurtSound: {fileID: 0}
+  reloadSound: {fileID: 0}
 --- !u!114 &17489390492456399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Bat
+  interactSound: 
 --- !u!1 &7353590349421510581
 GameObject:
   m_ObjectHideFlags: 0
