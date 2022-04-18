@@ -10503,7 +10503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6440084402712432932, guid: cd069e713d29cd340a5c48bdbac4b7af, type: 3}
       propertyPath: m_Name
-      value: Knife (1)
+      value: Knife
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd069e713d29cd340a5c48bdbac4b7af, type: 3}
