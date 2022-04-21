@@ -82,6 +82,7 @@ public class SceneController : MonoBehaviour {
     }
 
     void Start() {
+        Application.targetFrameRate = 60;
         optionsMenu.InitializeSettings();
         //listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
     }

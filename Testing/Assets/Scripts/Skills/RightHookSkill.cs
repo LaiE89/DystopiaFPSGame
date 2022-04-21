@@ -7,20 +7,18 @@ using EZCameraShake;
 [CreateAssetMenu(fileName = "Right Hook Skill", menuName = "ScriptableObject/Skills/RightHook")]
 public class RightHookSkill : SkillsObject {
     public float knockback = 3;
-    public float minDistance = 5;
 
     public override SkillsObject CreateInstance(float multiplier) {
         RightHookSkill instance = CreateInstance<RightHookSkill>();
         SettingBaseValues(instance, multiplier);
         instance.knockback = knockback;
-        instance.minDistance = minDistance;
         return instance;
     }
 
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isEnemy.isPassive && !isActivating && !isEnemy.alreadyAttacked && isEnemy.canSeePlayer && isEnemy.angleToPlayerHorz < 30 && !isEnemy.isDying && useTime + cooldown < Time.time && !isEnemy.isChoking && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < minDistance;
+            return !isEnemy.isPassive && !isActivating && !isEnemy.alreadyAttacked && isEnemy.canSeePlayer && isEnemy.angleToPlayerHorz < 30 && !isEnemy.isDying && useTime + cooldown < Time.time && !isEnemy.isChoking && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < isEnemy.eWeaponStats.attackRange + 1;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         return !isActivating && useTime + cooldown < Time.time;

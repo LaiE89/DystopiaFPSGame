@@ -18,7 +18,8 @@ namespace Enemies {
         }
 
         public void PlayerDamage() {
-            enemyMovement.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
+            // enemyMovement.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
+            enemyMovement.eWeaponStats.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound, enemyMovement);
         }
 
         public void StartRotation() {
@@ -40,7 +41,8 @@ namespace Enemies {
         public void ShootDamage() {
             enemyMovement.eWeaponStats.bullets -= 1;
             enemyMovement.eWeaponStats.muzzleFlash.Play();
-            enemyMovement.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
+            // enemyMovement.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
+            enemyMovement.eWeaponStats.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound, enemyMovement);
         }
 
         public void ShootDamageEnd() {
@@ -81,6 +83,33 @@ namespace Enemies {
                 if (skills.GetType() == typeof(ShitSkill)) {
                     ShitSkill shit = skills as ShitSkill;
                     shit.EnemyShit(enemyMovement, SceneController.Instance.player);
+                }
+            }
+        }
+
+        public void Kick() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(KickSkill)) {
+                    KickSkill kick = skills as KickSkill;
+                    kick.EnemyKick(enemyMovement);
+                }
+            }
+        }
+
+        public void JumpAttack() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(JumpAttackSkill)) {
+                    JumpAttackSkill jump = skills as JumpAttackSkill;
+                    jump.EnemyJumpAttack(enemyMovement);
+                }
+            }
+        }
+
+        public void Jump() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(JumpAttackSkill)) {
+                    JumpAttackSkill jump = skills as JumpAttackSkill;
+                    jump.EnemyJump(enemyMovement, SceneController.Instance.player);
                 }
             }
         }
