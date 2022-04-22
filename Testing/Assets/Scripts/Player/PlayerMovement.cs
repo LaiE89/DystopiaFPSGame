@@ -6,24 +6,25 @@ using UnityEngine.UI;
 using TMPro;
 using EZCameraShake;
 using System.Linq;
-using UnityEngine.AI;
 
 namespace Player {
     public class PlayerMovement : MonoBehaviour {
 
         [Header("Keybinds")]
-        [SerializeField] KeyCode jumpKey = KeyCode.Space;
-        [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
-        [SerializeField] KeyCode forwardKey = KeyCode.W;
-        [SerializeField] KeyCode leftKey = KeyCode.A;
-        [SerializeField] KeyCode backwardKey = KeyCode.S;
-        [SerializeField] KeyCode rightKey = KeyCode.D;
-        [SerializeField] KeyCode consumeKey = KeyCode.E;
-        [SerializeField] KeyCode reloadKey = KeyCode.R;
-        [SerializeField] KeyCode pickUpKey = KeyCode.Q;
-        [SerializeField] KeyCode skill1Key = KeyCode.Alpha1;
-        [SerializeField] KeyCode skill2Key = KeyCode.Alpha2;
-        [SerializeField] KeyCode skill3Key = KeyCode.Alpha3;
+        [SerializeField] public KeyCode jumpKey = KeyCode.Space;
+        [SerializeField] public KeyCode sprintKey = KeyCode.LeftShift;
+        [SerializeField] public KeyCode forwardKey = KeyCode.W;
+        [SerializeField] public KeyCode leftKey = KeyCode.A;
+        [SerializeField] public KeyCode backwardKey = KeyCode.S;
+        [SerializeField] public KeyCode rightKey = KeyCode.D;
+        [SerializeField] public KeyCode consumeKey = KeyCode.E;
+        [SerializeField] public KeyCode reloadKey = KeyCode.R;
+        [SerializeField] public KeyCode pickUpKey = KeyCode.Q;
+        [SerializeField] public KeyCode skill1Key = KeyCode.Alpha1;
+        [SerializeField] public KeyCode skill2Key = KeyCode.Alpha2;
+        [SerializeField] public KeyCode skill3Key = KeyCode.Alpha3;
+        [SerializeField] public KeyCode attackKey = KeyCode.Mouse0;
+        [SerializeField] public KeyCode blockKey = KeyCode.Mouse1;
 
         [Header("Mouse Movement")]
         [SerializeField] float startingYRotation;
@@ -125,7 +126,7 @@ namespace Player {
         [SerializeField] public Image hurtScreen;
         [SerializeField] public Image berserkScreen;
         [SerializeField] public ingameMenus canvas;
-        public struct SkillIcon {
+        public class SkillIcon {
             public Image skillImage;
             public Image cooldownImage;
             public KeyCode skillKey;
@@ -162,7 +163,8 @@ namespace Player {
         }
 
         private void Start() {
-            
+            ApplyKeybinds();
+
             // Initializing Gameobjects
             listOfSkillIcons = new List<SkillIcon>();
             SkillsObject[] currentSkillsNoNull = EquipmentManager.instance.currentSkills.Where(item => item != null).ToArray();
@@ -230,7 +232,6 @@ namespace Player {
                 if (i == 0) {
                     this.skills[i] = skills[i].CreateInstance(0.5f);
                     this.skills[i].skillNumber = 1;
-                    Debug.Log(listOfSkillIcons[i].skillImage.name);
                     listOfSkillIcons[i].skillImage.sprite = this.skills[i].icon;
                     listOfSkillIcons[i].cooldownImage.fillAmount = 1;
                 }else if (i == 1) {
@@ -441,7 +442,7 @@ namespace Player {
 
         private void Attack() {
             attackTimer += Time.deltaTime;
-            if (Input.GetMouseButton(0) && !isConsuming && !isReloading) {
+            if (Input.GetKey(attackKey) && !isConsuming && !isReloading) {
                 if (myWeaponStats.isGun && myWeaponStats.bullets > 0) {
                     if (attackTimer >= myWeaponStats.shootCooldown * attackSpeedMultiplier) {
                         isAttacking = true;
@@ -466,29 +467,6 @@ namespace Player {
             }
         }
 
-        public void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
-            Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            attackSound.Play();
-            if (Physics.Raycast(ray, out hit, range, playerLayers)) {
-                if (hit.collider.tag == "Enemy") {
-                    hurtSound.Play();
-                    enemy = hit.collider.gameObject;
-                    eMovement = enemy.GetComponent<Enemies.Movement>();
-                    ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    blood.Play();
-                    DealDamage(eMovement, enemy, damage, knockback);
-                }else {
-                    Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
-                    if (destructable != null) {
-                       destructable.Interact(); 
-                    }
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
-                }
-            }
-        }
-
         public void DealDamage(Enemies.Movement enemyScript, GameObject enemyObject, float damage, float knockback) {
             enemyScript.TakeDamage(damage);
             Vector3 eDirection = enemyObject.transform.position - transform.position;
@@ -497,7 +475,7 @@ namespace Player {
         }
 
         private void Block() {
-            if (Input.GetMouseButton(1) && !Input.GetMouseButton(0) && !isAttacking && !isConsuming && !isReloading) {
+            if (Input.GetKey(blockKey) && !Input.GetKey(attackKey) && !isAttacking && !isConsuming && !isReloading) {
                 if (!isBlocking) {
                     isParrying = true;
                 }
@@ -783,6 +761,29 @@ namespace Player {
         }
 
 ///// SETTINGS /////
+        public void ApplyKeybinds() {
+            skill1Key = ControlsMenu.keybinds[nameof(skill1Key)];
+            skill2Key = ControlsMenu.keybinds[nameof(skill2Key)];
+            skill3Key = ControlsMenu.keybinds[nameof(skill3Key)];
+            jumpKey = ControlsMenu.keybinds[nameof(jumpKey)];
+            consumeKey = ControlsMenu.keybinds[nameof(consumeKey)];
+            pickUpKey = ControlsMenu.keybinds[nameof(pickUpKey)];
+            reloadKey = ControlsMenu.keybinds[nameof(reloadKey)];
+            sprintKey = ControlsMenu.keybinds[nameof(sprintKey)];
+            attackKey = ControlsMenu.keybinds[nameof(attackKey)];
+            blockKey = ControlsMenu.keybinds[nameof(blockKey)];
+            
+            for (int i = 0; i < skills.Length; i++) {
+                if (skills[i].skillNumber == 1) {
+                    listOfSkillIcons[skills[i].skillNumber-1].skillKey = skill1Key;
+                }else if (skills[i].skillNumber == 2) {
+                    listOfSkillIcons[skills[i].skillNumber-1].skillKey = skill2Key;
+                }else {
+                    listOfSkillIcons[skills[i].skillNumber-1].skillKey = skill3Key;
+                }
+            }
+        }
+
         public static void SettingChanges() {
             if (!InventoryManager.instance.gameObject.activeSelf) {
                 Cursor.lockState = CursorLockMode.Locked;

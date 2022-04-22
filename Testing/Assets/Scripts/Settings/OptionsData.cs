@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
@@ -22,6 +23,10 @@ public class OptionsData {
     public bool isFullscreen;
     [DataMember]
     public float brightness;
+    [DataMember]
+    public int targetFPSIndex;
+    [DataMember]
+    public Dictionary<String, KeyCode> keybinds;
     
     public OptionsData () {
         sens = OptionsMenu.sens;
@@ -30,5 +35,7 @@ public class OptionsData {
         resolutionIndex = OptionsMenu.resolutionIndex;
         isFullscreen = OptionsMenu.isFullscreen;
         brightness = OptionsMenu.brightness;
+        targetFPSIndex = OptionsMenu.targetFPSIndex;
+        keybinds = ControlsMenu.keybinds;
     }
 }

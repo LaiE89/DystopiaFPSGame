@@ -59,21 +59,21 @@ public class SoundController : MonoBehaviour {
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
-        var sound = PlayClipAt(s.source.clip, position);
+        var sound = PlayClipAt(s.source.clip, position, pitch);
         sound.pitch = pitch;
         sound.volume = volume;
         sound.spatialBlend = 1;
         sound.outputAudioMixerGroup = master;
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos) {
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float pitch) {
         var tempGO = new GameObject("TempAudio"); // create the temp object
         tempGO.transform.position = pos; // set its position
         var aSource = tempGO.AddComponent<AudioSource>(); // add an audio source
         aSource.clip = clip; // define the clip
         // set other aSource properties here, if desired
         aSource.Play(); // start the sound
-        Destroy(tempGO, clip.length); // destroy object after clip duration
+        Destroy(tempGO, clip.length / Math.Abs(pitch)); // destroy object after clip duration
         return aSource; // return the AudioSource reference
     }
 

@@ -991,6 +991,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.123528324
+        functionName: Jump
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 109b77ce864067540b1cb90fec3e0d2f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.6529415
         functionName: JumpAttack
         data: 
@@ -998,8 +1005,8 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.123528324
-        functionName: Jump
+      - time: 1
+        functionName: StartRotation
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 109b77ce864067540b1cb90fec3e0d2f, type: 3}
         floatParameter: 0

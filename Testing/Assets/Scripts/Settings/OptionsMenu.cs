@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
 using System.Collections.Generic;
+using System;
 using System.IO;
 
 public class OptionsMenu : MonoBehaviour {
@@ -12,6 +13,7 @@ public class OptionsMenu : MonoBehaviour {
     public static int resolutionIndex;
     public static bool isFullscreen;
     public static float brightness;
+    public static int targetFPSIndex;
     Resolution[] resolutions;
     [SerializeField] Slider sensSlider;
     [SerializeField] TMP_Dropdown qualityDropdown;
@@ -20,6 +22,7 @@ public class OptionsMenu : MonoBehaviour {
     [SerializeField] TMP_Dropdown resolutionDropdown;
     [SerializeField] Toggle fullScreenToggle;
     [SerializeField] AudioMixer audioMixer;
+    [SerializeField] TMP_Dropdown targetFPSDropdown;
 
     private void Start() {
         InitializeSettings();
@@ -78,6 +81,27 @@ public class OptionsMenu : MonoBehaviour {
         QualitySettings.SetQualityLevel(newIndex, false);
     }
 
+    public void SetTargetFPS(int newIndex) {
+        targetFPSIndex = newIndex;
+        switch (newIndex) {
+            case 0:
+                Application.targetFrameRate = 30;
+                break;
+            case 1:
+                Application.targetFrameRate = 60;
+                break;
+            case 2:
+                Application.targetFrameRate = 120;
+                break;
+            case 3:
+                Application.targetFrameRate = -1;
+                break;
+            default:
+                Application.targetFrameRate = -1;
+                break; 
+        }
+    }
+
     public void SaveSettings() {
         OptionsSaveSystem.SaveSettings();
     }
@@ -105,6 +129,11 @@ public class OptionsMenu : MonoBehaviour {
             brightness = settings.brightness;
             brightnessSlider.value = settings.brightness;
 
+            targetFPSIndex = settings.targetFPSIndex;
+            targetFPSDropdown.value = settings.targetFPSIndex;
+
+            ControlsMenu.keybinds = settings.keybinds;
+
         }else {
             sens = 60;
             sensSlider.value = 60;
@@ -123,6 +152,12 @@ public class OptionsMenu : MonoBehaviour {
 
             brightness = 0.1f;
             brightnessSlider.value = 0.1f;
+
+            targetFPSIndex = 3;
+            targetFPSDropdown.value = 3;
+
+            ControlsMenu.keybinds = new Dictionary<string, KeyCode>();
+            ControlsMenu.DefaultKeybinds();
         }
         AdjustSensitivity(sens);
         ChangeQuality(qualityIndex);
@@ -130,5 +165,6 @@ public class OptionsMenu : MonoBehaviour {
         SetResolution(resolutionIndex);
         SetFullscreen(isFullscreen);
         SetBrightness(brightness);
+        SetTargetFPS(targetFPSIndex);
     }
 }

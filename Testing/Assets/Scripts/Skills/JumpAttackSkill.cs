@@ -46,12 +46,29 @@ public class JumpAttackSkill : SkillsObject {
     }
 
     public void EnemyJumpAttack(Movement enemy) {
-        enemy.eWeaponStats.SpherecastDamage(range, damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, SceneController.Instance.soundController.GetSound("Dash"), SceneController.Instance.soundController.GetSound("Impact"), enemy);
+        SceneController.Instance.soundController.PlayClipAtPoint("Punch", enemy.transform.position, 0.3f, 1);
+        enemy.isRotating = false;
+        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.directionToTarget.y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z), range, enemy.enemyLayers);
+        if (hits.Length > 0) {
+            foreach (RaycastHit hit in hits) {
+                if (hit.collider.tag == "Player") {
+                    enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, null);
+                    SceneController.Instance.soundController.PlayClipAtPoint("Impact 2", enemy.transform.position, 0.3f, 1);
+                }else {
+                    Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
+                    if (destructable != null) {
+                    destructable.Interact(); 
+                    }
+                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ground.Play();
+                }
+            }
+        }
     }
 
     public void EnemyJump(Movement enemy, PlayerMovement player) {
         enemy.turnNonKinematic();
-        SceneController.Instance.soundController.PlayClipAtPoint("Dash", enemy.transform.position, 1, 0.5f);
+        SceneController.Instance.soundController.PlayClipAtPoint("PlayerJump", enemy.transform.position, 0.5f, 1f);
         Vector3 eDirection = player.transform.position - enemy.transform.position;
         // distanceToTarget = Vector3.Distance(enemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position);
         enemy.rb.AddForce(ToolMethods.SettingVector(eDirection.x, distanceToTarget - 0.5f, eDirection.z).normalized * (distanceToTarget + 2f), ForceMode.Impulse);

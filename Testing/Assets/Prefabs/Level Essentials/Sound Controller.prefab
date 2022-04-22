@@ -207,4 +207,22 @@ MonoBehaviour:
     music: 0
     group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
+  - name: Punch
+    clip: {fileID: 8300000, guid: 40cda279da2faea43ad6582184440a70, type: 3}
+    volume: 1
+    pitch: 1
+    spatialBlend: 1
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Impact 2
+    clip: {fileID: 8300000, guid: f066f3ebedc79dc429b921d5076e5491, type: 3}
+    volume: 1
+    pitch: 1
+    spatialBlend: 1
+    loop: 0
+    music: 0
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
   allSounds: []

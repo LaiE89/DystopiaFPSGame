@@ -30,7 +30,6 @@ public class KickSkill : SkillsObject {
             if (isEnemy.skillLagRoutine != null) {
                 isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
             }
-            isEnemy.ResetSpeed();
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isKicking");
         }
@@ -39,6 +38,23 @@ public class KickSkill : SkillsObject {
     }
 
     public void EnemyKick(Movement enemy) {
-        enemy.eWeaponStats.SpherecastDamage(enemy.height + 1f, damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, SceneController.Instance.soundController.GetSound("Dash"), SceneController.Instance.soundController.GetSound("Impact"), enemy);
+        SceneController.Instance.soundController.PlayClipAtPoint("Punch", enemy.transform.position, 0.25f, 1);
+        enemy.isRotating = false;
+        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.directionToTarget.y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z), enemy.height + 1f, enemy.enemyLayers);
+        if (hits.Length > 0) {
+            foreach (RaycastHit hit in hits) {
+                if (hit.collider.tag == "Player") {
+                    enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, null);
+                    SceneController.Instance.soundController.PlayClipAtPoint("Impact 2", enemy.transform.position, 0.25f, 1);
+                }else {
+                    Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
+                    if (destructable != null) {
+                    destructable.Interact(); 
+                    }
+                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
+                    ground.Play();
+                }
+            }
+        }
     }
 }

@@ -361,47 +361,6 @@ namespace Enemies {
             alreadyAttacked = false;
         }
 
-        public void SpherecastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
-            attackSound.Play();
-            isRotating = false;
-            RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), range, enemyLayers);
-            if (hits.Length > 0) {
-                foreach (RaycastHit hit in hits) {
-                    if (hit.collider.tag == "Player") {
-                        CombatCalculation(damage, knockback, hurtSound);
-                    }else {
-                        Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
-                        if (destructable != null) {
-                        destructable.Interact(); 
-                        }
-                        ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                        ground.Play();
-                    }
-                }
-            }
-        }
-
-        public void RaycastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound) {
-            RaycastHit hit;
-            //Debug.DrawRay(transform.position + new Vector3(0, height - 0.5f, 0), transform.TransformDirection(Vector3.forward) * 10, Color.green);
-            //new Vector3(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z)
-            Debug.DrawRay(ToolMethods.OffsetPosition(transform.position, 0, height-0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z) * 20, Color.green, 3);
-            isRotating = false;
-            attackSound.Play();
-            if (Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), ToolMethods.SettingVector(transform.TransformDirection(Vector3.forward).x, directionToTarget.y, transform.TransformDirection(Vector3.forward).z), out hit, range, enemyLayers)) {
-                if (hit.collider.tag == "Player") {
-                    CombatCalculation(damage, knockback, hurtSound);
-                }else {
-                    Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
-                    if (destructable != null) {
-                       destructable.Interact(); 
-                    }
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
-                }
-            }
-        }
-
         private void CheckGround() {
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
             if (isGrounded && isKnockedBack) {
