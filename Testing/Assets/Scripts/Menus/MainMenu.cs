@@ -9,7 +9,8 @@ using System.Runtime.Serialization;
 using System.Xml;
 
 public class MainMenu : MonoBehaviour {
-    [SerializeField] public OptionsMenu options; 
+    [SerializeField] public OptionsMenu options;
+    [SerializeField] public GameObject confirmationScreen; 
     [SerializeField] public GameObject loadingScreen; 
     [SerializeField] public Slider slider;
     [SerializeField] public TextMeshProUGUI progressText;
@@ -40,13 +41,12 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void PlayGame() {
-        soundController.Play("UI Click");
-        DeleteFile();
-        NewPlayer();
-        StartCoroutine(LoadAsyncronously(1));
         string path = Application.persistentDataPath + "/player.dat";
+        soundController.Play("UI Click");
         if (File.Exists(path)) {
-            loading = true;
+            confirmationScreen.SetActive(true);
+        }else {
+            StartingNewPlayer();
         }
     }
 
@@ -117,5 +117,15 @@ public class MainMenu : MonoBehaviour {
         var writer = XmlWriter.Create(path, settings);
         serializer.WriteObject(writer, data);
         writer.Close();
+    }
+
+    public void StartingNewPlayer() {
+        string path = Application.persistentDataPath + "/player.dat";
+        DeleteFile();
+        NewPlayer();
+        StartCoroutine(LoadAsyncronously(1));
+        if (File.Exists(path)) {
+            loading = true;
+        }
     }
 }

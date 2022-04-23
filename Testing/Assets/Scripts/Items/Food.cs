@@ -8,7 +8,6 @@ public class Food : Interactable {
     [SerializeField] public float pickUpTime;
     [SerializeField] public bool isAlive;
     bool isEating = false;
-    bool isConsuming = false;
     Player.PlayerMovement player;
 
     void Start() {
@@ -20,14 +19,14 @@ public class Food : Interactable {
     }
 
     public override void Interact() {
-        if (!isConsuming) {
-            isConsuming = true;
+        if (!player.isEating) {
+            player.isEating = true;
             StartCoroutine(Consuming());
         }
     }
 
     IEnumerator Consuming() {
-        while (isConsuming) {
+        while (player.isEating) {
             curPickUpTime += Time.deltaTime;
             player.holdInteractSlider.value = curPickUpTime;
             if (curPickUpTime < pickUpTime && !isEating) {
@@ -73,7 +72,7 @@ public class Food : Interactable {
             }else {
                 player.holdInteractSlider.gameObject.SetActive(false);
                 StopCoroutine(Consuming());
-                isConsuming = false;
+                player.isEating = false;
             }
         }
     }
@@ -84,7 +83,7 @@ public class Food : Interactable {
             if (!ingameMenus.pausedGame) {
                 player.holdInteractSlider.gameObject.SetActive(false);
                 StopCoroutine(Consuming());
-                isConsuming = false;
+                player.isEating = false;
             }
         }
     }

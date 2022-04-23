@@ -99,6 +99,7 @@ namespace Player {
         [Header("Consume")]
         [SerializeField] public int playerDrugs;
         [HideInInspector] public bool isConsuming;
+        [HideInInspector] public bool isEating;
 
         [Header("Reload")]
         [SerializeField] public int playerAmmo;
@@ -444,7 +445,7 @@ namespace Player {
 
         private void Attack() {
             attackTimer += Time.deltaTime;
-            if (Input.GetKey(attackKey) && !isConsuming && !isReloading && !isMidAttack) {
+            if (Input.GetKey(attackKey) && !isConsuming && !isReloading && !isMidAttack && !isEating) {
                 if (myWeaponStats.isGun && myWeaponStats.bullets > 0) {
                     if (attackTimer >= myWeaponStats.shootCooldown * attackSpeedMultiplier) {
                         isAttacking = true;
@@ -477,7 +478,7 @@ namespace Player {
         }
 
         private void Block() {
-            if (Input.GetKey(blockKey) && !Input.GetKey(attackKey) && !isAttacking && !isConsuming && !isReloading) {
+            if (Input.GetKey(blockKey) && !Input.GetKey(attackKey) && !isAttacking && !isConsuming && !isReloading && !isEating) {
                 if (!isBlocking) {
                     isParrying = true;
                 }
@@ -567,7 +568,7 @@ namespace Player {
         }
 
         private void Consume() {
-            if (Input.GetKeyDown(consumeKey) && !isAttacking && !isConsuming && !isReloading && !isRunning && playerDrugs > 0) {
+            if (Input.GetKeyDown(consumeKey) && !isAttacking && !isConsuming && !isEating && !isReloading && !isRunning && playerDrugs > 0) {
                 StopBlocking();
                 isConsuming = true; 
                 weaponAnimator.SetTrigger("isConsuming");
@@ -599,7 +600,7 @@ namespace Player {
         }
 
         private void Reload() {
-            if (Input.GetKeyDown(reloadKey) && myWeaponStats.isGun && !isAttacking && !isConsuming && !isReloading && !isRunning && playerAmmo > 0) {
+            if (Input.GetKeyDown(reloadKey) && myWeaponStats.isGun && !isAttacking && !isConsuming && !isEating && !isReloading && !isRunning && playerAmmo > 0) {
                 StopBlocking();
                 isReloading = true; 
                 weaponAnimator.SetTrigger("isReloading");
@@ -616,7 +617,7 @@ namespace Player {
         }
 
         private void PickUp() {
-            if (Input.GetKeyDown(pickUpKey) && !isAttacking && !isBlocking && !isReloading && !isConsuming) {
+            if (Input.GetKeyDown(pickUpKey) && !isAttacking && !isBlocking && !isReloading && !isConsuming && !isEating) {
                 Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, pickUpRange)) {
