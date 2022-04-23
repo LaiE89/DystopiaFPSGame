@@ -69,7 +69,7 @@ public class Weapons : MonoBehaviour {
         // Debug.DrawRay(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height-0.5f, 0), ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.directionToTarget.y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z) * 20, Color.green, 3);
         enemy.isRotating = false;
         attackSound.Play();
-        if (Physics.Raycast(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0), ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.directionToTarget.y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z), out hit, range, enemy.enemyLayers)) {
+        if (Physics.Raycast(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0), enemy.directionToTarget, out hit, range, enemy.enemyLayers)) {
             if (hit.collider.tag == "Player") {
                 enemy.CombatCalculation(damage, knockback, hurtSound);
             }else {

@@ -3156,8 +3156,9 @@ MonoBehaviour:
   targetLocked: 0
   angleToPlayerHorz: 0
   directionToTarget: {x: 0, y: 0, z: 0}
-  timeBetweenAttacks: 0.2
-  shootingAccuracyAngle: 30
+  shootingInaccuracy: 0.5
+  timeBetweenAttacks: 0.1
+  shootingAccuracyAngle: 180
   meleeAccuracyAngle: 180
   rotationDegPerSec: 10
   alertRadius: 10
@@ -3169,6 +3170,7 @@ MonoBehaviour:
   isDying: 0
   isIdle: 0
   isAlertable: 1
+  isPassive: 0
   idleAnimation: {fileID: 0}
   damageMultiplier: 0
   attackSpeedMultiplier: 0

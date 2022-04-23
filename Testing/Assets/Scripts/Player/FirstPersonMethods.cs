@@ -58,6 +58,7 @@ namespace Player {
                 PlayerMovement.isMidAttack = false;
             }
         }
+        
         public void ExtraWeaponSound() {
             PlayerMovement.myWeaponStats.extraSound.Play();
         }

@@ -2362,7 +2362,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-922378
+  m_Name: pb_Mesh-53096
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10939,7 +10939,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 506228366213301485, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_Name
-      value: Gun
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 4367100074325377101, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_RootOrder
@@ -13271,7 +13271,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 506228366213301485, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_Name
-      value: Gun
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 4367100074325377101, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_RootOrder
@@ -13886,7 +13886,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 506228366213301485, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_Name
-      value: Gun
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 4367100074325377101, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_RootOrder
@@ -18648,7 +18648,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 506228366213301485, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_Name
-      value: Gun
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 4367100074325377101, guid: 89cac7e4fc169de418838210c3c86eb1, type: 3}
       propertyPath: m_RootOrder
@@ -20614,15 +20614,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6495205658211297919, guid: 24889954469691a40af8c7eff9a55a43, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 44.3389
+      value: 44.426
       objectReference: {fileID: 0}
     - target: {fileID: 6495205658211297919, guid: 24889954469691a40af8c7eff9a55a43, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8558
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6495205658211297919, guid: 24889954469691a40af8c7eff9a55a43, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.012
+      value: 6.755
       objectReference: {fileID: 0}
     - target: {fileID: 6495205658211297919, guid: 24889954469691a40af8c7eff9a55a43, type: 3}
       propertyPath: m_LocalRotation.w

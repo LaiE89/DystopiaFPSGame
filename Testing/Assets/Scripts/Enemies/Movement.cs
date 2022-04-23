@@ -47,8 +47,9 @@ namespace Enemies {
         float distanceToTarget;
         
         [Header("Attacking Variables")]
+        [Range(0,1)] public float shootingInaccuracy;
         [SerializeField] float timeBetweenAttacks;
-        [SerializeField] float shootingAccuracyAngle;
+        [SerializeField] float shootingAccuracyAngle = 30;
         [SerializeField] float meleeAccuracyAngle = 180;
         [SerializeField] float rotationDegPerSec;
         [SerializeField] public float alertRadius;
@@ -58,6 +59,7 @@ namespace Enemies {
         [HideInInspector] public bool isRotating;
         [HideInInspector] public bool alreadyAttacked;
         [HideInInspector] public bool isDying;
+        [HideInInspector] public bool isMidAttack;
         [HideInInspector ]public Coroutine skillLagRoutine;
         int selectedWeapon;
         GameObject eWeapon;
@@ -141,6 +143,7 @@ namespace Enemies {
                                 }
                                 if (agent.remainingDistance < 0.5f) {
                                     targetLocked = false;
+                                    isRotating = false; //
                                     GoNextPoint();
                                 }
                             }else {
@@ -154,6 +157,7 @@ namespace Enemies {
                                     timeNotSeeing += Time.deltaTime;
                                     if (timeNotSeeing > 2) {
                                         targetLocked = false;
+                                        isRotating = false; //
                                         if (isIdle && Vector3.Distance(gameObject.transform.position, destinations[0]) > 0.5f) {
                                             // GoNextPoint();
                                             isGoingBack = true;
@@ -172,14 +176,17 @@ namespace Enemies {
                     if (isInitialRotation) {
                         if (canSeePlayer && eWeaponStats.isGun && eWeaponStats.bullets > 0) {
                             if (distanceToTarget <= eWeaponStats.shootRange - 1f && distanceToTarget > eWeaponStats.attackRange && angleToPlayerHorz < shootingAccuracyAngle) {
+                                isRotating = true;
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }else if (distanceToTarget <= eWeaponStats.attackRange && angleToPlayerHorz < meleeAccuracyAngle) {
+                                isRotating = true;
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }
                         }else {
                             if (canSeePlayer && distanceToTarget <= eWeaponStats.attackRange && angleToPlayerHorz < meleeAccuracyAngle) { 
+                                isRotating = true;
                                 AttackPlayer();
                                 isInitialRotation = false;
                             }
@@ -278,6 +285,7 @@ namespace Enemies {
                     agent.isStopped = false;
                 }
                 targetLocked = false;
+                isRotating = false; //
                 isInitialRotation = false;
             }
         }
@@ -338,9 +346,7 @@ namespace Enemies {
         }
 
         private void AttackPlayer() {
-            if (!alreadyAttacked) {
-                // Attack code here
-                // agent.SetDestination(transform.position);
+            if (!alreadyAttacked && !isMidAttack) {
                 agent.velocity = Vector3.zero;
                 if (agent.isActiveAndEnabled) {
                     agent.isStopped = true;
@@ -516,6 +522,15 @@ namespace Enemies {
             this.isRunning = false;
             // Make this dynamic
             this.speedMultiplier = 1;
+        }
+
+        public Vector3 GetShootingDirection(Vector3 direction) {
+            if (shootingInaccuracy == 0) { // Perfect Accuracy
+                return direction;
+            }
+            Vector3 targetPos = ToolMethods.OffsetPosition(direction * eWeaponStats.shootRange, UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), 0);
+            Vector3 fDirection = targetPos - direction;
+            return fDirection.normalized;
         }
 
         /*void OnDrawGizmos() {

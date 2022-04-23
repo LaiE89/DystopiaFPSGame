@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -43,16 +44,32 @@ namespace Enemies {
         }
 
         public void ShootDamage() {
-            enemyMovement.eWeaponStats.bullets -= 1;
             enemyMovement.eWeaponStats.muzzleFlash.Play();
-            // enemyMovement.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound);
             enemyMovement.eWeaponStats.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound, enemyMovement);
+            if (enemyMovement.eWeaponStats.bullets > 0) {
+                enemyMovement.eWeaponStats.bullets -= 1;
+                StartCoroutine(waitForBulletCheck());
+            }
+        }
+        
+        IEnumerator waitForBulletCheck() {
+            enemyMovement.isMidAttack = true;
+            yield return new WaitForEndOfFrame();
+            if (enemyMovement.eWeaponStats.bullets <= 0) {
+                AnimatorStateInfo stateInfo = enemyMovement.animator.GetCurrentAnimatorStateInfo(0);
+                Debug.Log(stateInfo.IsName("Attack"));
+                yield return new WaitForSeconds((1 - stateInfo.normalizedTime) * stateInfo.length);
+                enemyMovement.isMidAttack = false;
+                enemyMovement.animatorOverrideController["Punch"] = enemyMovement.eWeaponStats.attackAnimation;
+            }else {
+                enemyMovement.isMidAttack = false;
+            }
         }
 
         public void ShootDamageEnd() {
-            if (enemyMovement.eWeaponStats.bullets <= 0) {
+            /*if (enemyMovement.eWeaponStats.bullets <= 0) {
                 enemyMovement.animatorOverrideController["Punch"] = enemyMovement.eWeaponStats.attackAnimation;
-            }
+            }*/
         }
 
         public void RightHook() {

@@ -5936,7 +5936,7 @@ MonoBehaviour:
   shootKnockback: 3
   maxBullets: 3
   bullets: 3
-  shootAlertRadius: 20
+  shootAlertRadius: 25
   muzzleFlash: {fileID: 8425721133286594185}
   enemyShootAnimation: {fileID: -3232006357042683793, guid: b076720bba6593045915887e8637b497, type: 3}
   fpShootAnimation: {fileID: -3232006357042683793, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
