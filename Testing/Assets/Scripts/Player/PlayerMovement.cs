@@ -616,7 +616,7 @@ namespace Player {
         }
 
         private void PickUp() {
-            if (Input.GetKeyDown(pickUpKey) && !isAttacking && !isBlocking) {
+            if (Input.GetKeyDown(pickUpKey) && !isAttacking && !isBlocking && !isReloading && !isConsuming) {
                 Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, pickUpRange)) {
