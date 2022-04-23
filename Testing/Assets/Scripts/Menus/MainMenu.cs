@@ -15,6 +15,7 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] public TextMeshProUGUI progressText;
     public static bool loading;
     public static bool saving;
+    public static SoundController soundController;
 
     [Header("Player Default Values")]
     [SerializeField] float playerHealth = 5;
@@ -31,6 +32,7 @@ public class MainMenu : MonoBehaviour {
 
     private void Awake() {
         saving = false;
+        soundController = GameObject.Find("Sound Controller").GetComponent<SoundController>();
     }
 
     private void Start() {
@@ -38,6 +40,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void PlayGame() {
+        soundController.Play("UI Click");
         DeleteFile();
         NewPlayer();
         StartCoroutine(LoadAsyncronously(1));
@@ -64,6 +67,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void LoadGame() {
+        soundController.Play("UI Click");
         string path = Application.persistentDataPath + "/player.dat";
         if (File.Exists(path)) {
             int currentLevel = Player.SaveSystem.LoadPlayer().sceneIndex;
@@ -92,6 +96,10 @@ public class MainMenu : MonoBehaviour {
             UnityEditor.AssetDatabase.Refresh();
             #endif
         }
+    }
+
+    public void PlayUISound() {
+        soundController.Play("UI Click");
     }
 
     public void NewPlayer() {

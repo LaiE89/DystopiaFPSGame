@@ -174,7 +174,7 @@ MonoBehaviour:
   - name: UI Click
     clip: {fileID: 8300000, guid: 43d0cd7ff55992e48815c561e204e4bb, type: 3}
     volume: 1
-    pitch: 0.75
+    pitch: 1.2
     spatialBlend: 0
     loop: 0
     music: 0

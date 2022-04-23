@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -35,19 +36,30 @@ namespace Player {
 
         public void ShootDamage() {
             ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius, transform.position, PlayerMovement.enemyMask);
+            PlayerMovement.myWeaponStats.muzzleFlash.Play();
+            PlayerMovement.myWeaponStats.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound, PlayerMovement);
             if (PlayerMovement.myWeaponStats.bullets > 0) {
                 PlayerMovement.myWeaponStats.bullets -= 1;
+                StartCoroutine(waitForBulletCheck());
             }
             PlayerMovement.bulletsTextBox.text = ("BULLETS x " + PlayerMovement.myWeaponStats.bullets);
-            PlayerMovement.myWeaponStats.muzzleFlash.Play();
-            // PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound);
-            PlayerMovement.myWeaponStats.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound, PlayerMovement);
         }
 
-        public void ShootDamageEnd() {
+        IEnumerator waitForBulletCheck() {
+            PlayerMovement.isMidAttack = true;
+            yield return new WaitForEndOfFrame();
             if (PlayerMovement.myWeaponStats.bullets <= 0) {
+                AnimatorStateInfo stateInfo = PlayerMovement.weaponAnimator.GetNextAnimatorStateInfo(0);
+                // Debug.Log("State Info Name: " + stateInfo.IsName("Attack") + ", Length: " + stateInfo.length);
+                yield return new WaitForSeconds((1 - stateInfo.normalizedTime) * stateInfo.length);
+                PlayerMovement.isMidAttack = false;
                 PlayerMovement.weaponOverrideController["Attack"] = PlayerMovement.myWeaponStats.fpAttackAnimation;
+            }else {
+                PlayerMovement.isMidAttack = false;
             }
+        }
+        public void ExtraWeaponSound() {
+            PlayerMovement.myWeaponStats.extraSound.Play();
         }
 
         public void Slam() {
@@ -73,6 +85,15 @@ namespace Player {
                 if (skills.GetType() == typeof(ShitSkill)) {
                     ShitSkill shit = skills as ShitSkill;
                     shit.PlayerShit(PlayerMovement);
+                }
+            }
+        }
+
+        public void QuickAttack() {
+            foreach (SkillsObject skills in PlayerMovement.skills) {
+                if (skills.GetType() == typeof(QuickAttackSkill)) {
+                    QuickAttackSkill qAttack = skills as QuickAttackSkill;
+                    qAttack.PlayerAttack(PlayerMovement);
                 }
             }
         }

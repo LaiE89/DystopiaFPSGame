@@ -38,6 +38,10 @@ namespace Enemies {
             enemyMovement.agent.enabled = false;
         }
 
+        public void ExtraWeaponSound() {
+            enemyMovement.eWeaponStats.extraSound.Play();
+        }
+
         public void ShootDamage() {
             enemyMovement.eWeaponStats.bullets -= 1;
             enemyMovement.eWeaponStats.muzzleFlash.Play();
@@ -110,6 +114,15 @@ namespace Enemies {
                 if (skills.GetType() == typeof(JumpAttackSkill)) {
                     JumpAttackSkill jump = skills as JumpAttackSkill;
                     jump.EnemyJump(enemyMovement, SceneController.Instance.player);
+                }
+            }
+        }
+
+        public void QuickAttack() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(QuickAttackSkill)) {
+                    QuickAttackSkill qAttack = skills as QuickAttackSkill;
+                    qAttack.EnemyAttack(enemyMovement);
                 }
             }
         }

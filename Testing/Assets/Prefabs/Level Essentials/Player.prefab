@@ -90,6 +90,8 @@ MonoBehaviour:
   skill1Key: 49
   skill2Key: 50
   skill3Key: 51
+  attackKey: 323
+  blockKey: 324
   startingYRotation: 90
   orientation: {fileID: 4708515010818003553}
   groundMask:
@@ -127,9 +129,9 @@ MonoBehaviour:
   playerLayers:
     serializedVersion: 2
     m_Bits: 0
-  playerDrugs: 3
+  playerDrugs: 10
   isConsuming: 0
-  playerAmmo: 3
+  playerAmmo: 10
   isReloading: 0
   pickUpRange: 3
   selectedWeapon: 0

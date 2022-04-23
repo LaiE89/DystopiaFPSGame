@@ -22,7 +22,7 @@ namespace EZCameraShake
         /// </summary>
         public Vector3 DefaultRotInfluence = new Vector3(1, 1, 1);
         /// <summary>
-        /// Offset that will be applied to the camera's default (0,0,0) rest position
+        /// The recoil rotation influcence of all shakes created by this shaker.
         /// </summary>
         public Vector3 RestPositionOffset = new Vector3(0, 0, 0);
         /// <summary>

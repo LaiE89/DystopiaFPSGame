@@ -15,6 +15,7 @@ public class OptionsMenu : MonoBehaviour {
     public static float brightness;
     public static int targetFPSIndex;
     Resolution[] resolutions;
+    SoundController soundController;
     [SerializeField] Slider sensSlider;
     [SerializeField] TMP_Dropdown qualityDropdown;
     [SerializeField] Slider volumeSlider;
@@ -23,6 +24,14 @@ public class OptionsMenu : MonoBehaviour {
     [SerializeField] Toggle fullScreenToggle;
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] TMP_Dropdown targetFPSDropdown;
+
+    private void Awake() {
+        if (SceneController.Instance) {
+            soundController = SceneController.Instance.soundController;
+        }else {
+            soundController = MainMenu.soundController;
+        }
+    }
 
     private void Start() {
         InitializeSettings();
@@ -103,7 +112,12 @@ public class OptionsMenu : MonoBehaviour {
     }
 
     public void SaveSettings() {
+        soundController.Play("UI Click");
         OptionsSaveSystem.SaveSettings();
+    }
+
+    public void PlayUISound() {
+        soundController.Play("UI Click");
     }
 
     public void LoadSettings() {

@@ -50,4 +50,20 @@ public class QuickAttackSkill : SkillsObject {
         useTime = Time.time;
         isActivating = false;
     }
+
+    public void EnemyAttack(Movement enemy) {
+        if (enemy.eWeaponStats.isGun) {
+            enemy.eWeaponStats.MeleeAttack(enemy.eWeaponStats.attackRange, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
+        }else {
+            enemy.eWeaponStats.SpherecastDamage(enemy.eWeaponStats.attackRange, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
+        }
+    }
+
+    public void PlayerAttack(PlayerMovement player) {
+        if (player.myWeaponStats.isGun) {
+            player.myWeaponStats.MeleeAttack(player.myWeaponStats.attackRange, player.myWeaponStats.attackDamage, player.myWeaponStats.attackKnockback, player.myWeaponStats.attackSound, player.myWeaponStats.hurtSound, player);
+        }else {
+            player.myWeaponStats.AttackDamage(player.myWeaponStats.attackRange, player.myWeaponStats.attackDamage, player.myWeaponStats.attackKnockback, player.myWeaponStats.attackSound, player.myWeaponStats.hurtSound, player);
+        }
+    }
 }

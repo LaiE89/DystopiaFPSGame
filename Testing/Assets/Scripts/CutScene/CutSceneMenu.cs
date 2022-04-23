@@ -26,6 +26,7 @@ public class CutSceneMenu : MonoBehaviour {
     }
 
     public void Resume() {
+        SceneController.Instance.soundController.Play("UI Click");
         pauseMenuUI.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -34,6 +35,7 @@ public class CutSceneMenu : MonoBehaviour {
     }
 
     public void Pause() {
+        SceneController.Instance.soundController.Play("UI Click");
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0;
         pausedGame = true;
@@ -44,7 +46,12 @@ public class CutSceneMenu : MonoBehaviour {
     }
 
     public void Skip() {
+        SceneController.Instance.soundController.Play("UI Click");
         NextLevel();
+    }
+
+    public void PlayUISound() {
+        SceneController.Instance.soundController.Play("UI Click");
     }
 
     IEnumerator LoadAsyncronously (int sceneIndex) {

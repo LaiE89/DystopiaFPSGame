@@ -35,6 +35,7 @@ namespace Player {
         float mouseY;
         float xRotation;
         float yRotation; 
+        float upRecoil;
         public static float newSens;
 
         [Header("Ground Detection")]
@@ -88,6 +89,7 @@ namespace Player {
         [HideInInspector] public Weapons myWeaponStats;
         [HideInInspector] public Animator weaponAnimator;
         [HideInInspector] public LayerMask playerLayers;
+        [HideInInspector] public bool isMidAttack;
         SkinnedMeshRenderer armMeshRenderer;
         Weapons defaultWeaponStats;
         float attackTimer;
@@ -133,7 +135,7 @@ namespace Player {
         }
         List<SkillIcon> listOfSkillIcons;
 
-        [SerializeField] Transform mouseCam;
+        [SerializeField] public Transform mouseCam;
         [SerializeField] public Camera attackCam;
         [SerializeField] public GameObject hand;
         [SerializeField] public GameObject firstPersonView;
@@ -442,7 +444,7 @@ namespace Player {
 
         private void Attack() {
             attackTimer += Time.deltaTime;
-            if (Input.GetKey(attackKey) && !isConsuming && !isReloading) {
+            if (Input.GetKey(attackKey) && !isConsuming && !isReloading && !isMidAttack) {
                 if (myWeaponStats.isGun && myWeaponStats.bullets > 0) {
                     if (attackTimer >= myWeaponStats.shootCooldown * attackSpeedMultiplier) {
                         isAttacking = true;
@@ -524,6 +526,10 @@ namespace Player {
 
         public void StopParrying() {
             isParrying = false;
+        }
+
+        public void AddRecoil(float up) {
+            upRecoil += up;
         }
 
 ///// ITEMS /////
@@ -665,7 +671,8 @@ namespace Player {
             mouseX = Input.GetAxisRaw("Mouse X");
             mouseY = Input.GetAxisRaw("Mouse Y");
             yRotation += mouseX * sensX * 0.01f;
-            xRotation -= mouseY * sensY * 0.01f;
+            xRotation -= upRecoil + mouseY * sensY * 0.01f;
+            upRecoil = 0;
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
             //mouseCam.rotation = Quaternion.Euler(xRotation, yRotation, 0);
@@ -810,7 +817,7 @@ namespace Player {
             pickUpRange = data.pickUpRange;
             statusEffects = data.statusEffects;
             GameObject cloneWeapon = (GameObject)Resources.Load(data.myWeapon, typeof(GameObject));
-            if (!cloneWeapon.GetComponent<Weapons>().isDefaultItem) {
+            if (cloneWeapon && !cloneWeapon.GetComponent<Weapons>().isDefaultItem) {
                 savedWeapon = Instantiate(cloneWeapon, this.transform.position, transform.rotation) as GameObject; 
             }
         }

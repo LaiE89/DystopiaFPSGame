@@ -12,7 +12,7 @@ public class ControlsMenu : MonoBehaviour {
     Event keyEvent;
     bool waitingForKey;
     KeyCode newKey;
-
+    SoundController soundController;
     [SerializeField] TMP_Text attackText;
     [SerializeField] TMP_Text blockText;
     [SerializeField] TMP_Text sprintText;
@@ -26,6 +26,11 @@ public class ControlsMenu : MonoBehaviour {
 
     public void Awake() {
         waitingForKey = false;
+        if (SceneController.Instance) {
+            soundController = SceneController.Instance.soundController;
+        }else {
+            soundController = MainMenu.soundController;
+        }
     }
 
     public void Start() {
@@ -60,7 +65,8 @@ public class ControlsMenu : MonoBehaviour {
     }
 
     public void StartGetButtonDown(TMP_Text text) {
-        text.text = "SELECT A KEY";
+        text.text = "PRESS A KEY";
+        soundController.Play("UI Click");
         StartCoroutine(AssignKey(text));
     }
 
@@ -90,6 +96,7 @@ public class ControlsMenu : MonoBehaviour {
     }
 
     public void ResetKeybinds() {
+        soundController.Play("UI Click");
         keybinds.Clear();
         DefaultKeybinds();
         FixingText();
@@ -126,6 +133,7 @@ public class ControlsMenu : MonoBehaviour {
     }
 
     public void ApplyingKeybinds() {
+        soundController.Play("UI Click");
         if (SceneController.Instance) {
             Player.PlayerMovement player = SceneController.Instance.player;
             if (player) {

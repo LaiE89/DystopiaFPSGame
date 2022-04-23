@@ -36,11 +36,11 @@ public class BloodPlacer : MonoBehaviour {
         CreateExplosion(collisionEvents[0]);
     }
 
-    private async void CreateExplosion(ParticleCollisionEvent particle) {
+    private void CreateExplosion(ParticleCollisionEvent particle) {
         collisionEvents.Clear();
         Vector3 collisionHitLoc = particle.intersection;
         Vector3 collisionHitRot = particle.normal;
-        Quaternion HitRot = Quaternion.LookRotation(Vector3.forward, collisionHitRot);
+        // Quaternion HitRot = Quaternion.LookRotation(Vector3.forward, collisionHitRot);
         float randNum = Random.Range(0, 10);
         float randNum2 = Random.Range(1, 100);
         float randNum3 = Random.Range(1, 100);

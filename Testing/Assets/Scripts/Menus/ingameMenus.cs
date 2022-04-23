@@ -10,6 +10,15 @@ public class ingameMenus : MonoBehaviour {
     public GameObject deathScreenUI;
     public static bool pausedGame = false;
     InventoryManager inventoryManager;
+    SoundController soundController;
+
+    private void Awake() {
+        if (SceneController.Instance) {
+            soundController = SceneController.Instance.soundController;
+        }else {
+            soundController = MainMenu.soundController;
+        }
+    }
 
     private void Start() {
         inventoryManager = FindObjectOfType<InventoryManager>();
@@ -42,19 +51,27 @@ public class ingameMenus : MonoBehaviour {
         Player.PlayerMovement.SettingChanges();
         Time.timeScale = 1;
         pausedGame = false;
+        soundController.Play("UI Click");
     }
 
     public void Pause() {
+        soundController.Play("UI Click");
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0;
         pausedGame = true;
     }
 
     public void BackToMainMenu() {
+        // soundController.Play("UI Click");
         SceneManager.LoadScene("Menu");
     }
 
+    public void PlayUISound() {
+        soundController.Play("UI Click");
+    }
+
     public void Respawn() {
+        soundController.Play("UI Click");
         string path = Application.persistentDataPath + "/player.dat";
         if (File.Exists(path)){
             MainMenu.loading = true;

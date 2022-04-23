@@ -16,6 +16,13 @@ public class ToolMethods : MonoBehaviour {
         return result;
     }
     
+    public static Vector2 SettingVector2(float xValue, float yValue) {
+        Vector2 result;
+        result.x = xValue;
+        result.y = yValue;
+        return result;
+    }
+
     public static Vector3 SettingVector(float xValue, float yValue, float zValue) {
         Vector3 result;
         result.x = xValue;
@@ -33,6 +40,14 @@ public class ToolMethods : MonoBehaviour {
         return result;
     }
 
+    public static Quaternion OffsetQuaternion(Quaternion objectPos, float xAxisDiff, float yAxisDiff, float zAxisDiff, float wAxisDiff) {
+        Quaternion result;
+        result.x = objectPos.x + xAxisDiff;
+        result.y = objectPos.y + yAxisDiff;
+        result.z = objectPos.z + zAxisDiff;
+        result.w = objectPos.w + wAxisDiff;
+        return result;
+    }
 
     public static void AlertRadius(float radius, Vector3 position, LayerMask mask) {
         Collider[] list = Physics.OverlapSphere(position, radius, mask);
