@@ -101,7 +101,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Dialogue
     clip: {fileID: 8300000, guid: 6a822a8fef691da44a859b3de06a25ef, type: 3}
-    volume: 0.25
+    volume: 0.1
     pitch: 0.5
     spatialBlend: 0
     loop: 0

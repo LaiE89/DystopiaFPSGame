@@ -10,7 +10,7 @@ public class DialogueController : MonoBehaviour {
     public TextMeshProUGUI dialogueText;
     public string textSound;
     public Animator animator;
-    
+    public bool isPlaying;
     private Queue<string> sentences;
 
     void Start() {
@@ -18,6 +18,7 @@ public class DialogueController : MonoBehaviour {
     }
 
     public void StartDialogue(Dialogue dialogue) {
+        isPlaying = true;
         sentences = new Queue<string>();
         animator.SetBool("isOpen", true);
         nameText.text = dialogue.name;
@@ -60,6 +61,7 @@ public class DialogueController : MonoBehaviour {
     }
 
     void EndDialogue() {
+        isPlaying = false;
         animator.SetBool("isOpen", false);
     }
 }

@@ -45,4 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 0}
   dialogueText: {fileID: 0}
+  textSound: 
   animator: {fileID: 0}
+  isPlaying: 0
