@@ -3,8 +3,8 @@ using System.Collections;
 
 public abstract class Interactable : MonoBehaviour {
 
-    [SerializeField] string itemName;
-    [SerializeField] string interactSound;
+    [SerializeField] public string itemName;
+    [SerializeField] public string interactSound;
 
     public virtual void Interact(){
         if (interactSound != null) {
@@ -24,7 +24,7 @@ public abstract class Interactable : MonoBehaviour {
 
     public virtual void OnMouseOver() {
         Player.PlayerMovement player = SceneController.Instance.player;
-        if (transform.parent == null && !ingameMenus.pausedGame && player.interactableInRange(this.gameObject)){
+        if ((gameObject.tag == "Appliance" || transform.parent == null) && !ingameMenus.pausedGame && player.interactableInRange(this.gameObject)){
             player.interactTextBox.text = (itemName.ToUpper());
         }else {
             player.interactTextBox.text = ("");
@@ -33,7 +33,7 @@ public abstract class Interactable : MonoBehaviour {
 
     public virtual void OnMouseExit() {
         Player.PlayerMovement player = SceneController.Instance.player;
-        if (transform.parent == null && !ingameMenus.pausedGame) {
+        if ((gameObject.tag == "Appliance" || transform.parent == null) && !ingameMenus.pausedGame) {
             player.interactTextBox.text = ("");
         }
     }

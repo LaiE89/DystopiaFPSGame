@@ -110,7 +110,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Pick Up
     clip: {fileID: 8300000, guid: 2c3afd336fdec794084bce70e1a87d9d, type: 3}
-    volume: 0.25
+    volume: 0.5
     pitch: 1
     spatialBlend: 0
     loop: 0

@@ -7,10 +7,14 @@ public class Openable : Interactable {
 
     [SerializeField] LayerMask enemyMask;
     [SerializeField] Animator animator;
+    [SerializeField] Consumable key;
+    [SerializeField] NavMeshObstacle obstacle;
     bool canUse;
     bool isOpen;
+    string originalItemName;
 
     public void Start() {
+        originalItemName = this.itemName;
         canUse = true;
         isOpen = false;
     }
@@ -29,9 +33,17 @@ public class Openable : Interactable {
                 animator.SetBool("isOpen", false);  
                 ToolMethods.AlertRadius(5f, user.position, enemyMask);
             }else {
-                isOpen = true;
-                animator.SetBool("isOpen", true);  
-                ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                if (key == null) {
+                    if (obstacle.isActiveAndEnabled) {
+                        this.itemName = originalItemName;
+                        obstacle.enabled = false;
+                    }
+                    isOpen = true;
+                    animator.SetBool("isOpen", true);  
+                    ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                }else {
+                    this.itemName = "Requires " + key.itemName;
+                }
             }
             this.canUse = false;
             StartCoroutine(useDelay());

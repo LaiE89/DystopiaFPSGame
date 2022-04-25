@@ -41,7 +41,7 @@ public class Shotgun : Weapons {
     private Ray[] CreatingRays(Enemies.Movement enemy) {
         Ray[] rays = new Ray[pellets];
         Vector3 origin = ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0);
-        Vector3 targetPos = enemy.GetShootingDirection(enemy.directionToTarget);
+        Vector3 targetPos = enemy.GetShootingDirection();
         for(int i = 0; i < pellets; i++) {
             rays[i] = new Ray(origin, GetShootingDirection(targetPos));
         }

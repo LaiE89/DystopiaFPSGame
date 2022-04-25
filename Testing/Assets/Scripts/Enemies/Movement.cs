@@ -71,6 +71,9 @@ namespace Enemies {
         [SerializeField] public bool isAlertable;
         [SerializeField] public bool isPassive;
         [SerializeField] AnimationClip idleAnimation;
+        [SerializeField] float baseDamageMultiplier = 1;
+        [SerializeField] float baseAttackSpeedMultiplier = 1;
+        [SerializeField] float baseSpeedMultiplier = 1;
         [HideInInspector] public float damageMultiplier;
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float speedMultiplier;
@@ -326,9 +329,9 @@ namespace Enemies {
 
 // Combat Methods
         public void UpdatingStatus() {
-            attackSpeedMultiplier = 1;
-            damageMultiplier = 1;
-            speedMultiplier = 1;
+            attackSpeedMultiplier = baseAttackSpeedMultiplier;
+            damageMultiplier = baseDamageMultiplier;
+            speedMultiplier = baseSpeedMultiplier;
         }
 
         private IEnumerator SkillCheckRoutine(){
@@ -524,13 +527,18 @@ namespace Enemies {
             this.speedMultiplier = 1;
         }
 
-        public Vector3 GetShootingDirection(Vector3 direction) {
+        public Vector3 GetShootingDirection() {
+            Vector3 direction = (thePlayer.transform.position - ToolMethods.OffsetPosition(transform.position, 0, height - 1.5f, 0)).normalized;
             if (shootingInaccuracy == 0) { // Perfect Accuracy
                 return direction;
             }
             Vector3 targetPos = ToolMethods.OffsetPosition(direction * eWeaponStats.shootRange, UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), 0);
             Vector3 fDirection = targetPos - direction;
             return fDirection.normalized;
+        }
+
+        public Vector3 GetDirection() {
+            return (thePlayer.transform.position - ToolMethods.OffsetPosition(transform.position, 0, height - 1.5f, 0)).normalized;
         }
 
         /*void OnDrawGizmos() {

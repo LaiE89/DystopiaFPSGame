@@ -42,7 +42,7 @@ public class RightHookSkill : SkillsObject {
     public void EnemyRightHook(Movement enemy, PlayerMovement player) {
         enemy.eWeaponStats.attackSound.Play();
         enemy.isRotating = false;
-        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.transform.TransformDirection(Vector3.forward).x, enemy.directionToTarget.y, enemy.transform.TransformDirection(Vector3.forward).z), enemy.eWeaponStats.attackRange, enemy.enemyLayers);
+        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.transform.TransformDirection(Vector3.forward).x, enemy.GetDirection().y, enemy.transform.TransformDirection(Vector3.forward).z), enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.enemyLayers);
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {

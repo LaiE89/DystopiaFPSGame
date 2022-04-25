@@ -36,7 +36,7 @@ public class Pistol : Weapons {
 
     public override void RaycastDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound, Enemies.Movement enemy) {
         RaycastHit hit;
-        Vector3 direc = enemy.GetShootingDirection(enemy.directionToTarget);
+        Vector3 direc = enemy.GetShootingDirection();
         Debug.DrawRay(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height-0.5f, 0), direc * 20, Color.green, 1);
         //Debug.DrawLine (ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height-0.5f, 0), ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height-0.5f, 0) + ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.directionToTargetEyeLevel.y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z) * 10, Color.red, Mathf.Infinity);
         enemy.isRotating = false;

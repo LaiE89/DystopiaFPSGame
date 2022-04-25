@@ -53,9 +53,9 @@ public class QuickAttackSkill : SkillsObject {
 
     public void EnemyAttack(Movement enemy) {
         if (enemy.eWeaponStats.isGun) {
-            enemy.eWeaponStats.MeleeAttack(enemy.eWeaponStats.attackRange, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
+            enemy.eWeaponStats.MeleeAttack(enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
         }else {
-            enemy.eWeaponStats.SpherecastDamage(enemy.eWeaponStats.attackRange, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
+            enemy.eWeaponStats.SpherecastDamage(enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
         }
     }
 

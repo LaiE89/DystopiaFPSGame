@@ -20,7 +20,7 @@ namespace Enemies {
 
         public void PlayerDamage() {
             // enemyMovement.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound);
-            enemyMovement.eWeaponStats.SpherecastDamage(enemyMovement.eWeaponStats.attackRange, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound, enemyMovement);
+            enemyMovement.eWeaponStats.SpherecastDamage(enemyMovement.eWeaponStats.attackRange + enemyMovement.height - 1.5f, enemyMovement.eWeaponStats.attackDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.attackKnockback, enemyMovement.eWeaponStats.attackSound, enemyMovement.eWeaponStats.hurtSound, enemyMovement);
         }
 
         public void StartRotation() {

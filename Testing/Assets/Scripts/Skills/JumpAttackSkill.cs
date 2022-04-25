@@ -48,7 +48,7 @@ public class JumpAttackSkill : SkillsObject {
     public void EnemyJumpAttack(Movement enemy) {
         SceneController.Instance.soundController.PlayClipAtPoint("Punch", enemy.transform.position, 0.3f, 1);
         enemy.isRotating = false;
-        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.directionToTarget.y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z), range, enemy.enemyLayers);
+        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.gameObject.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.gameObject.transform.TransformDirection(Vector3.forward).x, enemy.GetDirection().y, enemy.gameObject.transform.TransformDirection(Vector3.forward).z), range + enemy.height - 1.5f, enemy.enemyLayers);
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {
