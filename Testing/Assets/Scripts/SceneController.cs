@@ -18,6 +18,7 @@ public class SceneController : MonoBehaviour {
     [SerializeField] public ParticleSystem groundParticles;
     [SerializeField] public ParticleSystem burningParticles;
     [SerializeField] public bool isCutscene;
+    [SerializeField] public string ambienceSound;
 
     [Header("Singletons")]
     public GameObject canvas;
@@ -83,6 +84,7 @@ public class SceneController : MonoBehaviour {
     }
 
     void Start() {
+        soundController.Play(ambienceSound);
         optionsMenu.InitializeSettings();
         //listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
     }

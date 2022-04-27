@@ -6,6 +6,7 @@ using UnityEngine;
 public class Dialogue {
     public string name;
     public bool isCenter;
+    public AudioSource audioSource;
 
     [TextArea(3, 10)]
     public string[] sentences;

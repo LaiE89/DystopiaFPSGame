@@ -53,6 +53,7 @@ public class ingameMenus : MonoBehaviour {
     }
 
     public void BackToMainMenu() {
+        Time.timeScale = 1;
         // soundController.Play("UI Click");
         SceneManager.LoadScene("Menu");
     }

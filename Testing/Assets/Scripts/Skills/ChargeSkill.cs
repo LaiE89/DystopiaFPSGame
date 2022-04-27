@@ -71,7 +71,7 @@ public class ChargeSkill : SkillsObject {
         enemy.turnNonKinematic();
         SceneController.Instance.soundController.PlayClipAtPoint("Dash", enemy.transform.position, 1, 0.5f);
         Vector3 eDirection = player.transform.position - enemy.transform.position;
-        enemy.rb.AddForce(ToolMethods.SettingVector(eDirection.x, 0, eDirection.z).normalized * chargeSpeed, ForceMode.Impulse);
+        enemy.rb.AddForce(ToolMethods.SettingVector(eDirection.x, 0, eDirection.z).normalized * chargeSpeed, ForceMode.VelocityChange);
         while (!enemy.rb.isKinematic && isCharging) {
             if (Vector3.Distance(enemy.transform.position, player.transform.position) < 1f) {
                 enemy.turnNonKinematic();

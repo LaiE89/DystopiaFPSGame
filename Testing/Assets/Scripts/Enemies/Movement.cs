@@ -70,6 +70,7 @@ namespace Enemies {
         [SerializeField] bool isIdle;
         [SerializeField] public bool isAlertable;
         [SerializeField] public bool isPassive;
+        [SerializeField] public bool isInvicible;
         [SerializeField] AnimationClip idleAnimation;
         [SerializeField] float baseDamageMultiplier = 1;
         [SerializeField] float baseAttackSpeedMultiplier = 1;
@@ -237,7 +238,9 @@ namespace Enemies {
                                 }
                             }
                         }else {
-                            Walking();
+                            if (destinations.Length > 0) {
+                                Walking();
+                            }
                         }
                     }
                 }
@@ -400,26 +403,28 @@ namespace Enemies {
         }
 
         public void TakeDamage(float amount) {
-            enemyHealth -= amount;
-            if (isPassive) {
-                isPassive = false;
-            }
-            animator.ResetTrigger("isAttacking");
-            animator.SetTrigger("isDamaged");
-            ResetSpeed();
-            turnNonKinematic();
-            if (skillLagRoutine != null) {
-                StopCoroutine(skillLagRoutine);
-            }
-            if (enemyHealth <= 0) {
-                if (Hand.transform.childCount > 1) {
-                    eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+            if (!isInvicible) {
+                enemyHealth -= amount;
+                if (isPassive) {
+                    isPassive = false;
                 }
-                animator.SetTrigger("isDying");
-                isDying = true;
-                StartCoroutine(LoopingGroundCheckDelay());
+                animator.ResetTrigger("isAttacking");
+                animator.SetTrigger("isDamaged");
+                ResetSpeed();
+                turnNonKinematic();
+                if (skillLagRoutine != null) {
+                    StopCoroutine(skillLagRoutine);
+                }
+                if (enemyHealth <= 0) {
+                    if (Hand.transform.childCount > 1) {
+                        eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+                    }
+                    animator.SetTrigger("isDying");
+                    isDying = true;
+                    StartCoroutine(LoopingGroundCheckDelay());
+                }
+                Debug.Log(gameObject.name + " took some damage. Current Health: " + enemyHealth);
             }
-            Debug.Log(gameObject.name + " took some damage. Current Health: " + enemyHealth);
         }
 
         public IEnumerator TakeFireDamage(int numberOfTicks) {
@@ -532,7 +537,7 @@ namespace Enemies {
             if (shootingInaccuracy == 0) { // Perfect Accuracy
                 return direction;
             }
-            Vector3 targetPos = ToolMethods.OffsetPosition(direction * eWeaponStats.shootRange, UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), 0);
+            Vector3 targetPos = ToolMethods.OffsetPosition(direction * eWeaponStats.shootRange, UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy), UnityEngine.Random.Range(-shootingInaccuracy, shootingInaccuracy));
             Vector3 fDirection = targetPos - direction;
             return fDirection.normalized;
         }

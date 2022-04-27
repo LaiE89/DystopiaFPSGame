@@ -37,6 +37,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     private void Start() {
+        soundController.Play("Menu Song");
         options.InitializeSettings();
     }
 

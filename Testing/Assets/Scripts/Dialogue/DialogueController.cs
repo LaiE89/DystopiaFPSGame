@@ -33,10 +33,10 @@ public class DialogueController : MonoBehaviour {
         foreach(string sentence in dialogue.sentences) {
             sentences.Enqueue(sentence);
         }
-        DisplayNextSentence();
+        DisplayNextSentence(dialogue);
     }
 
-    public void DisplayNextSentence() {
+    public void DisplayNextSentence(Dialogue dialogue) {
         if (sentences.Count == 0) {
             EndDialogue();
             return;
@@ -44,20 +44,24 @@ public class DialogueController : MonoBehaviour {
 
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
+        StartCoroutine(TypeSentence(sentence, dialogue));
     }
 
-    IEnumerator TypeSentence (string sentence) {
+    IEnumerator TypeSentence (string sentence, Dialogue dialogue) {
         dialogueText.text = "";
         foreach (char letter in sentence.ToCharArray()) {
             dialogueText.text += letter;
-            if (textSound != null) {
-                SceneController.Instance.soundController.PlayOneShot(textSound);
+            if (dialogue.audioSource != null) {
+                dialogue.audioSource.PlayOneShot(dialogue.audioSource.clip);
+            }else {
+                if (textSound != null) {
+                    SceneController.Instance.soundController.PlayOneShot(textSound);
+                }
             }
             yield return new WaitForSeconds(0.01f);
         }
         yield return new WaitForSeconds(2f);
-        DisplayNextSentence();
+        DisplayNextSentence(dialogue);
     }
 
     void EndDialogue() {

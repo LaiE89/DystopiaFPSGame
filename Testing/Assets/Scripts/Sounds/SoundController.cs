@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Audio;
 using UnityEngine;
@@ -110,8 +111,19 @@ public class SoundController : MonoBehaviour {
     public void PauseAll() {
         foreach (AudioSource s in allSounds) {
             if (s != null) {
-                s.Pause();
+                if (!CheckASisMusic(s)) {
+                    s.Pause();
+                }
             }
         }
+    }
+
+    private bool CheckASisMusic(AudioSource l) {
+        foreach (Sound s in specialSounds) {
+            if (l == s.source && s.music) {
+                return true;
+            }
+        }
+        return false;
     }
 }
