@@ -403,34 +403,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sound Controller
       objectReference: {fileID: 0}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.size
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.data[21].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 28c969e9d0421d4458ed0215ebdd7ca4, type: 3}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.data[21].loop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.data[21].name
-      value: Industrial Beat
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.data[21].group
-      value: 
-      objectReference: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.data[21].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094859852860548585, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
-      propertyPath: specialSounds.Array.data[21].volume
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 4094859852860548586, guid: 355b8b78ee86752428ed0935cddf074d, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -18424,6 +18396,10 @@ PrefabInstance:
       value: 27.424
       objectReference: {fileID: 0}
     - target: {fileID: 8434529429241604314, guid: 050a6497c5a7cbe4481adc0a0ff39664, type: 3}
+      propertyPath: bossMusic
+      value: Boss Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 8434529429241604314, guid: 050a6497c5a7cbe4481adc0a0ff39664, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -28585,6 +28561,10 @@ PrefabInstance:
     - target: {fileID: 5273021178010669612, guid: 5f79365d61c878e49b0d0bb51b0f0f90, type: 3}
       propertyPath: progressText
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5273021178010669612, guid: 5f79365d61c878e49b0d0bb51b0f0f90, type: 3}
+      propertyPath: ambienceSound
+      value: Factory Ambience
       objectReference: {fileID: 0}
     - target: {fileID: 5273021178010669612, guid: 5f79365d61c878e49b0d0bb51b0f0f90, type: 3}
       propertyPath: loadingScreen

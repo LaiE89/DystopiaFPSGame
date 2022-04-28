@@ -27077,6 +27077,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8050421151551719543, guid: b02bd76c919471d49918e77fc4bf75ce, type: 3}
   m_PrefabInstance: {fileID: 1111092839}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &1111884480 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5474120788616566729, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+  m_PrefabInstance: {fileID: 7073612479864647306}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1117140885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35619,6 +35624,10 @@ PrefabInstance:
       propertyPath: progressText
       value: 
       objectReference: {fileID: 322975664}
+    - target: {fileID: 5273021178010669612, guid: 5f79365d61c878e49b0d0bb51b0f0f90, type: 3}
+      propertyPath: ambienceSound
+      value: Wind Ambience
+      objectReference: {fileID: 0}
     - target: {fileID: 5273021178010669612, guid: 5f79365d61c878e49b0d0bb51b0f0f90, type: 3}
       propertyPath: loadingScreen
       value: 
@@ -53872,6 +53881,70 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: bossMusic
+      value: Boss Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[0].name
+      value: JACKED BANDIT
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].name
+      value: OBJECTIVE
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].onDeath
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[0].onTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].isCenter
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].onTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[0].audioSource
+      value: 
+      objectReference: {fileID: 1111884480}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].audioSource
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].isObjective
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[0].sentences.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].sentences.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[0].sentences.Array.data[0]
+      value: Hi there fucking punk.
+      objectReference: {fileID: 0}
+    - target: {fileID: 904282237635787196, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
+      propertyPath: dialogues.Array.data[1].sentences.Array.data[0]
+      value: LEAVE THE SITE
+      objectReference: {fileID: 0}
     - target: {fileID: 1139940941279322588, guid: 60c6d3782c6e4cf48afc2f3426097b64, type: 3}
       propertyPath: m_IsActive
       value: 1

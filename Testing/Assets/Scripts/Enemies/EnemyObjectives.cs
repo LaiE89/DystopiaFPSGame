@@ -9,6 +9,7 @@ namespace Enemies {
         Boolean[] listOfConditions;
         [SerializeField] GameObject objectiveBlock;
         [SerializeField] Movement enemyScript;
+        [SerializeField] String bossMusic;
         Dictionary<String, Queue<Dialogue>> dictOfDialogue;
         Queue<Dialogue> dialogueQueue;
         Queue<Dialogue> objectivesQueue;
@@ -85,11 +86,21 @@ namespace Enemies {
                         }else {
                             if (curr.onTarget || curr.onHurt) {
                                 dictOfDialogue["Mouse"].Clear();
+                                // Debug.Log("Playing Boss Music");
+                                if (!String.IsNullOrEmpty(bossMusic)) {
+                                    SceneController.Instance.soundController.Play(bossMusic);
+                                }
                             }
                             dialogueQueue.Enqueue(curr);
                         }
-                        if (condition.Key == "Death" && objectiveBlock != null) {
-                            objectiveBlock.SetActive(false);
+                        if (condition.Key == "Death") {
+                            if (objectiveBlock != null) {
+                                objectiveBlock.SetActive(false);
+                            }
+                            if (!String.IsNullOrEmpty(bossMusic)) {
+                                SceneController.Instance.soundController.Stop(bossMusic, 2);
+                            }
+
                         }
                     }
                 }

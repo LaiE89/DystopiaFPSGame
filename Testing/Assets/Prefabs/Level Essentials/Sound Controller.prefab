@@ -234,4 +234,31 @@ MonoBehaviour:
     music: 1
     group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
+  - name: Factory Ambience
+    clip: {fileID: 8300000, guid: 7fe56881f4a79dc4c9b2723509d4c69f, type: 3}
+    volume: 0.25
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
+    music: 1
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Boss Music
+    clip: {fileID: 8300000, guid: 28c969e9d0421d4458ed0215ebdd7ca4, type: 3}
+    volume: 0.25
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
+    music: 1
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Wind Ambience
+    clip: {fileID: 8300000, guid: 49443748d1fd4ff46aa3d85706353703, type: 3}
+    volume: 0.25
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
+    music: 1
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
   allSounds: []
