@@ -435,7 +435,7 @@ namespace Player {
                 yield return null;
                 for (int i = 0; i < skills.Length; i++) {
                     listOfSkillIcons[skills[i].skillNumber - 1].cooldownImage.fillAmount = 1 - (Time.time - skills[i].useTime) / skills[i].cooldown;
-                    if (Input.GetKeyDown(listOfSkillIcons[skills[i].skillNumber - 1].skillKey) && skills[i].CanUseSkill(gameObject)) {
+                    if (Input.GetKeyDown(listOfSkillIcons[skills[i].skillNumber - 1].skillKey) && !ingameMenus.pausedGame && skills[i].CanUseSkill(gameObject)) {
                         skills[i].UseSkill(gameObject);
                         listOfSkillIcons[skills[i].skillNumber - 1].cooldownImage.fillAmount = 1;
                     }

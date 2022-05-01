@@ -1656,6 +1656,7 @@ MonoBehaviour:
   dialogues: []
   objectiveBlock: {fileID: 0}
   enemyScript: {fileID: 6114301611358388566}
+  bossMusic: 
 --- !u!114 &1161208965445943216
 MonoBehaviour:
   m_ObjectHideFlags: 0
