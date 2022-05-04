@@ -116,10 +116,11 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  radius: 5
+  radius: 10
   horizontalForce: 15
   verticalForce: 0
-  damage: 3
+  damage: 2
+  numberOfTicks: 3
   alertRadius: 20
 --- !u!208 &-5448607539991435403
 NavMeshObstacle:

@@ -682,7 +682,7 @@ namespace Player {
         }
 
         private void Jump() {
-            if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming && !isReloading) {
+            if (Input.GetKeyDown(jumpKey) && isGrounded && !isConsuming && !isReloading && !isChoking) {
                 if (playerStamina >= 10f) {
                     soundController.Stop("PlayerRun", 0.25f);
                     soundController.PlayOneShot("PlayerJump");

@@ -7,6 +7,7 @@ public class Explodable : Destructable {
     [SerializeField] float horizontalForce;
     [SerializeField] float verticalForce;
     [SerializeField] float damage;
+    [SerializeField] int numberOfTicks;
     [SerializeField] float alertRadius;
     bool isExploded;
 
@@ -26,8 +27,10 @@ public class Explodable : Destructable {
                         Player.PlayerMovement pMovement = nearbyObject.GetComponent<Player.PlayerMovement>();
                         if (eMovement != null) {
                             eMovement.TakeDamage(damage);
+                            eMovement.StartCoroutine(eMovement.TakeFireDamage(numberOfTicks));
                         }else if (pMovement != null) {
                             pMovement.TakeDamage(damage);
+                            pMovement.StartCoroutine(pMovement.TakeFireDamage(numberOfTicks));
                         }
                         rb.AddExplosionForce(horizontalForce, transform.position, radius, verticalForce, ForceMode.Impulse);
                     }

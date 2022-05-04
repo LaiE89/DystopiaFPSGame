@@ -60,7 +60,8 @@ namespace Enemies {
         [HideInInspector] public bool alreadyAttacked;
         [HideInInspector] public bool isDying;
         [HideInInspector] public bool isMidAttack;
-        [HideInInspector ]public Coroutine skillLagRoutine;
+        [HideInInspector] public Coroutine skillLagRoutine;
+        [HideInInspector] public Coroutine groundCheckRoutine;
         int selectedWeapon;
         GameObject eWeapon;
         bool isInitialRotation;
@@ -133,9 +134,10 @@ namespace Enemies {
         }
         
         private void Update() {
-            if (isKnockedBack) {
+            /*if (isKnockedBack) {
                 StartCoroutine(GroundCheckDelay());
-            }else {
+            }*/
+            if (!isKnockedBack) {
                 if (targetLocked) {
                     Running();
                     if (!alreadyAttacked) {
@@ -477,6 +479,8 @@ namespace Enemies {
         }
 
         public void turnNonKinematic() {
+            StopCoroutine(LoopingGroundCheckDelay()); //
+            StartCoroutine(LoopingGroundCheckDelay()); //
             alreadyAttacked = false;
             if (!targetLocked) {
                 isInitialRotation = true;

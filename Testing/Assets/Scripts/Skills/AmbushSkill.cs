@@ -40,25 +40,15 @@ public class AmbushSkill : SkillsObject {
                     GameObject enemy = hit.collider.gameObject;
                     Vector3 playerRelativeToEnemy = enemy.transform.InverseTransformPoint(isPlayer.transform.position);
                     Movement eMovement = enemy.GetComponent<Enemies.Movement>();
+                    Collider enemyCollider = hit.collider;
                     if (playerRelativeToEnemy.z <= 0 && (eMovement.agent.isActiveAndEnabled && !eMovement.agent.isOnOffMeshLink || !eMovement.agent.isActiveAndEnabled)) {
                         isPlayer.isChoking = true;
                         eMovement.isChoking = true;
                         Vector3 enemyOriginalPosition = enemy.transform.position;
                         Quaternion enemyOriginalRotation = enemy.transform.rotation;
-                        enemy.layer = LayerMask.NameToLayer("Ignore Raycast");
-                        foreach (Transform child in enemy.transform) {
-                            child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-                        }
-                        ToolMethods.ResetAllAnimatorTriggers(eMovement.animator);
-                        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Ignore Raycast"), LayerMask.NameToLayer("Player"), true);
-                        enemy.transform.SetParent(isPlayer.firstPersonView.transform.GetChild(isPlayer.firstPersonView.transform.childCount - 1));
-                        eMovement.animator.SetTrigger("isUsingSkills");
-                        eMovement.animator.SetTrigger("isChoking");
+                        Vector3 enemyOriginalScale = enemy.transform.localScale;
                         float originalSpeed = isPlayer.speedMultiplier;
-                        isPlayer.speedMultiplier = 0;
-                        isPlayer.weaponAnimator.SetTrigger("isUsingSkills");
-                        isPlayer.weaponAnimator.SetTrigger("isAmbushing");
-                        isPlayer.StartCoroutine(PlayerChoke(isPlayer, enemy, eMovement, enemyOriginalPosition, enemyOriginalRotation, originalSpeed));
+                        isPlayer.StartCoroutine(PlayerChoke(isPlayer, enemy, eMovement, enemyCollider, enemyOriginalPosition, enemyOriginalRotation, enemyOriginalScale, originalSpeed));
                         isPlayer.UsingStamina(staminaCost);
                     }
                 }
@@ -68,19 +58,33 @@ public class AmbushSkill : SkillsObject {
         isActivating = false;
     }
 
-    public IEnumerator PlayerChoke(PlayerMovement player, GameObject enemy, Movement eMovement, Vector3 originalPosition, Quaternion originalRotation, float originalSpeed) {
-        var instruction = new WaitForEndOfFrame();
+    public IEnumerator PlayerChoke(PlayerMovement player, GameObject enemy, Movement eMovement, Collider enemyCollider, Vector3 originalPosition, Quaternion originalRotation, Vector3 originalScale, float originalSpeed) {
+        enemy.layer = LayerMask.NameToLayer("Ignore Raycast");
+        foreach (Transform child in enemy.transform) {
+            child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+        ToolMethods.ResetAllAnimatorTriggers(eMovement.animator);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Ignore Raycast"), LayerMask.NameToLayer("Player"), true);
+        enemy.transform.SetParent(player.firstPersonView.transform.GetChild(player.firstPersonView.transform.childCount - 1));
+        eMovement.animator.SetTrigger("isUsingSkills");
+        eMovement.animator.SetTrigger("isChoking");
+        player.speedMultiplier = 0;
+        player.weaponAnimator.SetTrigger("isUsingSkills");
+        player.weaponAnimator.SetTrigger("isAmbushing");
+        // var instruction = new WaitForEndOfFrame();
         eMovement.isRotating = false;
         eMovement.rb.isKinematic = true;
         eMovement.agent.enabled = false;
-        yield return instruction;
-        eMovement.rb.velocity = Vector3.zero;
-        eMovement.rb.angularVelocity = Vector3.zero; 
-        yield return instruction;
+        // yield return instruction;
+        // eMovement.rb.velocity = Vector3.zero;
+        // eMovement.rb.angularVelocity = Vector3.zero; 
+        // yield return instruction;
         enemy.transform.localPosition = Vector3.zero;
         enemy.transform.localRotation = Quaternion.identity;
         enemy.transform.localScale = Vector3.one;
-        enemy.GetComponent<CapsuleCollider>().enabled = false;
+        // enemy.GetComponent<CapsuleCollider>().enabled = false;
+        enemyCollider.enabled = false;
+        eMovement.enabled = false;
         yield return new WaitForSeconds(1.5f);
         ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, ToolMethods.OffsetPosition(player.firstPersonView.transform.GetChild(player.firstPersonView.transform.childCount - 1).transform.position, 0, 0.65f, 0.6f), Quaternion.identity);
         blood.Play();
@@ -91,11 +95,13 @@ public class AmbushSkill : SkillsObject {
         }
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Ignore Raycast"), LayerMask.NameToLayer("Player"), false);
         enemy.transform.SetParent(null);
-        enemy.GetComponent<CapsuleCollider>().enabled = true;
+        // enemy.GetComponent<CapsuleCollider>().enabled = true;
+        enemyCollider.enabled = true;
+        eMovement.enabled = true;
         eMovement.agent.enabled = true;
         enemy.transform.position = originalPosition;
         enemy.transform.rotation = originalRotation;
-        enemy.transform.localScale = Vector3.one;
+        enemy.transform.localScale = originalScale;
         player.speedMultiplier = originalSpeed;
         eMovement.isChoking = false;
         player.isChoking = false;

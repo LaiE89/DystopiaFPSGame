@@ -2422,9 +2422,9 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.3
   m_Speed: 1
-  m_Acceleration: 8
+  m_Acceleration: 12
   avoidancePriority: 50
-  m_AngularSpeed: 1080
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
@@ -2535,6 +2535,7 @@ MonoBehaviour:
   dialogues: []
   objectiveBlock: {fileID: 0}
   enemyScript: {fileID: 3985529621055756418}
+  bossMusic: 
 --- !u!114 &3509262639257668855
 MonoBehaviour:
   m_ObjectHideFlags: 0

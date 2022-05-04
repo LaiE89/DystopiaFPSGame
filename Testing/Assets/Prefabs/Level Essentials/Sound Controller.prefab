@@ -174,7 +174,7 @@ MonoBehaviour:
   - name: UI Click
     clip: {fileID: 8300000, guid: 43d0cd7ff55992e48815c561e204e4bb, type: 3}
     volume: 1
-    pitch: 1.2
+    pitch: 1.4
     spatialBlend: 0
     loop: 0
     music: 0
@@ -259,6 +259,15 @@ MonoBehaviour:
     spatialBlend: 0
     loop: 1
     music: 1
+    group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
+    source: {fileID: 0}
+  - name: Page Turn
+    clip: {fileID: 8300000, guid: 6ddf055b50f90254fb903a3e495f9829, type: 3}
+    volume: 1
+    pitch: 1.25
+    spatialBlend: 0
+    loop: 0
+    music: 0
     group: {fileID: 24300002, guid: f47922c61f176ea40b87b83231abdcde, type: 2}
     source: {fileID: 0}
   allSounds: []
