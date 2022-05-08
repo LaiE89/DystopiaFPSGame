@@ -724,7 +724,7 @@ namespace Player {
                     soundController.Play("PlayerRun");
                     isRunning = true;
                 }
-                UsingStamina(Time.deltaTime * 20f); // 0.2f
+                UsingStamina(Time.deltaTime * 10f);
                 moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed * speedMultiplier, acceleration * Time.deltaTime);
             }else {
                 Walk();

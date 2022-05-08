@@ -9,6 +9,6 @@ public class AmmoConsumable : Consumable {
         Player.PlayerMovement playerInstance = SceneController.Instance.player;
         playerInstance.playerAmmo += 1;
         playerInstance.ammoTextBox.text = ("AMMO x " + playerInstance.playerAmmo);
-        playerInstance.interactTextBox.text = ("");
+        // playerInstance.interactTextBox.text = ("");
     }
 }

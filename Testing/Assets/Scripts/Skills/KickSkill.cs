@@ -27,9 +27,6 @@ public class KickSkill : SkillsObject {
         base.UseSkill(user, target);
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            if (isEnemy.skillLagRoutine != null) {
-                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
-            }
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isKicking");
         }

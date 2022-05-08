@@ -28,10 +28,7 @@ public class QuickAttackSkill : SkillsObject {
         base.UseSkill(user, target);
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            if (isEnemy.skillLagRoutine != null) {
-                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
-            }
-            isEnemy.ResetSpeed();
+            // isEnemy.ResetSpeed();
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isQuickAttacking");
         }
@@ -55,7 +52,7 @@ public class QuickAttackSkill : SkillsObject {
         if (enemy.eWeaponStats.isGun) {
             enemy.eWeaponStats.MeleeAttack(enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
         }else {
-            enemy.eWeaponStats.SpherecastDamage(enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.eWeaponStats.attackDamage, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
+            enemy.eWeaponStats.SpherecastDamage(enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.eWeaponStats.attackDamage * enemy.damageMultiplier, enemy.eWeaponStats.attackKnockback, enemy.eWeaponStats.attackSound, enemy.eWeaponStats.hurtSound, enemy);
         }
     }
 

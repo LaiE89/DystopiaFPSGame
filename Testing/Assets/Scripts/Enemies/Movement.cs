@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,6 +16,7 @@ namespace Enemies {
         [SerializeField] GameObject Hand;
         [SerializeField] public AudioSource walkSound;
         [SerializeField] public AudioSource runSound;
+        [SerializeField] public GameObject drops;
         [HideInInspector] public GameObject thePlayer;
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public AnimatorOverrideController animatorOverrideController;
@@ -230,8 +232,11 @@ namespace Enemies {
                     }else {
                         if (agent.isActiveAndEnabled && !agent.pathPending && agent.remainingDistance <= 0.05f) {
                             if (Vector3.Distance(gameObject.transform.position, destinations[0]) > 0.05f) {
+                                isGoingBack = true;
                                 GoNextPoint();
                             }else {
+                                isWalking = false;
+                                isRunning = false;
                                 animator.SetBool("isWalking", false);
                                 animator.SetBool("isRunning", false);
                                 if (isGoingBack) {
@@ -418,12 +423,15 @@ namespace Enemies {
                     StopCoroutine(skillLagRoutine);
                 }
                 if (enemyHealth <= 0) {
-                    if (Hand.transform.childCount > 1) {
-                        eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+                    if (!isDying) {
+                        DroppingDrops();
+                        if (Hand.transform.childCount > 1) {
+                            eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
+                        }
+                        animator.SetTrigger("isDying");
+                        isDying = true;
                     }
-                    animator.SetTrigger("isDying");
-                    isDying = true;
-                    StartCoroutine(LoopingGroundCheckDelay());
+                    // StartCoroutine(LoopingGroundCheckDelay());
                 }
                 Debug.Log(gameObject.name + " took some damage. Current Health: " + enemyHealth);
             }
@@ -463,7 +471,7 @@ namespace Enemies {
                             TakeDamage(1f);
                             if (Hand.transform.childCount > 1) {
                                 eWeapon.GetComponent<Holdable>().DroppingWeapon(transform);
-                                selectedWeapon = 1;
+                                selectedWeapon = 0;
                                 SwitchWeapon(selectedWeapon);
                             }
                         }else {
@@ -518,8 +526,6 @@ namespace Enemies {
 
         public IEnumerator SkillEndingLag(float time, float speed) {
             var instruction = new WaitForEndOfFrame();
-            // This needs fixing so it works for dynamic speed multiplier
-            float curSpeed = 1;
             this.isRunning = false;
             this.speedMultiplier *= speed;
             while (time > 0) {
@@ -527,13 +533,13 @@ namespace Enemies {
                 yield return instruction;
             }
             this.isRunning = false;
-            this.speedMultiplier = curSpeed;
+            this.speedMultiplier = baseSpeedMultiplier;
         }
 
         public void ResetSpeed() {
             this.isRunning = false;
             // Make this dynamic
-            this.speedMultiplier = 1;
+            this.speedMultiplier = baseSpeedMultiplier;
         }
 
         public Vector3 GetShootingDirection() {
@@ -548,6 +554,28 @@ namespace Enemies {
 
         public Vector3 GetDirection() {
             return (thePlayer.transform.position - ToolMethods.OffsetPosition(transform.position, 0, height - 1.5f, 0)).normalized;
+        }
+
+        private void DroppingDrops() {
+            List<GameObject> dropsTable = new List<GameObject>();
+            foreach (Transform child in drops.transform) {
+                dropsTable.Add(child.gameObject);
+            }
+            foreach (GameObject drop in dropsTable) {
+                drop.transform.SetParent(null);
+                drop.transform.localScale = Vector3.one;
+                if (!drop.GetComponent<Rigidbody>()) {
+                    drop.AddComponent<Rigidbody>();
+                }
+                Rigidbody dropRb = drop.GetComponent<Rigidbody>();
+                dropRb.isKinematic = false;
+                dropRb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                drop.SetActive(true);
+                float random = UnityEngine.Random.Range(-1f,1f);
+                dropRb.AddForce(ToolMethods.SettingVector(random, random, random).normalized, ForceMode.Impulse);
+                dropRb.AddForce(gameObject.transform.up * 2, ForceMode.Impulse);
+                dropRb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10);
+            }
         }
 
         /*void OnDrawGizmos() {

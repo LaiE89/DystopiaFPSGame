@@ -20,7 +20,7 @@ public class Activatable : Interactable {
         if (canUse) {
             base.Interact();
             if (isOpen) {
-                isOpen = false;  
+                isOpen = false;
                 gateAnimator.SetBool("isOpen", false);
                 gateClose.Play();
                 particles.Play();

@@ -9,6 +9,9 @@ public class Openable : Interactable {
     [SerializeField] Animator animator;
     [SerializeField] Consumable key;
     [SerializeField] NavMeshObstacle obstacle;
+    [SerializeField] bool isRight;
+    [SerializeField] AnimationClip openRight;
+    AnimatorOverrideController overrideController;
     bool canUse;
     bool isOpen;
     string originalItemName;
@@ -17,6 +20,14 @@ public class Openable : Interactable {
         originalItemName = this.itemName;
         canUse = true;
         isOpen = false;
+        overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        animator.runtimeAnimatorController = overrideController;
+        if (key != null) {
+            obstacle.enabled = true;
+        }
+        if (isRight) {
+            overrideController["Door_Open_Left"] = openRight;
+        }
     }
     
     void OnCollisionEnter(Collision other) {
@@ -42,7 +53,7 @@ public class Openable : Interactable {
                     animator.SetBool("isOpen", true);  
                     ToolMethods.AlertRadius(5f, user.position, enemyMask);
                 }else {
-                    this.itemName = "Requires " + key.itemName;
+                    this.itemName = "Locked (Requires " + key.itemName + ")";
                 }
             }
             this.canUse = false;

@@ -7,18 +7,20 @@ using EZCameraShake;
 [CreateAssetMenu(fileName = "Right Hook Skill", menuName = "ScriptableObject/Skills/RightHook")]
 public class RightHookSkill : SkillsObject {
     public float knockback = 3;
+    public float range = 2;
 
     public override SkillsObject CreateInstance(float multiplier) {
         RightHookSkill instance = CreateInstance<RightHookSkill>();
         SettingBaseValues(instance, multiplier);
         instance.knockback = knockback;
+        instance.range = range;
         return instance;
     }
 
     public override bool CanUseSkill(GameObject user) {
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            return !isEnemy.isPassive && !isActivating && !isEnemy.alreadyAttacked && isEnemy.canSeePlayer && isEnemy.angleToPlayerHorz < 30 && !isEnemy.isDying && useTime + cooldown < Time.time && !isEnemy.isChoking && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < isEnemy.eWeaponStats.attackRange + 1;
+            return !isEnemy.isPassive && !isActivating && !isEnemy.alreadyAttacked && isEnemy.canSeePlayer && isEnemy.angleToPlayerHorz < 30 && !isEnemy.isDying && useTime + cooldown < Time.time && !isEnemy.isChoking && Vector3.Distance(isEnemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position) < range + isEnemy.height - 1.5f + 1;
             //isEnemy.canSeePlayer && useTime + cooldown < Time.time && distance <= maxChargeDistance && distance >= minChargeDistance
         }
         return !isActivating && useTime + cooldown < Time.time;
@@ -31,7 +33,7 @@ public class RightHookSkill : SkillsObject {
             if (isEnemy.skillLagRoutine != null) {
                 isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
             }
-            isEnemy.skillLagRoutine = isEnemy.StartCoroutine(isEnemy.SkillEndingLag(1.25f, 0.25f));
+            isEnemy.skillLagRoutine = isEnemy.StartCoroutine(isEnemy.SkillEndingLag(1f, 0.5f));
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isRightHooking");
         }
@@ -42,7 +44,7 @@ public class RightHookSkill : SkillsObject {
     public void EnemyRightHook(Movement enemy, PlayerMovement player) {
         enemy.eWeaponStats.attackSound.Play();
         enemy.isRotating = false;
-        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.transform.TransformDirection(Vector3.forward).x, enemy.GetDirection().y, enemy.transform.TransformDirection(Vector3.forward).z), enemy.eWeaponStats.attackRange + enemy.height - 1.5f, enemy.enemyLayers);
+        RaycastHit[] hits = Physics.SphereCastAll(ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.5f, 0), 0.3f, ToolMethods.SettingVector(enemy.transform.TransformDirection(Vector3.forward).x, enemy.GetDirection().y, enemy.transform.TransformDirection(Vector3.forward).z), range + enemy.height - 1.5f, enemy.enemyLayers);
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {

@@ -473,6 +473,8 @@ MonoBehaviour:
   fpShootAnimation: {fileID: 0}
   shootSound: {fileID: 0}
   shootHurtSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  extraSound: {fileID: 0}
 --- !u!114 &8040703314720630243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,6 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Knife
+  interactSound: 
 --- !u!1001 &3468193674170351297
 PrefabInstance:
   m_ObjectHideFlags: 0

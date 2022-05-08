@@ -39,10 +39,7 @@ public class ChargeSkill : SkillsObject {
         startParticle.Play();
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
-            if (isEnemy.skillLagRoutine != null) {
-                isEnemy.StopCoroutine(isEnemy.skillLagRoutine);
-            }
-            isEnemy.ResetSpeed();
+            // isEnemy.ResetSpeed();
             isEnemy.animator.SetTrigger("isUsingSkills");
             isEnemy.animator.SetTrigger("isCharging");
             isEnemy.StartCoroutine(EnemyCharge(isEnemy, target.GetComponent<PlayerMovement>()));

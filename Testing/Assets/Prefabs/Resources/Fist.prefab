@@ -77,6 +77,8 @@ MonoBehaviour:
   fpShootAnimation: {fileID: 0}
   shootSound: {fileID: 0}
   shootHurtSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  extraSound: {fileID: 0}
 --- !u!1 &2812176799632566079
 GameObject:
   m_ObjectHideFlags: 0
