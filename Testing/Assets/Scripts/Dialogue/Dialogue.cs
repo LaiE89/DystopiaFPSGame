@@ -13,6 +13,7 @@ public class Dialogue {
 
     [Header("Enemy Objectives Stuff")]
     public bool isObjective;
+    public bool isAlerting;
     public bool isCancellable;
 
     [Header("Trigger Type")]

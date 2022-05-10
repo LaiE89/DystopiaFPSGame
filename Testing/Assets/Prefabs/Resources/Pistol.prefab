@@ -101,7 +101,7 @@ MonoBehaviour:
   shootDamage: 2
   shootRange: 15
   shootCooldown: 0.5
-  shootKnockback: 1
+  shootKnockback: 2
   maxBullets: 5
   bullets: 5
   shootAlertRadius: 15

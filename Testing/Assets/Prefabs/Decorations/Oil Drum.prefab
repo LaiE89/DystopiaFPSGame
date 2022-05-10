@@ -117,8 +117,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   radius: 10
-  horizontalForce: 15
-  verticalForce: 0
+  horizontalForce: 20
+  verticalForce: 0.1
   damage: 2
   numberOfTicks: 3
   alertRadius: 20

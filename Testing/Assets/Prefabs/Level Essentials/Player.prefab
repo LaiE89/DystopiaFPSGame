@@ -108,7 +108,7 @@ MonoBehaviour:
   moveSpeed: 0
   walkSpeed: 2
   sprintSpeed: 6
-  playerHealth: 10
+  playerHealth: 100
   maxPlayerHealth: 10
   maxPlayerStamina: 100
   timeBeforeStamina: 1

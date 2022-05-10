@@ -68,6 +68,9 @@ public class JumpAttackSkill : SkillsObject {
         SceneController.Instance.soundController.PlayClipAtPoint("PlayerJump", enemy.transform.position, 0.5f, 1f);
         Vector3 eDirection = player.transform.position - enemy.transform.position;
         // distanceToTarget = Vector3.Distance(enemy.gameObject.transform.position, SceneController.Instance.playerObject.transform.position);
+        if (distanceToTarget > maxDistance) {
+            distanceToTarget = maxDistance;
+        }
         enemy.rb.AddForce(ToolMethods.SettingVector(eDirection.x, distanceToTarget - 0.5f + enemy.height - 1.5f, eDirection.z).normalized * (distanceToTarget + 2.5f), ForceMode.VelocityChange);
     }
 }

@@ -24,12 +24,12 @@ public class Activatable : Interactable {
                 gateAnimator.SetBool("isOpen", false);
                 gateClose.Play();
                 particles.Play();
-                ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                ToolMethods.AlertRadius(5f, user.position, user.position, enemyMask);
             }else {
                 isOpen = true;
                 gateAnimator.SetBool("isOpen", true);  
                 gateOpen.Play();
-                ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                ToolMethods.AlertRadius(5f, user.position, user.position, enemyMask);
             }
             this.canUse = false;
             StartCoroutine(useDelay());

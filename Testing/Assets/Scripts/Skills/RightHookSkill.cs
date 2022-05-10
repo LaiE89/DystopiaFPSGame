@@ -63,7 +63,7 @@ public class RightHookSkill : SkillsObject {
 
     private void CombatCalculation(Movement enemy, PlayerMovement player, float damage, float knockback, AudioSource hurtSound) {
         GameObject thePlayer = SceneController.Instance.playerObject;
-        ToolMethods.AlertRadius(enemy.alertRadius, thePlayer.transform.position, player.enemyMask);
+        ToolMethods.AlertRadius(enemy.alertRadius, enemy.transform.position, thePlayer.transform.position, player.enemyMask);
         if (hurtSound != null) {
             hurtSound.Play();
         }

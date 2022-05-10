@@ -29,13 +29,13 @@ namespace Player {
         }
 
         public void AttackDamage() {
-            ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.alertRadius, transform.position, PlayerMovement.enemyMask);
+            ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.alertRadius, transform.position, transform.position, PlayerMovement.enemyMask);
             // PlayerMovement.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage * PlayerMovement.damageMultiplier, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound); 
             PlayerMovement.myWeaponStats.AttackDamage(PlayerMovement.myWeaponStats.attackRange, PlayerMovement.myWeaponStats.attackDamage * PlayerMovement.damageMultiplier, PlayerMovement.myWeaponStats.attackKnockback, PlayerMovement.myWeaponStats.attackSound, PlayerMovement.myWeaponStats.hurtSound, PlayerMovement);   
         }
 
         public void ShootDamage() {
-            ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius, transform.position, PlayerMovement.enemyMask);
+            ToolMethods.AlertRadius(PlayerMovement.myWeaponStats.shootAlertRadius, transform.position, transform.position, PlayerMovement.enemyMask);
             PlayerMovement.myWeaponStats.muzzleFlash.Play();
             PlayerMovement.myWeaponStats.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound, PlayerMovement);
             if (PlayerMovement.myWeaponStats.bullets > 0) {
@@ -95,6 +95,15 @@ namespace Player {
                 if (skills.GetType() == typeof(QuickAttackSkill)) {
                     QuickAttackSkill qAttack = skills as QuickAttackSkill;
                     qAttack.PlayerAttack(PlayerMovement);
+                }
+            }
+        }
+
+        public void Cleave() {
+            foreach (SkillsObject skills in PlayerMovement.skills) {
+                if (skills.GetType() == typeof(CleaveSkill)) {
+                    CleaveSkill cleave = skills as CleaveSkill;
+                    cleave.PlayerAttack(PlayerMovement);
                 }
             }
         }

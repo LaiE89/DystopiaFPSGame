@@ -99,6 +99,12 @@ ModelImporter:
   - first:
       74: 1598446862658210281
     second: Holding High
+  - first:
+      74: 8967385486592034853
+    second: Squat
+  - first:
+      74: 1970460594263377210
+    second: Sit
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -1188,6 +1194,64 @@ ModelImporter:
       internalID: 0
       firstFrame: 1770
       lastFrame: 1809
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Squat
+      takeName: metarig|metarigAction
+      internalID: 0
+      firstFrame: 1820
+      lastFrame: 1939
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit
+      takeName: metarig|metarigAction
+      internalID: 0
+      firstFrame: 1950
+      lastFrame: 1989.0001
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

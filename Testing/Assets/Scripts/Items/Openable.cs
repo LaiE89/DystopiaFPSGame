@@ -42,7 +42,7 @@ public class Openable : Interactable {
             if (isOpen) {
                 isOpen = false;  
                 animator.SetBool("isOpen", false);  
-                ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                ToolMethods.AlertRadius(5f, user.position, user.position, enemyMask);
             }else {
                 if (key == null) {
                     if (obstacle.isActiveAndEnabled) {
@@ -51,7 +51,7 @@ public class Openable : Interactable {
                     }
                     isOpen = true;
                     animator.SetBool("isOpen", true);  
-                    ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                    ToolMethods.AlertRadius(5f, user.position, user.position, enemyMask);
                 }else {
                     this.itemName = "Locked (Requires " + key.itemName + ")";
                 }

@@ -22,9 +22,9 @@ namespace Enemies {
         [HideInInspector] public AnimatorOverrideController animatorOverrideController;
         [HideInInspector] public Animator animator;
         [HideInInspector] public LayerMask enemyLayers;
+        [HideInInspector] public Player.PlayerMovement pMovement;
         bool isGrounded;
         float groundDistance = 0.1f; // original groundDistance = 0.2, original groundposition - 0.15
-        Player.PlayerMovement pMovement;
 
         [Header("=====STATS=====", order=0)]
 
@@ -78,6 +78,7 @@ namespace Enemies {
         [SerializeField] float baseDamageMultiplier = 1;
         [SerializeField] float baseAttackSpeedMultiplier = 1;
         [SerializeField] float baseSpeedMultiplier = 1;
+        [SerializeField] float baseSkillMultiplier = 1;
         [HideInInspector] public float damageMultiplier;
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float speedMultiplier;
@@ -99,7 +100,7 @@ namespace Enemies {
             }
 
             for (int i = 0; i < skills.Length; i++) {
-                this.skills[i] = skills[i].CreateInstance(1);
+                this.skills[i] = skills[i].CreateInstance(baseSkillMultiplier);
             }
 
             UpdatingStatus();
@@ -272,7 +273,6 @@ namespace Enemies {
                 angleToPlayerHorz = Vector3.Angle(transform.forward, ToolMethods.SettingVector(directionToTarget.x, 0, directionToTarget.z));
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 if (angleToPlayer < viewAngle / 2) {
-                    // Height used to be 0.75f
                     if (!Physics.Raycast(ToolMethods.OffsetPosition(transform.position, 0, height - 0.5f, 0), directionToTarget, distanceToTarget, groundMask)){
                         if (!targetLocked) {
                             isInitialRotation = true;
@@ -384,6 +384,7 @@ namespace Enemies {
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
             if (isGrounded && isKnockedBack) {
                 animator.ResetTrigger("isDamaged");
+                rb.interpolation = RigidbodyInterpolation.None; //
                 rb.isKinematic = true;
                 if (!isDying) {
                     agent.enabled = true;
@@ -447,7 +448,7 @@ namespace Enemies {
         }
 
         public void CombatCalculation(float damage, float knockback, AudioSource hurtSound) {
-            ToolMethods.AlertRadius(alertRadius, thePlayer.transform.position, pMovement.enemyMask);
+            ToolMethods.AlertRadius(alertRadius, this.transform.position, thePlayer.transform.position, pMovement.enemyMask);
             if (hurtSound != null) {
                 hurtSound.Play();
             }
@@ -496,6 +497,7 @@ namespace Enemies {
             isRotating = true;
             rb.isKinematic = false;
             isKnockedBack = true;
+            rb.interpolation = RigidbodyInterpolation.Interpolate; //
         }
 
         private void SwitchWeapon(int selectedWeapon) {

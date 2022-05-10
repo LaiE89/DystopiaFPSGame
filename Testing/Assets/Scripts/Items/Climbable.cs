@@ -19,10 +19,10 @@ public class Climbable : Interactable {
             base.Interact();
             if (Vector3.Distance(user.position, topDestination) > Vector3.Distance(user.position, baseDestination)) {
                 user.position = topDestination;  
-                ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                ToolMethods.AlertRadius(5f, user.position, user.position, enemyMask);
             }else {
                 user.position = baseDestination;
-                ToolMethods.AlertRadius(5f, user.position, enemyMask);
+                ToolMethods.AlertRadius(5f, user.position, user.position, enemyMask);
             }
             this.canUse = false;
             StartCoroutine(useDelay());

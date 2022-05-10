@@ -14,7 +14,7 @@ public class Explodable : Destructable {
     public override void Interact() {
         if (!isExploded) {
             isExploded = true;
-            ToolMethods.AlertRadius(alertRadius, transform.position, LayerMask.NameToLayer("Enemy"));
+            ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, LayerMask.NameToLayer("Enemy"));
             base.Interact();
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
             foreach (Collider nearbyObject in colliders) {

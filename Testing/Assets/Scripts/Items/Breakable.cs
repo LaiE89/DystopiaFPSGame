@@ -34,7 +34,7 @@ public class Breakable : Destructable {
         if (!isBroken) {
             isBroken = true;
             if (alertRadius > 0) {
-                ToolMethods.AlertRadius(alertRadius, transform.position, LayerMask.NameToLayer("Enemy"));
+                ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, LayerMask.NameToLayer("Enemy"));
             }
             base.Interact();
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);

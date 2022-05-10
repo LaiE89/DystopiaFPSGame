@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2844250958249004075}
   - component: {fileID: 6505076266923039072}
-  - component: {fileID: 7508792711296825258}
+  - component: {fileID: 8086209243978237110}
   - component: {fileID: 5816575175764167235}
   m_Layer: 0
   m_Name: Spear
@@ -50,7 +50,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 0.1, z: 2.4}
   m_Center: {x: 0, y: 0, z: -0.7}
---- !u!114 &7508792711296825258
+--- !u!114 &8086209243978237110
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 218286123195553578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b16a1a12fa90f941aa24c458d5d2fc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 61b1bfa6eebe94f4fa94d12b7f9a8823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDefaultItem: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
   alertRadius: 5
   attackAnimation: {fileID: -6741758067321407611, guid: b076720bba6593045915887e8637b497, type: 3}
   blockAnimation: {fileID: 0}
-  fpAttackAnimation: {fileID: -4738338977195520429, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+  fpAttackAnimation: {fileID: -6741758067321407611, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
   fpBlockAnimation: {fileID: 3281725632038056797, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
   attackSound: {fileID: 8377878431038494129}
   hurtSound: {fileID: 8285010282511998758}

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7642750824301278900}
   - component: {fileID: 7642750824301278899}
   - component: {fileID: 7642750824301278898}
-  - component: {fileID: 7642750824301278897}
   - component: {fileID: 7642750824301278896}
+  - component: {fileID: 4656987243213628377}
   m_Layer: 8
   m_Name: Ammunition Case
   m_TagString: Food
@@ -300,20 +300,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7642750824301278911}
   m_Mesh: {fileID: 0}
---- !u!64 &7642750824301278897
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7642750824301278911}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &7642750824301278896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,3 +314,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Ammo
   interactSound: Pick Up
+--- !u!65 &4656987243213628377
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642750824301278911}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3, y: 0.3, z: 0.3}
+  m_Center: {x: 0.15, y: 0.15, z: -0.15}

@@ -25,6 +25,10 @@ namespace Enemies {
             dictOfDialogue.Add("Target", new Queue<Dialogue>());
             dictOfDialogue.Add("Mouse", new Queue<Dialogue>());
             dictOfDialogue.Add("Hurt", new Queue<Dialogue>());
+            Dialogue emptyDialogue = new Dialogue();
+            emptyDialogue.onDeath = true;
+            emptyDialogue.sentences = new String[0];
+            dictOfDialogue["Death"].Enqueue(emptyDialogue);
             foreach (Dialogue dialogue in dialogues) {
                 if (dialogue.onAttack) {
                     dictOfDialogue["Attack"].Enqueue(dialogue); 
@@ -45,7 +49,7 @@ namespace Enemies {
             StartCoroutine(checkDialogueRoutine());
         }
 
-        private IEnumerator checkDialogueRoutine(){
+        public IEnumerator checkDialogueRoutine(){
             WaitForSeconds wait = new WaitForSeconds(0.2f);
             while (true) {
                 yield return wait;
@@ -81,26 +85,29 @@ namespace Enemies {
                 if (condition.Value) {
                     if (dictOfDialogue[condition.Key].Count != 0) {
                         Dialogue curr = dictOfDialogue[condition.Key].Dequeue();
+                        if (curr.isAlerting) {
+                            ToolMethods.AlertRadius(enemyScript.alertRadius, this.transform.position, enemyScript.thePlayer.transform.position, enemyScript.pMovement.enemyMask);
+                        }
                         if (curr.isObjective) {
                             objectivesQueue.Enqueue(curr);
                         }else {
                             if (curr.onTarget || curr.onHurt) {
                                 dictOfDialogue["Mouse"].Clear();
-                                // Debug.Log("Playing Boss Music");
                                 if (!String.IsNullOrEmpty(bossMusic)) {
                                     SceneController.Instance.soundController.Play(bossMusic);
                                 }
                             }
                             dialogueQueue.Enqueue(curr);
                         }
-                        if (condition.Key == "Death") {
+                        //if (condition.Key == "Death") {
+                        if (curr.onDeath) {
+                            dictOfDialogue["Target"].Clear();
                             if (objectiveBlock != null) {
                                 objectiveBlock.SetActive(false);
                             }
                             if (!String.IsNullOrEmpty(bossMusic)) {
                                 SceneController.Instance.soundController.Stop(bossMusic, 2);
                             }
-
                         }
                     }
                 }

@@ -2,7 +2,6 @@ using System.Collections;
 using Enemies;
 using Player;
 using UnityEngine;
-using EZCameraShake;
 
 [CreateAssetMenu(fileName = "Quick Attack Skill", menuName = "ScriptableObject/Skills/QuickAttack")]
 public class QuickAttackSkill : SkillsObject {

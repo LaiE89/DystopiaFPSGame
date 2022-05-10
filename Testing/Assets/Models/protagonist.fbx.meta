@@ -11,7 +11,7 @@ ModelImporter:
     second: GettingUpFromTorture
   - first:
       74: 2353680664591731088
-    second: Punch
+    second: Fighting
   - first:
       74: -6741758067321407611
     second: Stab
@@ -110,7 +110,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Punch
+      name: Fighting
       takeName: metarig|metarigAction
       internalID: 0
       firstFrame: 80
@@ -121,7 +121,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -133,21 +133,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.32065055
-        functionName: PlayerDamage
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 109b77ce864067540b1cb90fec3e0d2f, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 1
-        functionName: StartRotation
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 109b77ce864067540b1cb90fec3e0d2f, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
