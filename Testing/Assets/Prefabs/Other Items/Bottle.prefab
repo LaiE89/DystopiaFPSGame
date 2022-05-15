@@ -122,6 +122,9 @@ MonoBehaviour:
   igniteTime: 0.3
   numberOfTicks: 3
   rb: {fileID: 7885398622368391161}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!54 &7885398622368391161
 Rigidbody:
   m_ObjectHideFlags: 0

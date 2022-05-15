@@ -9,6 +9,7 @@ public class Flammable : Destructable {
     [SerializeField] float igniteTime;
     [SerializeField] int numberOfTicks;
     [SerializeField] Rigidbody rb;
+    [SerializeField] LayerMask enemyMask;
     bool isIgnited;
     bool isExploded;
 
@@ -33,7 +34,7 @@ public class Flammable : Destructable {
     public override void Interact() {
         if (!isExploded) {
             isExploded = true;
-            ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, LayerMask.NameToLayer("Enemy"));
+            ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, enemyMask);
             base.Interact();
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
             foreach (Collider nearbyObject in colliders) {

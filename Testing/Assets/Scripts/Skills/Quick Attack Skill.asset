@@ -18,6 +18,6 @@ MonoBehaviour:
   skillNumber: 0
   icon: {fileID: 21300000, guid: 81c76a0d706e46244813e73f4e08388e, type: 3}
   title: QUICK ATTACK
-  description: Use a quick attack. Costs stamina.
+  description: Perform a quick attack. Costs additional stamina.
   useTime: 0
   addedStaminaCost: 5

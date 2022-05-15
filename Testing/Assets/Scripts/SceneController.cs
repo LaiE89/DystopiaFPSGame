@@ -81,11 +81,11 @@ public class SceneController : MonoBehaviour {
                     break;
             }
         }
+        optionsMenu.InitializeSettings();
     }
 
     void Start() {
         soundController.Play(ambienceSound);
-        optionsMenu.InitializeSettings();
         //listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
     }
 

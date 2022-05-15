@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23757a440a1a6bf47b59993dd710ec96, type: 3}
+  m_Name: Level 2 Skills Inventory
+  m_EditorClassIdentifier: 
+  Container:
+  - {fileID: 11400000, guid: 393b5084c2baf45428d95509223b6cbe, type: 2}
+  - {fileID: 11400000, guid: 17243d2c8bb2a714fa59978d190ad57e, type: 2}
+  - {fileID: 11400000, guid: 3b114da6b5418024cb209114960e092d, type: 2}
+  - {fileID: 11400000, guid: c7f71b911c0aaa0429101d639bacece8, type: 2}
+  - {fileID: 11400000, guid: 27741df3b4f0231488c2cbdb4f8934a3, type: 2}
+  - {fileID: 11400000, guid: 5456a04cf5c257b489b5421daa5df0bc, type: 2}

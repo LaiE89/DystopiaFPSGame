@@ -3402,6 +3402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ce7a59de5bf0745bac24075c2e74a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 8072950675821004392}
   m_Method: 3
   m_Curve:
     serializedVersion: 2

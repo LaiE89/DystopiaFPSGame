@@ -28,6 +28,9 @@ namespace Enemies {
             Dialogue emptyDialogue = new Dialogue();
             emptyDialogue.onDeath = true;
             emptyDialogue.sentences = new String[0];
+            if (dialogues.Length > 0) {
+                emptyDialogue.name = dialogues[0].name;
+            }
             dictOfDialogue["Death"].Enqueue(emptyDialogue);
             foreach (Dialogue dialogue in dialogues) {
                 if (dialogue.onAttack) {

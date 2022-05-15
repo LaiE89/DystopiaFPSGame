@@ -9,12 +9,13 @@ public class Explodable : Destructable {
     [SerializeField] float damage;
     [SerializeField] int numberOfTicks;
     [SerializeField] float alertRadius;
+    [SerializeField] LayerMask enemyMask;
     bool isExploded;
 
     public override void Interact() {
         if (!isExploded) {
             isExploded = true;
-            ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, LayerMask.NameToLayer("Enemy"));
+            ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, enemyMask);
             base.Interact();
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
             foreach (Collider nearbyObject in colliders) {

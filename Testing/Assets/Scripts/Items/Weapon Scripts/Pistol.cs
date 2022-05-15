@@ -2,7 +2,8 @@ using Player;
 using UnityEngine;
 
 public class Pistol : Weapons {
-
+    public float upRecoil;
+    
     public override void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound, PlayerMovement player) {
         if (this.bullets > 0) {
             Ray ray = player.attackCam.ScreenPointToRay(Input.mousePosition);
@@ -29,6 +30,7 @@ public class Pistol : Weapons {
                     ground.Play();
                 }
             }
+            player.AddRecoil(upRecoil);
         }else {
             base.AttackDamage(range, damage, knockback, attackSound, hurtSound, player);
         }

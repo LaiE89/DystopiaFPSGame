@@ -137,5 +137,7 @@ MonoBehaviour:
   horizontalForce: 5
   verticalForce: 0
   alertRadius: 3
-  breakTime: 0
   rb: {fileID: 248761234205345717}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128

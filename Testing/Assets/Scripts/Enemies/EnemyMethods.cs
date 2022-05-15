@@ -57,13 +57,37 @@ namespace Enemies {
             yield return new WaitForEndOfFrame();
             if (enemyMovement.eWeaponStats.bullets <= 0) {
                 AnimatorStateInfo stateInfo = enemyMovement.animator.GetCurrentAnimatorStateInfo(0);
-                Debug.Log(stateInfo.IsName("Attack"));
                 yield return new WaitForSeconds((1 - stateInfo.normalizedTime) * stateInfo.length);
                 enemyMovement.isMidAttack = false;
                 enemyMovement.animatorOverrideController["Punch"] = enemyMovement.eWeaponStats.attackAnimation;
+                if (enemyMovement.numOfAmmo > 0) {
+                    if (enemyMovement.skillLagRoutine != null) {
+                        enemyMovement.StopCoroutine(enemyMovement.skillLagRoutine);
+                    }
+                    // enemyMovement.skillLagRoutine = enemyMovement.StartCoroutine(enemyMovement.SkillEndingLag(1f, 0));
+                    enemyMovement.animator.SetTrigger("isReloading");
+                    StopCoroutine(Reloading());
+                    StartCoroutine(Reloading());
+                }
             }else {
                 enemyMovement.isMidAttack = false;
             }
+        }
+        
+        IEnumerator Reloading() {
+            enemyMovement.isReloading = true;
+            enemyMovement.agent.velocity = Vector3.zero;
+            if (enemyMovement.agent.isActiveAndEnabled) {
+                enemyMovement.agent.isStopped = true;
+            }
+            // enemyMovement.alreadyAttacked = true;
+            yield return new WaitForSeconds(1f);
+            enemyMovement.eWeaponStats.reloadSound.Play();
+            enemyMovement.numOfAmmo -= 1;
+            enemyMovement.eWeaponStats.bullets = enemyMovement.eWeaponStats.maxBullets;
+            enemyMovement.animatorOverrideController["Punch"] = enemyMovement.eWeaponStats.enemyShootAnimation;
+            enemyMovement.isReloading = false;
+            // enemyMovement.alreadyAttacked = false;
         }
 
         public void ShootDamageEnd() {

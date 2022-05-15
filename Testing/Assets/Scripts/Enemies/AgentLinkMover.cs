@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum OffMeshLinkMoveMethod
 {
@@ -13,9 +14,9 @@ public enum OffMeshLinkMoveMethod
 [RequireComponent(typeof(NavMeshAgent))]
 public class AgentLinkMover : MonoBehaviour
 {
-    public OffMeshLinkMoveMethod m_Method = OffMeshLinkMoveMethod.Parabola;
+    public Animator animator;
+    // public OffMeshLinkMoveMethod m_Method = OffMeshLinkMoveMethod.Parabola;
     public AnimationCurve m_Curve = new AnimationCurve();
-    // public LayerMask playerMask;
 
     IEnumerator Start()
     {
@@ -24,14 +25,21 @@ public class AgentLinkMover : MonoBehaviour
         agent.autoTraverseOffMeshLink = false;
         while (true) {
             if (agent.isOnOffMeshLink) {
-                //OffMeshLinkData offMeshLinkData = agent.currentOffMeshLinkData;
-                //if (!Physics.CheckSphere(offMeshLinkData.endPos, 0.5f, playerMask)) {
+                NavMeshLink link = (NavMeshLink)agent.navMeshOwner;
+                int areaType = link.area;
+                /*
                 if (m_Method == OffMeshLinkMoveMethod.NormalSpeed)
                     yield return StartCoroutine(NormalSpeed(agent));
                 else if (m_Method == OffMeshLinkMoveMethod.Parabola)
-                    yield return StartCoroutine(Parabola(agent, 2.0f, 0.5f));
+                    yield return StartCoroutine(Parabola(agent)); // height = 2.0f, duration = 0.5f
                 else if (m_Method == OffMeshLinkMoveMethod.Curve)
-                    yield return StartCoroutine(Curve(agent, 0.5f));
+                    yield return StartCoroutine(Curve(agent)); // duration = 0.5f
+                */
+                if (areaType == 2) {
+                    yield return StartCoroutine(Parabola(agent));
+                }else {
+                    yield return StartCoroutine(Curve(agent)); 
+                }
                 if (agent.isActiveAndEnabled) {
                     agent.CompleteOffMeshLink();
                 }
@@ -51,30 +59,48 @@ public class AgentLinkMover : MonoBehaviour
         }
     }
 
-    IEnumerator Parabola(NavMeshAgent agent, float height, float duration)
+    IEnumerator Parabola(NavMeshAgent agent)
     {
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 startPos = agent.transform.position;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
+        float duration = Vector3.Distance(startPos, endPos) / agent.speed;
+        if (duration < 0.7f) {
+            duration = 0.7f;
+        }
+        float height = duration;
         float normalizedTime = 0.0f;
+        animator.SetTrigger("isJumping");
         while (normalizedTime < 1.0f)
         {
             float yOffset = height * 4.0f * (normalizedTime - normalizedTime * normalizedTime);
+            if (float.IsNaN(yOffset)) {
+                yOffset = 0.1f;
+            }
+            Vector3 direction = (endPos - startPos).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
+            agent.transform.rotation = lookRotation;
+            // Debug.Log("Transform Assignment: " + Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up + ", Offset: " + yOffset + ", Vector3 sum: " + yOffset * Vector3.up);
             agent.transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
             normalizedTime += Time.deltaTime / duration;
             yield return null;
         }
+        animator.ResetTrigger("isJumping");
     }
 
-    IEnumerator Curve(NavMeshAgent agent, float duration)
+    IEnumerator Curve(NavMeshAgent agent)
     {
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 startPos = agent.transform.position;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
+        float duration = Vector3.Distance(startPos, endPos) / (agent.speed / 1.5f);
         float normalizedTime = 0.0f;
         while (normalizedTime < 1.0f)
         {
             float yOffset = m_Curve.Evaluate(normalizedTime);
+            if (float.IsNaN(yOffset)) {
+                yOffset = 0.1f;
+            }
             Vector3 direction = (endPos - startPos).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(ToolMethods.SettingVector(direction.x, 0, direction.z));
             agent.transform.rotation = lookRotation;

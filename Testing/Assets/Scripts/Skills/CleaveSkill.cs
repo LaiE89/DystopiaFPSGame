@@ -56,21 +56,22 @@ public class CleaveSkill : SkillsObject {
     }
 
     public void PlayerAttack(PlayerMovement player) {
+        player.myWeaponStats.attackSound.Play();
         Vector3 mousePos = player.attackCam.ScreenToWorldPoint(Input.mousePosition);
         Ray ray = player.attackCam.ScreenPointToRay(Input.mousePosition);
         Collider[] rangeChecks = Physics.OverlapSphere(mousePos, player.myWeaponStats.attackRange, player.playerLayers);
-        Debug.Log("Mouse position: " + mousePos);
-        PrintChecks(rangeChecks);
         if (rangeChecks.Length != 0) {
             foreach (Collider collider in rangeChecks) {
-                Transform enemyTarget = collider.transform;
-                Vector3 directionToTarget = (enemyTarget.position - mousePos).normalized;
-                float angleToPlayer = Vector3.Angle(ray.direction.normalized, ToolMethods.SettingVector(directionToTarget.x, ray.direction.y, directionToTarget.z));
-                float distanceToTarget = Vector3.Distance(mousePos, enemyTarget.position);
-                // Debug.Log("Target Name: " + enemyTarget.gameObject.name + ", AngleToPlayer: " + angleToPlayer + ", DistanceToTarget: " + distanceToTarget);
-                if (angleToPlayer < 180 / 2) {
-                    if (Physics.Raycast(mousePos, ToolMethods.SettingVector(directionToTarget.x, ray.direction.y, directionToTarget.z), out RaycastHit hit, distanceToTarget, player.playerLayers)){
-                        player.myWeaponStats.PlayerDealDamage(player.myWeaponStats.attackDamage, player.myWeaponStats.attackKnockback, player.myWeaponStats.attackSound, player.myWeaponStats.hurtSound, hit, player);
+                if (collider.gameObject.layer != ToolMethods.LayerMaskToLayer(player.groundMask)) {
+                    Transform enemyTarget = collider.transform;
+                    Vector3 directionToTarget = (enemyTarget.position - mousePos).normalized;
+                    float angleToPlayer = Vector3.Angle(ray.direction.normalized, ToolMethods.SettingVector(directionToTarget.x, ray.direction.y, directionToTarget.z));
+                    float distanceToTarget = Vector3.Distance(mousePos, enemyTarget.position);
+                    Debug.Log("Target Name: " + enemyTarget.gameObject.name + ", AngleToPlayer: " + angleToPlayer + ", DistanceToTarget: " + distanceToTarget);
+                    if (angleToPlayer < 180 / 2) {
+                        if (Physics.Raycast(mousePos, ToolMethods.SettingVector(directionToTarget.x, ray.direction.y, directionToTarget.z).normalized, out RaycastHit hit, distanceToTarget, player.playerLayers)){
+                            player.myWeaponStats.PlayerDealDamage(player.myWeaponStats.attackDamage, player.myWeaponStats.attackKnockback, player.myWeaponStats.attackSound, player.myWeaponStats.hurtSound, hit, player);
+                        }
                     }
                 }
             }

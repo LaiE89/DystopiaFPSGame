@@ -12,18 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97a63a658658a641a0038e1c63b0059, type: 3}
   m_Name: Molotov Skill
   m_EditorClassIdentifier: 
-  cooldown: 10
+  cooldown: 30
   damage: 1
   isActivating: 0
   skillNumber: 0
   icon: {fileID: 21300000, guid: 83f6498cb4fb1344cb4a4e7bb5348195, type: 3}
   title: MOLOTOV
-  description: Throw a molotov, dealing AOE fire damage to anyone hit. Costs stamina.
+  description: Throw a molotov, dealing AOE fire damage to anyone hit. Costs nothing.
   useTime: 0
   molotovPrefab: {fileID: 6253598458254913203, guid: 988e29ec5aae5d54dbadf1811c9eef97, type: 3}
   molotovThrowing: {fileID: -1000980501646940940, guid: b1e1b5d0cb272f742a577cb9336533e4, type: 3}
+  enemyMolotovThrowing: {fileID: -1000980501646940940, guid: b076720bba6593045915887e8637b497, type: 3}
+  animationSpeed: 1
   force: 10
   verticalForce: 5
-  staminaCost: 50
+  staminaCost: 0
   minDistance: 8
   maxDistance: 20

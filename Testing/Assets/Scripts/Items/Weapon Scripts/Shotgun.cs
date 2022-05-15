@@ -8,11 +8,11 @@ public class Shotgun : Weapons {
 
     public override void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound, PlayerMovement player) {
         if (this.bullets > 0) {
-            player.AddRecoil(upRecoil);
             Ray[] rays = CreatingRays(player);
             foreach (Ray ray in rays) {
                 BulletRaycast(range, damage, knockback, attackSound, hurtSound, ray, player);
             }
+            player.AddRecoil(upRecoil);
         }else {
             base.AttackDamage(range, damage, knockback, attackSound, hurtSound, player);
         }

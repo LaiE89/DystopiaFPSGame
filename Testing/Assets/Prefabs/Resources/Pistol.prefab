@@ -99,7 +99,7 @@ MonoBehaviour:
   blockSound: {fileID: 4861100881725580039}
   breakSound: {fileID: 4861100881725580039}
   shootDamage: 2
-  shootRange: 15
+  shootRange: 25
   shootCooldown: 0.5
   shootKnockback: 2
   maxBullets: 5
@@ -112,6 +112,7 @@ MonoBehaviour:
   shootHurtSound: {fileID: 5874079995351933146}
   reloadSound: {fileID: 8926655107635374502}
   extraSound: {fileID: 0}
+  upRecoil: 3
 --- !u!1 &1118975398475353776
 GameObject:
   m_ObjectHideFlags: 0

@@ -56,6 +56,8 @@ namespace Enemies {
         [SerializeField] float rotationDegPerSec;
         [SerializeField] public float alertRadius;
         [SerializeField] public float enemyHealth;
+        [SerializeField] public int numOfDrugs;
+        [SerializeField] public int numOfAmmo;
         [SerializeField] public SkillsObject[] skills;
         [HideInInspector] public Weapons eWeaponStats;
         [HideInInspector] public bool isRotating;
@@ -83,6 +85,7 @@ namespace Enemies {
         [HideInInspector] public float attackSpeedMultiplier;
         [HideInInspector] public float speedMultiplier;
         [HideInInspector] public bool isChoking;
+        [HideInInspector] public bool isReloading;
         Quaternion startingRotation;
         bool isGoingBack;
 
@@ -177,7 +180,7 @@ namespace Enemies {
                                 }
                             }
                             // agent.SetDestination(thePlayer.transform.position);
-                            if (agent.isStopped) {
+                            if (agent.isStopped && !isReloading) {
                                 agent.isStopped = false;
                             }
                         }
@@ -294,7 +297,7 @@ namespace Enemies {
                     agent.SetDestination(thePlayer.transform.position);
                 }
             }else if (targetLocked && !canSeePlayer && rangeChecks.Length == 0){
-                if (agent.isActiveAndEnabled && agent.isStopped) {
+                if (agent.isActiveAndEnabled && agent.isStopped && !isReloading) {
                     agent.isStopped = false;
                 }
                 targetLocked = false;

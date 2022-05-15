@@ -122,6 +122,9 @@ MonoBehaviour:
   damage: 2
   numberOfTicks: 3
   alertRadius: 20
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!208 &-5448607539991435403
 NavMeshObstacle:
   m_ObjectHideFlags: 0

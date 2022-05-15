@@ -9,6 +9,7 @@ public class Breakable : Destructable {
     [SerializeField] float verticalForce;
     [SerializeField] float alertRadius;
     [SerializeField] Rigidbody rb;
+    [SerializeField] LayerMask enemyMask;
     bool isBreaking;
     bool isBroken;
 
@@ -34,7 +35,7 @@ public class Breakable : Destructable {
         if (!isBroken) {
             isBroken = true;
             if (alertRadius > 0) {
-                ToolMethods.AlertRadius(alertRadius, transform.position, transform.position, LayerMask.NameToLayer("Enemy"));
+                ToolMethods.AlertRadius(alertRadius, gameObject.transform.position, gameObject.transform.position, enemyMask);
             }
             base.Interact();
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);

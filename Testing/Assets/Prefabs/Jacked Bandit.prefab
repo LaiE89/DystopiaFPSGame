@@ -2555,7 +2555,7 @@ MonoBehaviour:
   itemName: FOOD
   interactSound: 
   nutritionValue: 60
-  pickUpTime: 10
+  pickUpTime: 9
   isAlive: 1
 --- !u!114 &7303397272296865809
 MonoBehaviour:
@@ -2569,7 +2569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ce7a59de5bf0745bac24075c2e74a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Method: 3
+  animator: {fileID: 8370126367385931526}
   m_Curve:
     serializedVersion: 2
     m_Curve:

@@ -138,7 +138,6 @@ public class ControlsMenu : MonoBehaviour {
             Player.PlayerMovement player = SceneController.Instance.player;
             if (player) {
                 player.ApplyKeybinds();
-                Debug.Log(keybinds["skill1Key"]);
             }
         }
     }
