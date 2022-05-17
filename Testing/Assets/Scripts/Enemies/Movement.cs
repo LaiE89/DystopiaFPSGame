@@ -450,7 +450,7 @@ namespace Enemies {
             }
         }
 
-        public void CombatCalculation(float damage, float knockback, AudioSource hurtSound) {
+        public bool CombatCalculation(float damage, float knockback, AudioSource hurtSound) {
             ToolMethods.AlertRadius(alertRadius, this.transform.position, thePlayer.transform.position, pMovement.enemyMask);
             if (hurtSound != null) {
                 hurtSound.Play();
@@ -466,6 +466,7 @@ namespace Enemies {
                 if (dotProduct < -0.9) {
                     if (pMovement.myWeaponStats.weaponHealth <= 0 && pMovement.statusEffects.Contains("isInjured")) {
                         pMovement.TakeDamage(damage);
+                        return true;
                     }else {
                         CameraShaker.Instance.ShakeOnce(damage/2, damage, 0.1f, 0.5f);
                         pMovement.UsingStamina(damage * 10f);
@@ -478,15 +479,19 @@ namespace Enemies {
                                 selectedWeapon = 0;
                                 SwitchWeapon(selectedWeapon);
                             }
+                            return false;
                         }else {
                             pMovement.BlockingDamage(damage);
+                            return false;
                         }
                     }
                 }else {
                     pMovement.TakeDamage(damage);
+                    return true;
                 }
             }else {
                 pMovement.TakeDamage(damage);
+                return true;
             }
         }
 

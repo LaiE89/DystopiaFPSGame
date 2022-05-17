@@ -132,6 +132,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  thisCollider: {fileID: 1161561992013675097}
+  thisRb: {fileID: 248761234205345717}
+  thrower: {fileID: 0}
   radius: 0.5
   damage: 0
   horizontalForce: 5

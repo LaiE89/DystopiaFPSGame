@@ -84,8 +84,11 @@ public class MolotovSkill : SkillsObject {
     }
 
     public void PlayerMolotov(PlayerMovement player) {
-        GameObject molotov = Instantiate(molotovPrefab, ToolMethods.OffsetPosition(player.transform.position, 0, 1.25f, 0f) + player.transform.forward, player.transform.rotation);
-        Rigidbody rb = molotov.GetComponent<Rigidbody>();
+        // GameObject molotov = Instantiate(molotovPrefab, ToolMethods.OffsetPosition(player.transform.position, 0, 1.25f, 0f) + player.transform.forward, player.transform.rotation);
+        GameObject molotov = Instantiate(molotovPrefab, player.attackCam.ScreenToWorldPoint(Input.mousePosition) + Vector3.up * 0.15f, player.transform.rotation);
+        Destructable destructable = molotov.GetComponent<Destructable>();
+        Rigidbody rb = destructable.thisRb;
+        destructable.thrower = player.gameObject;
         rb.AddForce(ToolMethods.SettingVector(player.attackCam.transform.forward.x * force, player.attackCam.transform.forward.y * force, player.attackCam.transform.forward.z * force), ForceMode.Impulse);
         float random = Random.Range(-1f,1f);
         rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10); 

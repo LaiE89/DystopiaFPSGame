@@ -77,9 +77,9 @@ public class ShitSkill : SkillsObject {
     }
 
     public void EnemyShit(Movement enemy, PlayerMovement player) {
-        GameObject molotov = Instantiate(shitPrefab, ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.25f, 0f) + enemy.transform.forward, enemy.transform.rotation);
-        Rigidbody rb = molotov.GetComponent<Rigidbody>();
-        Breakable shitScript = molotov.GetComponent<Breakable>();
+        GameObject shit = Instantiate(shitPrefab, ToolMethods.OffsetPosition(enemy.transform.position, 0, enemy.height - 0.25f, 0f) + enemy.transform.forward, enemy.transform.rotation);
+        Rigidbody rb = shit.GetComponent<Rigidbody>();
+        Breakable shitScript = shit.GetComponent<Breakable>();
         shitScript.damage = 1f;
         rb.AddForce(ToolMethods.SettingVector(enemy.transform.forward.x * force, enemy.transform.forward.y + verticalForce, enemy.transform.forward.z * force), ForceMode.Impulse);
         float random = Random.Range(-1f,1f);
@@ -89,8 +89,11 @@ public class ShitSkill : SkillsObject {
     }
 
     public void PlayerShit(PlayerMovement player) {
-        GameObject molotov = Instantiate(shitPrefab, ToolMethods.OffsetPosition(player.transform.position, 0, 1.25f, 0f) + player.transform.forward, player.transform.rotation);
-        Rigidbody rb = molotov.GetComponent<Rigidbody>();
+        // GameObject shit = Instantiate(shitPrefab, ToolMethods.OffsetPosition(player.transform.position, 0, 1.25f, 0f) + player.transform.forward, player.transform.rotation);
+        GameObject shit = Instantiate(shitPrefab, player.attackCam.ScreenToWorldPoint(Input.mousePosition) + Vector3.up * 0.15f, player.transform.rotation);
+        Destructable destructable = shit.GetComponent<Destructable>();
+        Rigidbody rb = destructable.thisRb;
+        destructable.thrower = player.gameObject;
         rb.AddForce(ToolMethods.SettingVector(player.attackCam.transform.forward.x * force, player.attackCam.transform.forward.y * force, player.attackCam.transform.forward.z * force), ForceMode.Impulse);
         float random = Random.Range(-1f,1f);
         rb.AddTorque(ToolMethods.SettingVector(random, random, random) * 10);

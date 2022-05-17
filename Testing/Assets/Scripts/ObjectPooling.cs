@@ -39,7 +39,7 @@ public class ObjectPooling : MonoBehaviour
 		spawned.SetActive(false);
 	}
 
-	public void SpawnDecal(Vector3 forward, Vector3 position, Vector3 scale)
+	public GameObject SpawnDecal(Vector3 forward, Vector3 position, Vector3 scale)
 	{
 		GameObject decal = GetNextAvailableDecal();
 		if (decal != null)
@@ -52,7 +52,9 @@ public class ObjectPooling : MonoBehaviour
 			decal.SetActive(true);
 
 			decalsActiveInWorld.Enqueue(decal);
+			return decal;
 		}
+		return null;
 	}
 
 	private GameObject GetNextAvailableDecal()

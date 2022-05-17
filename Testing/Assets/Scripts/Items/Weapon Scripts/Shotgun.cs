@@ -1,10 +1,12 @@
 using Player;
 using UnityEngine;
+using System.Collections;
 
 public class Shotgun : Weapons {
     public float upRecoil;
     public int pellets;
     public float spread; // lower = smaller spread
+    public TrailRenderer bulletTrail;
 
     public override void AttackDamage(float range, float damage, float knockback, AudioSource attackSound, AudioSource hurtSound, PlayerMovement player) {
         if (this.bullets > 0) {
@@ -52,13 +54,14 @@ public class Shotgun : Weapons {
         Debug.DrawRay(ray.origin, ray.direction * 20f, Color.green, 1f);
         RaycastHit hit;
         attackSound.Play();
+        TrailRenderer trail = Instantiate(bulletTrail, ray.origin, Quaternion.identity);
         if (Physics.Raycast(ray, out hit, range, player.playerLayers)) {
+            StartCoroutine(SpawnTrail(trail, hit.point));
             if (hit.collider.tag == "Enemy") {
                 hurtSound.Play();
                 GameObject enemy = hit.collider.gameObject;
                 Enemies.Movement eMovement = enemy.GetComponent<Enemies.Movement>();
-                ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                blood.Play();
+                SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                 player.DealDamage(eMovement, enemy, damage, knockback);
             }else {
                 Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
@@ -69,9 +72,10 @@ public class Shotgun : Weapons {
                         PlaceBulletHole(hit);
                     }
                 }
-                ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                ground.Play();
+                SceneController.Instance.groundParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
             }
+        }else {
+            StartCoroutine(SpawnTrail(trail, ray.origin + ray.direction * range));
         }
     }
 
@@ -79,9 +83,14 @@ public class Shotgun : Weapons {
         Debug.DrawRay(ray.origin, ray.direction * 20f, Color.green, 1f);
         RaycastHit hit;
         attackSound.Play();
+        TrailRenderer trail = Instantiate(bulletTrail, ray.origin, Quaternion.identity);
         if (Physics.Raycast(ray, out hit, range, enemy.enemyLayers)) {
+            StartCoroutine(SpawnTrail(trail, hit.point));
             if (hit.collider.tag == "Player") {
-                enemy.CombatCalculation(damage, knockback, hurtSound);
+                bool hasDamaged = enemy.CombatCalculation(damage, knockback, hurtSound);
+                if (hasDamaged) {
+                    SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
+                }
             }else {
                 Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                 if (destructable != null) {
@@ -91,9 +100,10 @@ public class Shotgun : Weapons {
                         PlaceBulletHole(hit);
                     }
                 }
-                ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                ground.Play();
+                SceneController.Instance.groundParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
             }
+        }else {
+            StartCoroutine(SpawnTrail(trail, ray.origin + ray.direction * range));
         }
     }
 
@@ -115,5 +125,18 @@ public class Shotgun : Weapons {
         Vector3 collisionHitRot = hit.normal;
         // Quaternion HitRot = Quaternion.LookRotation(Vector3.forward, collisionHitRot);
         SceneController.Instance.bulletHolePool.SpawnDecal(collisionHitRot * -1f, collisionHitLoc - collisionHitRot * -1f * 0.01f, ToolMethods.SettingVector(0.1f, 0.1f, 0.1f));
+    }
+
+    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 destination) {
+        float time = 0;
+        Vector3 startPosition = trail.transform.position;
+
+        while (time < 1) {
+            trail.transform.position = Vector3.Lerp(startPosition, destination, time);
+            time += Time.deltaTime / trail.time;
+            yield return null;
+        }
+        trail.transform.position = destination;
+        Destroy(trail.gameObject, trail.time);
     }
 }

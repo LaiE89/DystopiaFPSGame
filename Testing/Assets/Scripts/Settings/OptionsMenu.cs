@@ -88,24 +88,38 @@ public class OptionsMenu : MonoBehaviour {
     public void ChangeQuality(int newIndex) {
         qualityIndex = newIndex;
         QualitySettings.SetQualityLevel(newIndex, false);
+        if (targetFPSIndex == 4) {
+            QualitySettings.vSyncCount = 1;
+        }else {
+            QualitySettings.vSyncCount = 0;
+        }
     }
 
     public void SetTargetFPS(int newIndex) {
         targetFPSIndex = newIndex;
         switch (newIndex) {
             case 0:
+                QualitySettings.vSyncCount = 0;
                 Application.targetFrameRate = 30;
                 break;
             case 1:
+                QualitySettings.vSyncCount = 0;
                 Application.targetFrameRate = 60;
                 break;
             case 2:
+                QualitySettings.vSyncCount = 0;
                 Application.targetFrameRate = 120;
                 break;
             case 3:
+                QualitySettings.vSyncCount = 0;
+                Application.targetFrameRate = -1;
+                break;
+            case 4:
+                QualitySettings.vSyncCount = 1;
                 Application.targetFrameRate = -1;
                 break;
             default:
+                QualitySettings.vSyncCount = 0;
                 Application.targetFrameRate = -1;
                 break; 
         }

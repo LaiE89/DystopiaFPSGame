@@ -2267,6 +2267,8 @@ MonoBehaviour:
   rotationDegPerSec: 10
   alertRadius: 10
   enemyHealth: 20
+  numOfDrugs: 0
+  numOfAmmo: 0
   skills:
   - {fileID: 11400000, guid: 393b5084c2baf45428d95509223b6cbe, type: 2}
   - {fileID: 11400000, guid: 5b487404bdf537c46bd0db76a4774239, type: 2}
@@ -2280,7 +2282,7 @@ MonoBehaviour:
   isAlertable: 0
   isPassive: 1
   isInvicible: 0
-  idleAnimation: {fileID: -3100369314251171874, guid: b076720bba6593045915887e8637b497, type: 3}
+  idleAnimation: {fileID: 1970460594263377210, guid: b076720bba6593045915887e8637b497, type: 3}
   baseDamageMultiplier: 10
   baseAttackSpeedMultiplier: 0.25
   baseSpeedMultiplier: 5
@@ -2289,6 +2291,7 @@ MonoBehaviour:
   attackSpeedMultiplier: 0
   speedMultiplier: 0
   isChoking: 0
+  isReloading: 0
 --- !u!114 &5268279347135183644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2388,7 +2391,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 3993100294326871154}
-  m_Method: 3
   m_Curve:
     serializedVersion: 2
     m_Curve:

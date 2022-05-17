@@ -48,6 +48,7 @@ namespace Enemies {
             enemyMovement.eWeaponStats.RaycastDamage(enemyMovement.eWeaponStats.shootRange, enemyMovement.eWeaponStats.shootDamage * enemyMovement.damageMultiplier, enemyMovement.eWeaponStats.shootKnockback, enemyMovement.eWeaponStats.shootSound, enemyMovement.eWeaponStats.shootHurtSound, enemyMovement);
             if (enemyMovement.eWeaponStats.bullets > 0) {
                 enemyMovement.eWeaponStats.bullets -= 1;
+                StopCoroutine(waitForBulletCheck());
                 StartCoroutine(waitForBulletCheck());
             }
         }

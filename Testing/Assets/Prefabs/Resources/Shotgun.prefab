@@ -5947,6 +5947,7 @@ MonoBehaviour:
   upRecoil: 10
   pellets: 5
   spread: 1.5
+  bulletTrail: {fileID: 963917851609170521, guid: 96b2a14a736ac3944acf37b4cb151398, type: 3}
 --- !u!114 &1978073102008543168
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -116,12 +116,17 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  thisCollider: {fileID: 958260322265487145}
+  thisRb: {fileID: 0}
+  thrower: {fileID: 0}
   radius: 10
   horizontalForce: 20
   verticalForce: 0.1
   damage: 2
   numberOfTicks: 3
   alertRadius: 20
+  timeBeforeExplodes: 0
+  onContact: 0
   enemyMask:
     serializedVersion: 2
     m_Bits: 128

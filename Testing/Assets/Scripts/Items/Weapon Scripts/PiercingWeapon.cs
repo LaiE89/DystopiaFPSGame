@@ -15,16 +15,14 @@ public class PiercingWeapon : Weapons {
                     hurtSound.Play();
                     GameObject enemy = hit.collider.gameObject;
                     Enemies.Movement eMovement = enemy.GetComponent<Enemies.Movement>();
-                    ParticleSystem blood = Instantiate(SceneController.Instance.bloodParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    blood.Play();
+                    SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                     player.DealDamage(eMovement, enemy, damage, knockback);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
                         destructable.Interact(); 
                     }
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
+                    SceneController.Instance.groundParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                     if (hit.transform.gameObject.layer == ToolMethods.LayerMaskToLayer(player.groundMask)) {
                         return;
                     }

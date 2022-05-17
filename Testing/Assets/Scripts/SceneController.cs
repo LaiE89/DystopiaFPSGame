@@ -14,8 +14,8 @@ public class SceneController : MonoBehaviour {
     [SerializeField] public Slider loadingSlider;
     [SerializeField] public TextMeshProUGUI progressText;
     [SerializeField] public TextMeshProUGUI savingText;
-    [SerializeField] public ParticleSystem bloodParticles;
-    [SerializeField] public ParticleSystem groundParticles;
+    [SerializeField] public ParticleSystem dbloodParticles;
+    [SerializeField] public ParticleSystem dgroundParticles;
     [SerializeField] public ParticleSystem burningParticles;
     [SerializeField] public bool isCutscene;
     [SerializeField] public string ambienceSound;
@@ -30,6 +30,9 @@ public class SceneController : MonoBehaviour {
     public List<Enemies.Movement> listOfEnemies;
     public ObjectPooling bloodPool;
     public ObjectPooling bulletHolePool;
+    public ObjectPooling bloodParticlePool;
+    public ObjectPooling groundParticlePool;
+    public ObjectPooling bulletTrailPool;
     //public Enemies.Movement[] listOfEnemies;
 
     public static int sceneIndex;

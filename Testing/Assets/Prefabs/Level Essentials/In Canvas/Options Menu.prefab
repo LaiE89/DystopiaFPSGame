@@ -6751,6 +6751,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: UNLIMITED
       m_Image: {fileID: 0}
+    - m_Text: VSYNC ON
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

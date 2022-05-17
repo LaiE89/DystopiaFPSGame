@@ -55,8 +55,9 @@ public class Food : Interactable {
         isEating = true;
         player.weaponAnimator.SetTrigger("isConsuming");
         yield return new WaitForSeconds(0.7f);
-        ParticleSystem eatParticles = Instantiate(SceneController.Instance.bloodParticles, ToolMethods.OffsetPosition(transform.position, 0, 0.1f, 0), transform.rotation);
-        eatParticles.Play();
+        // ParticleSystem eatParticles = Instantiate(SceneController.Instance.bloodParticles, ToolMethods.OffsetPosition(transform.position, 0, 0.1f, 0), transform.rotation);
+        // eatParticles.Play();
+        SceneController.Instance.bloodParticlePool.SpawnDecal(transform.up, ToolMethods.OffsetPosition(transform.position, 0, 0.1f, 0), ToolMethods.SettingVector(1f, 1f, 1f));
         yield return new WaitForEndOfFrame();
         player.weaponAnimator.ResetTrigger("isConsuming");
         isEating = false;

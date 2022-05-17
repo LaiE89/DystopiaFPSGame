@@ -39,8 +39,9 @@ namespace Player {
             PlayerMovement.myWeaponStats.muzzleFlash.Play();
             PlayerMovement.myWeaponStats.AttackDamage(PlayerMovement.myWeaponStats.shootRange, PlayerMovement.myWeaponStats.shootDamage, PlayerMovement.myWeaponStats.shootKnockback, PlayerMovement.myWeaponStats.shootSound, PlayerMovement.myWeaponStats.shootHurtSound, PlayerMovement);
             if (PlayerMovement.myWeaponStats.bullets > 0) {
-                PlayerMovement.myWeaponStats.bullets -= 1;
+                StopCoroutine(waitForBulletCheck());
                 StartCoroutine(waitForBulletCheck());
+                PlayerMovement.myWeaponStats.bullets -= 1;
             }
             PlayerMovement.bulletsTextBox.text = ("BULLETS x " + PlayerMovement.myWeaponStats.bullets);
         }
@@ -50,8 +51,13 @@ namespace Player {
             yield return new WaitForEndOfFrame();
             if (PlayerMovement.myWeaponStats.bullets <= 0) {
                 AnimatorStateInfo stateInfo = PlayerMovement.weaponAnimator.GetNextAnimatorStateInfo(0);
-                // Debug.Log("State Info Name: " + stateInfo.IsName("Attack") + ", Length: " + stateInfo.length);
-                yield return new WaitForSeconds((1 - stateInfo.normalizedTime) * stateInfo.length);
+                AnimatorStateInfo stateInfo2 = PlayerMovement.weaponAnimator.GetCurrentAnimatorStateInfo(0);
+                Debug.Log("State Info Name: " + stateInfo.IsName("Attack") + ", Length: " + stateInfo.length + ", NormalizedTime: " + stateInfo.normalizedTime + ", State Info2 Name: " + stateInfo2.IsName("Attack") + ", Length: " + stateInfo2.length + ", NormalizedTime: " + stateInfo2.normalizedTime);
+                if (stateInfo2.IsName("Attack")) {
+                    yield return new WaitForSeconds((1 - stateInfo2.normalizedTime) * stateInfo2.length);    
+                }else {
+                    yield return new WaitForSeconds((1 - stateInfo.normalizedTime) * stateInfo.length);
+                }
                 PlayerMovement.isMidAttack = false;
                 PlayerMovement.weaponOverrideController["Attack"] = PlayerMovement.myWeaponStats.fpAttackAnimation;
             }else {

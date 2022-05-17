@@ -41,15 +41,17 @@ public class KickSkill : SkillsObject {
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {
-                    enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, null);
+                    bool hasDamaged = enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, null);
+                    if (hasDamaged) {
+                        SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
+                    }
                     SceneController.Instance.soundController.PlayClipAtPoint("Impact 2", enemy.transform.position, 0.25f, 1);
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
                     destructable.Interact(); 
                     }
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
+                    SceneController.Instance.groundParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                 }
             }
         }

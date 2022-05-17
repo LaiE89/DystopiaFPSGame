@@ -48,20 +48,22 @@ public class RightHookSkill : SkillsObject {
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {
-                    CombatCalculation(enemy, player, enemy.eWeaponStats.attackDamage * enemy.damageMultiplier, knockback, enemy.eWeaponStats.hurtSound);
-                }else {
+                    bool hasDamaged = CombatCalculation(enemy, player, enemy.eWeaponStats.attackDamage * enemy.damageMultiplier, knockback, enemy.eWeaponStats.hurtSound);
+                    if (hasDamaged) {
+                        SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
+                    }
+                    }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
                     destructable.Interact(); 
                     }
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
+                    SceneController.Instance.groundParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                 }
             }
         }
     }
 
-    private void CombatCalculation(Movement enemy, PlayerMovement player, float damage, float knockback, AudioSource hurtSound) {
+    private bool CombatCalculation(Movement enemy, PlayerMovement player, float damage, float knockback, AudioSource hurtSound) {
         GameObject thePlayer = SceneController.Instance.playerObject;
         ToolMethods.AlertRadius(enemy.alertRadius, enemy.transform.position, thePlayer.transform.position, player.enemyMask);
         if (hurtSound != null) {
@@ -78,6 +80,7 @@ public class RightHookSkill : SkillsObject {
             if (dotProduct < -0.9) {
                 if (player.myWeaponStats.weaponHealth <= 0 && player.statusEffects.Contains("isInjured")) {
                     player.TakeDamage(damage);
+                    return true;
                 }else {
                     CameraShaker.Instance.ShakeOnce(damage, damage * 2, 0.1f, 0.5f);
                     player.UsingStamina(damage * 10f);
@@ -87,10 +90,13 @@ public class RightHookSkill : SkillsObject {
                         player.SwitchWeapon(player.selectedWeapon);
                     }
                     player.BlockingDamage(damage);
+                    return false;
                 }
             }
+            return true;
         }else {
             player.TakeDamage(damage);
+            return true;
         }
     }
 }

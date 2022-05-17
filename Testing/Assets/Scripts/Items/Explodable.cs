@@ -9,8 +9,43 @@ public class Explodable : Destructable {
     [SerializeField] float damage;
     [SerializeField] int numberOfTicks;
     [SerializeField] float alertRadius;
+    [SerializeField] float timeBeforeExplodes;
+    [SerializeField] bool onContact;
     [SerializeField] LayerMask enemyMask;
     bool isExploded;
+    bool isBreaking;
+
+    void Awake() {
+        if (timeBeforeExplodes > 0) {
+            StartCoroutine(CountDown());
+        }
+        if (onContact) {
+            StartCoroutine(breakDelay());
+        }
+    }
+
+    IEnumerator breakDelay() {
+        isBreaking = false;
+        yield return new WaitForEndOfFrame();
+        isBreaking = true;
+    }
+
+    public void OnCollisionEnter() {
+        if (isBreaking) {
+            Interact();
+            Destroy(gameObject);
+        }
+    }
+
+    IEnumerator CountDown() {
+        YieldInstruction instruction = new WaitForEndOfFrame();
+        float currTime = 0;
+        while (currTime < timeBeforeExplodes) {
+            currTime += Time.deltaTime;
+            yield return instruction;
+        }
+        Interact();
+    }
 
     public override void Interact() {
         if (!isExploded) {

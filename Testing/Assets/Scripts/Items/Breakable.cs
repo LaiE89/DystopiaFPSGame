@@ -21,7 +21,6 @@ public class Breakable : Destructable {
         isBreaking = false;
         yield return new WaitForEndOfFrame();
         isBreaking = true;
-
     }
 
     public void OnCollisionEnter() {

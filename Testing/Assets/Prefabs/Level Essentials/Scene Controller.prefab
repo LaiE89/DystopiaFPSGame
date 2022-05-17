@@ -29,6 +29,8 @@ Transform:
   m_Children:
   - {fileID: 1688102579991715003}
   - {fileID: 7751605056924243116}
+  - {fileID: 304866767543967351}
+  - {fileID: 8623019026616918377}
   m_Father: {fileID: 5273021178010669602}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -76,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletHoleDecalPrefab: {fileID: 1640087211130364491, guid: 1ec3b48839af50e43834342d00c37dbd, type: 3}
-  maxConcurrentDecals: 10
+  maxConcurrentDecals: 25
 --- !u!1 &2181069446286230573
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +124,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletHoleDecalPrefab: {fileID: 8172200900530101451, guid: 63421a0deb657ea4ebc5b7341d43f059, type: 3}
   maxConcurrentDecals: 100
+--- !u!1 &3865562490447664996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8623019026616918377}
+  - component: {fileID: 2932417861842941639}
+  m_Layer: 0
+  m_Name: Ground Particle Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8623019026616918377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865562490447664996}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8793226793238691775}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2932417861842941639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865562490447664996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204704f8e2f6aa0408f9f47231755b26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHoleDecalPrefab: {fileID: 2473760799489893069, guid: 71d4fc1e3f5ecc0468277d843d4bc8a9, type: 3}
+  maxConcurrentDecals: 5
 --- !u!1 &5273021178010669615
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,10 +232,11 @@ MonoBehaviour:
   loadingSlider: {fileID: 0}
   progressText: {fileID: 0}
   savingText: {fileID: 0}
-  bloodParticles: {fileID: 1283500811187906189}
-  groundParticles: {fileID: 4992777128092075289}
+  dbloodParticles: {fileID: 0}
+  dgroundParticles: {fileID: 0}
   burningParticles: {fileID: 805188749940341442}
   isCutscene: 0
+  ambienceSound: 
   canvas: {fileID: 0}
   soundController: {fileID: 0}
   dialogueController: {fileID: 0}
@@ -198,6 +246,54 @@ MonoBehaviour:
   listOfEnemies: []
   bloodPool: {fileID: 5489848426064043451}
   bulletHolePool: {fileID: 2370519375244419453}
+  bloodParticlePool: {fileID: 7826953637891279581}
+  groundParticlePool: {fileID: 2932417861842941639}
+  bulletTrailPool: {fileID: 0}
+--- !u!1 &7329545327910493367
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 304866767543967351}
+  - component: {fileID: 7826953637891279581}
+  m_Layer: 0
+  m_Name: Blood Particle Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &304866767543967351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7329545327910493367}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8793226793238691775}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7826953637891279581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7329545327910493367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204704f8e2f6aa0408f9f47231755b26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHoleDecalPrefab: {fileID: 2805180032693501697, guid: b576b774a794dd741a27af91c27b4d29, type: 3}
+  maxConcurrentDecals: 5
 --- !u!1 &7708000039529057223
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,11 +389,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2805180032693501700, guid: b576b774a794dd741a27af91c27b4d29, type: 3}
   m_PrefabInstance: {fileID: 3972712873648527754}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &1283500811187906189 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2805180032693501703, guid: b576b774a794dd741a27af91c27b4d29, type: 3}
-  m_PrefabInstance: {fileID: 3972712873648527754}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5204165084921056597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -310,16 +401,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5644862034968226777, guid: 0fd10048a37c97f49a02fd4b24ef5e18, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.511
-      objectReference: {fileID: 0}
-    - target: {fileID: 5644862034968226777, guid: 0fd10048a37c97f49a02fd4b24ef5e18, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5644862034968226777, guid: 0fd10048a37c97f49a02fd4b24ef5e18, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.064
       objectReference: {fileID: 0}
     - target: {fileID: 5644862034968226777, guid: 0fd10048a37c97f49a02fd4b24ef5e18, type: 3}
       propertyPath: m_LocalRotation.w
@@ -397,10 +480,5 @@ PrefabInstance:
 --- !u!4 &4992777128092075290 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2473760799489893064, guid: 71d4fc1e3f5ecc0468277d843d4bc8a9, type: 3}
-  m_PrefabInstance: {fileID: 7430226967837681618}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &4992777128092075289 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2473760799489893067, guid: 71d4fc1e3f5ecc0468277d843d4bc8a9, type: 3}
   m_PrefabInstance: {fileID: 7430226967837681618}
   m_PrefabAsset: {fileID: 0}

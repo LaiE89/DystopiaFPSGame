@@ -56,8 +56,7 @@ public class JumpAttackSkill : SkillsObject {
                     if (destructable != null) {
                     destructable.Interact(); 
                     }
-                    ParticleSystem ground = Instantiate(SceneController.Instance.groundParticles, hit.point, hit.transform.rotation) as ParticleSystem;
-                    ground.Play();
+                    SceneController.Instance.groundParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                 }
             }
         }

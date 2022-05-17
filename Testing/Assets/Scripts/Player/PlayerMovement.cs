@@ -478,7 +478,7 @@ namespace Player {
         }
 
         private void Block() {
-            if (Input.GetKey(blockKey) && !Input.GetKey(attackKey) && !isAttacking && !isConsuming && !isReloading && !isEating) {
+            if (Input.GetKey(blockKey) && !Input.GetKey(attackKey) && !isAttacking && !isConsuming && !isReloading && !isMidAttack && !isEating) {
                 if (!isBlocking) {
                     isParrying = true;
                 }
@@ -617,7 +617,7 @@ namespace Player {
         }
 
         private void PickUp() {
-            if (Input.GetKeyDown(pickUpKey) && !isAttacking && !isBlocking && !isReloading && !isConsuming && !isEating) {
+            if (Input.GetKeyDown(pickUpKey) && !isAttacking && !isBlocking && !isReloading && !isConsuming && !isMidAttack && !isEating) {
                 Ray ray = attackCam.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, pickUpRange)) {

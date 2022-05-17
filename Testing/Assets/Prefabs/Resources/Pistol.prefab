@@ -113,6 +113,7 @@ MonoBehaviour:
   reloadSound: {fileID: 8926655107635374502}
   extraSound: {fileID: 0}
   upRecoil: 3
+  bulletTrail: {fileID: 963917851609170521, guid: 96b2a14a736ac3944acf37b4cb151398, type: 3}
 --- !u!1 &1118975398475353776
 GameObject:
   m_ObjectHideFlags: 0
