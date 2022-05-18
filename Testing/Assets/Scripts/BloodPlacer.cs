@@ -40,7 +40,6 @@ public class BloodPlacer : MonoBehaviour {
         collisionEvents.Clear();
         Vector3 collisionHitLoc = particle.intersection;
         Vector3 collisionHitRot = particle.normal;
-        // Quaternion HitRot = Quaternion.LookRotation(Vector3.forward, collisionHitRot);
         float randNum = Random.Range(0, 10);
         float randNum2 = Random.Range(1, 100);
         float randNum3 = Random.Range(1, 100);
@@ -48,9 +47,5 @@ public class BloodPlacer : MonoBehaviour {
         if (randNum >= 8f) {
             SceneController.Instance.bloodPool.SpawnDecal(collisionHitRot * -1f, collisionHitLoc - collisionHitRot * -1f * 0.01f, ToolMethods.SettingVector(randNum2 / 100, randNum3 / 100, randNum4 / 100));
         }
-        /*var decal = Instantiate(objectToInstantiate); 
-        decal.transform.forward = collisionHitRot * -1f;
-        decal.transform.position = collisionHitLoc - decal.transform.forward * 0.01f;*/
     }
-
 }

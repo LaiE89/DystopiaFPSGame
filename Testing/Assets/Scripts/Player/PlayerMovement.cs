@@ -514,6 +514,7 @@ namespace Player {
                     GameObject droppedBone =  Instantiate(boneWeapon, hand.transform.position, transform.rotation) as GameObject;
                     droppedBone.GetComponent<Holdable>().CreatingWeapon(transform);
                     //isInjured = true;
+                    SceneController.Instance.bloodParticlePool.SpawnDecal(gameObject.transform.forward, hand.transform.position, ToolMethods.SettingVector(1f, 1f, 1f));
                     statusEffects.Add("isInjured");
                     UpdatingStatus(this.statusEffects);
                 }

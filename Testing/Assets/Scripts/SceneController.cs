@@ -92,7 +92,7 @@ public class SceneController : MonoBehaviour {
         //listOfEnemies = FindObjectsOfType<Enemies.Movement>() as Enemies.Movement[];
     }
 
-    IEnumerator LoadAsyncronously (int sceneIndex) {
+    /*IEnumerator LoadAsyncronously (int sceneIndex) {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
         loadingScreen.SetActive(true);
         while (!operation.isDone) {
@@ -101,6 +101,22 @@ public class SceneController : MonoBehaviour {
             progressText.text = progress * 100f + "%";
             yield return null;
         }
+    }*/
+
+    IEnumerator LoadAsyncronously (int sceneIndex) {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+        loadingScreen.SetActive(true);
+        loadingSlider.value = 0;
+        float time = 0;
+        operation.allowSceneActivation = false;
+        while (loadingSlider.value < 1f || time < 1f) {
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+            loadingSlider.value = Mathf.Lerp(loadingSlider.value, progress, time);
+            time += Time.unscaledDeltaTime;
+            progressText.SetText($"{(loadingSlider.value * 100).ToString("N2")}%");
+            yield return null;
+        }
+        operation.allowSceneActivation = true;
     }
 
     IEnumerator FadeOutSaving () {

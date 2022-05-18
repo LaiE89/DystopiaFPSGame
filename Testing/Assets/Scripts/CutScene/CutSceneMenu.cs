@@ -55,6 +55,7 @@ public class CutSceneMenu : MonoBehaviour {
         SceneController.Instance.soundController.Play("UI Click");
     }
 
+    /*
     IEnumerator LoadAsyncronously (int sceneIndex) {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
@@ -65,8 +66,24 @@ public class CutSceneMenu : MonoBehaviour {
             SceneController.Instance.progressText.text = progress * 100f + "%";
             yield return null;
         }
-    }
+    }*/
     
+    IEnumerator LoadAsyncronously (int sceneIndex) {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+        SceneController.Instance.loadingScreen.SetActive(true);
+        SceneController.Instance.loadingSlider.value = 0;
+        float time = 0;
+        operation.allowSceneActivation = false;
+        while (SceneController.Instance.loadingSlider.value < 1f || time < 1f) {
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+            SceneController.Instance.loadingSlider.value = Mathf.Lerp(SceneController.Instance.loadingSlider.value, progress, time);
+            time += Time.unscaledDeltaTime;
+            SceneController.Instance.progressText.SetText($"{(SceneController.Instance.loadingSlider.value * 100).ToString("N2")}%");
+            yield return null;
+        }
+        operation.allowSceneActivation = true;
+    }
+
     public void NextLevel() {
         SceneController.sceneIndex += 1;
         Debug.Log(SceneController.sceneIndex);

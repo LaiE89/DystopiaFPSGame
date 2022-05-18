@@ -14,6 +14,7 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] public GameObject loadingScreen; 
     [SerializeField] public Slider slider;
     [SerializeField] public TextMeshProUGUI progressText;
+    private Coroutine AnimationCoroutine;
     public static bool loading;
     public static bool saving;
     public static SoundController soundController;
@@ -51,15 +52,31 @@ public class MainMenu : MonoBehaviour {
         }
     }
 
-    IEnumerator LoadAsyncronously (int sceneIndex) {
+    /*IEnumerator LoadAsyncronously (int sceneIndex) {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
         loadingScreen.SetActive(true);
         while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / .9f);
             slider.value = progress;
-            progressText.text = Mathf.RoundToInt(progress * 100f) + "%";
+            progressText.SetText($"{(progress * 100).ToString("N2")}%");
             yield return null;
         }
+    }*/
+
+    IEnumerator LoadAsyncronously (int sceneIndex) {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+        loadingScreen.SetActive(true);
+        slider.value = 0;
+        float time = 0;
+        operation.allowSceneActivation = false;
+        while (slider.value < 1f || time < 1f) {
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+            slider.value = Mathf.Lerp(slider.value, progress, time);
+            time += Time.unscaledDeltaTime;
+            progressText.SetText($"{(slider.value * 100).ToString("N2")}%");
+            yield return null;
+        }
+        operation.allowSceneActivation = true;
     }
 
     public void QuitGame() {

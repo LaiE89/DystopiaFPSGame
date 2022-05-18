@@ -49,8 +49,11 @@ public class JumpAttackSkill : SkillsObject {
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Player") {
-                    enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, null);
+                    bool hasDamaged = enemy.CombatCalculation(damage * enemy.damageMultiplier, knockback * enemy.damageMultiplier, null);
                     SceneController.Instance.soundController.PlayClipAtPoint("Impact 2", enemy.transform.position, 0.3f, 1);
+                    if (hasDamaged) {
+                        SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
+                    }
                 }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
