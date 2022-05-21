@@ -78,15 +78,15 @@ public class SoundController : MonoBehaviour {
         return aSource; // return the AudioSource reference
     }
 
-    public void Stop(string sound, float fadeTime) {
+    public Coroutine Stop(string sound, float fadeTime) {
         Sound s = Array.Find(specialSounds, item => item.name == sound);
         if (s == null) {
             Debug.LogWarning("Sound: " + name + " not found!");
-            return;
+            return null;
         }
         //s.source.volume = s.volume * (1f + UnityEngine.Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f));
         //s.source.pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
-        StartCoroutine(FadeOut(s, fadeTime));
+        return StartCoroutine(FadeOut(s, fadeTime));
     }
 
     public IEnumerator FadeOut(Sound s, float fadeTime) {

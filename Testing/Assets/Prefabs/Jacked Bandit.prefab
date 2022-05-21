@@ -1449,7 +1449,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168275650879501236}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.025, z: 0}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5611183741143928698}
@@ -2486,6 +2486,8 @@ MonoBehaviour:
   rotationDegPerSec: 10
   alertRadius: 10
   enemyHealth: 20
+  numOfDrugs: 0
+  numOfAmmo: 0
   skills:
   - {fileID: 11400000, guid: af4fe02e583001b45a8f2c7711386bed, type: 2}
   - {fileID: 11400000, guid: 5b487404bdf537c46bd0db76a4774239, type: 2}
@@ -2510,6 +2512,7 @@ MonoBehaviour:
   attackSpeedMultiplier: 0
   speedMultiplier: 0
   isChoking: 0
+  isReloading: 0
 --- !u!114 &1614856727404974612
 MonoBehaviour:
   m_ObjectHideFlags: 0

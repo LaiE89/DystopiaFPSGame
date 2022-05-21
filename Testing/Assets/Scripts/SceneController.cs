@@ -32,7 +32,7 @@ public class SceneController : MonoBehaviour {
     public ObjectPooling bulletHolePool;
     public ObjectPooling bloodParticlePool;
     public ObjectPooling groundParticlePool;
-    public ObjectPooling bulletTrailPool;
+    public ObjectPooling sparksParticlePool;
     //public Enemies.Movement[] listOfEnemies;
 
     public static int sceneIndex;

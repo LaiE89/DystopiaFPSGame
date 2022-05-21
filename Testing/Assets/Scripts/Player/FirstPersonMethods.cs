@@ -52,7 +52,7 @@ namespace Player {
             if (PlayerMovement.myWeaponStats.bullets <= 0) {
                 AnimatorStateInfo stateInfo = PlayerMovement.weaponAnimator.GetNextAnimatorStateInfo(0);
                 AnimatorStateInfo stateInfo2 = PlayerMovement.weaponAnimator.GetCurrentAnimatorStateInfo(0);
-                Debug.Log("State Info Name: " + stateInfo.IsName("Attack") + ", Length: " + stateInfo.length + ", NormalizedTime: " + stateInfo.normalizedTime + ", State Info2 Name: " + stateInfo2.IsName("Attack") + ", Length: " + stateInfo2.length + ", NormalizedTime: " + stateInfo2.normalizedTime);
+                // Debug.Log("State Info Name: " + stateInfo.IsName("Attack") + ", Length: " + stateInfo.length + ", NormalizedTime: " + stateInfo.normalizedTime + ", State Info2 Name: " + stateInfo2.IsName("Attack") + ", Length: " + stateInfo2.length + ", NormalizedTime: " + stateInfo2.normalizedTime);
                 if (stateInfo2.IsName("Attack")) {
                     yield return new WaitForSeconds((1 - stateInfo2.normalizedTime) * stateInfo2.length);    
                 }else {

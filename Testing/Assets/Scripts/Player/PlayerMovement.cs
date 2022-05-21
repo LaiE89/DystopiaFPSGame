@@ -144,6 +144,7 @@ namespace Player {
         [HideInInspector] public SoundController soundController;
         [HideInInspector] public int sceneIndex;
         [HideInInspector] public Rigidbody rb;
+        Coroutine sprintSoundRoutine;
         GameObject enemy;
         Enemies.Movement eMovement;
         Rigidbody eRb;
@@ -712,7 +713,7 @@ namespace Player {
 
         private void Walk() {
             if (isRunning) {
-                soundController.Stop("PlayerRun", 0.25f);
+                sprintSoundRoutine = soundController.Stop("PlayerRun", 0.25f);
                 isRunning = false;
             }
             // moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
@@ -722,6 +723,10 @@ namespace Player {
         private void Sprint() {
             if (playerStamina > 20f) {
                 if (!isRunning) {
+                    if (sprintSoundRoutine != null) {
+                        soundController.StopCoroutine(sprintSoundRoutine);
+                        soundController.GetSound("PlayerRun").volume = 0.5f; // Hard coded for sprint sound
+                    }
                     soundController.Play("PlayerRun");
                     isRunning = true;
                 }

@@ -56,7 +56,7 @@ public class Shotgun : Weapons {
         attackSound.Play();
         TrailRenderer trail = Instantiate(bulletTrail, ray.origin, Quaternion.identity);
         if (Physics.Raycast(ray, out hit, range, player.playerLayers)) {
-            StartCoroutine(SpawnTrail(trail, hit.point));
+            StartCoroutine(SpawnTrail(trail, hit));
             if (hit.collider.tag == "Enemy") {
                 hurtSound.Play();
                 GameObject enemy = hit.collider.gameObject;
@@ -85,7 +85,7 @@ public class Shotgun : Weapons {
         attackSound.Play();
         TrailRenderer trail = Instantiate(bulletTrail, ray.origin, Quaternion.identity);
         if (Physics.Raycast(ray, out hit, range, enemy.enemyLayers)) {
-            StartCoroutine(SpawnTrail(trail, hit.point));
+            StartCoroutine(SpawnTrail(trail, hit));
             if (hit.collider.tag == "Player") {
                 bool hasDamaged = enemy.CombatCalculation(damage, knockback, hurtSound);
                 if (hasDamaged) {
@@ -137,6 +137,20 @@ public class Shotgun : Weapons {
             yield return null;
         }
         trail.transform.position = destination;
+        Destroy(trail.gameObject, trail.time);
+    }
+
+    private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit) {
+        float time = 0;
+        Vector3 startPosition = trail.transform.position;
+
+        while (time < 1) {
+            trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
+            time += Time.deltaTime / trail.time;
+            yield return null;
+        }
+        trail.transform.position = hit.point;
+        SceneController.Instance.sparksParticlePool.SpawnDecal(hit.normal, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
         Destroy(trail.gameObject, trail.time);
     }
 }

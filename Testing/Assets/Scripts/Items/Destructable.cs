@@ -14,7 +14,7 @@ public class Destructable : MonoBehaviour {
     [HideInInspector] public GameObject thrower;
 
     public virtual void Start() {
-        Debug.Log("Ignored Collision with " + thrower);
+        // Debug.Log("Ignored Collision with " + thrower);
         if (thrower != null) {
             Collider throwerCollider = thrower.GetComponent<Collider>();
             if (throwerCollider != null) {

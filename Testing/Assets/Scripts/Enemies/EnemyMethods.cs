@@ -168,5 +168,14 @@ namespace Enemies {
                 }
             }
         }
+
+        public void Haymaker() {
+            foreach (SkillsObject skills in enemyMovement.skills) {
+                if (skills.GetType() == typeof(HaymakerSkill)) {
+                    HaymakerSkill haymaker = skills as HaymakerSkill;
+                    haymaker.HaymakerAttack(enemyMovement);
+                }
+            }
+        }
     }
 }

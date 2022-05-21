@@ -31,6 +31,7 @@ Transform:
   - {fileID: 7751605056924243116}
   - {fileID: 304866767543967351}
   - {fileID: 8623019026616918377}
+  - {fileID: 4071050576373079221}
   m_Father: {fileID: 5273021178010669602}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -124,6 +125,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletHoleDecalPrefab: {fileID: 8172200900530101451, guid: 63421a0deb657ea4ebc5b7341d43f059, type: 3}
   maxConcurrentDecals: 100
+--- !u!1 &2890727808214150356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4071050576373079221}
+  - component: {fileID: 5542313293413990870}
+  m_Layer: 0
+  m_Name: Sparks Particle Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4071050576373079221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890727808214150356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8793226793238691775}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5542313293413990870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890727808214150356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204704f8e2f6aa0408f9f47231755b26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHoleDecalPrefab: {fileID: 2536977339483791358, guid: 18390022f08978142b0ded3cee806f92, type: 3}
+  maxConcurrentDecals: 10
 --- !u!1 &3865562490447664996
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +294,7 @@ MonoBehaviour:
   bulletHolePool: {fileID: 2370519375244419453}
   bloodParticlePool: {fileID: 7826953637891279581}
   groundParticlePool: {fileID: 2932417861842941639}
-  bulletTrailPool: {fileID: 0}
+  sparksParticlePool: {fileID: 5542313293413990870}
 --- !u!1 &7329545327910493367
 GameObject:
   m_ObjectHideFlags: 0

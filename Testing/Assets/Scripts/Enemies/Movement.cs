@@ -13,7 +13,7 @@ namespace Enemies {
         [SerializeField] public Rigidbody rb;
         [SerializeField] public LayerMask groundMask, playerMask;
         [SerializeField] public float height;
-        [SerializeField] GameObject Hand;
+        [SerializeField] public GameObject Hand;
         [SerializeField] public AudioSource walkSound;
         [SerializeField] public AudioSource runSound;
         [SerializeField] public GameObject drops;
@@ -66,8 +66,8 @@ namespace Enemies {
         [HideInInspector] public bool isMidAttack;
         [HideInInspector] public Coroutine skillLagRoutine;
         [HideInInspector] public Coroutine groundCheckRoutine;
-        int selectedWeapon;
-        GameObject eWeapon;
+        [HideInInspector] public GameObject eWeapon;
+        [HideInInspector] public int selectedWeapon;
         bool isInitialRotation;
         float timeNotSeeing;
 
@@ -508,7 +508,7 @@ namespace Enemies {
             rb.interpolation = RigidbodyInterpolation.Interpolate; //
         }
 
-        private void SwitchWeapon(int selectedWeapon) {
+        public void SwitchWeapon(int selectedWeapon) {
             if (selectedWeapon > Hand.transform.childCount - 1) {
                 selectedWeapon = 0;
             }else if (selectedWeapon < 0) {
