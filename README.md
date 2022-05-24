@@ -8,7 +8,5 @@ Development Log 1:
 
 ## Installation
 
-### v0.01 (Contains Level 1 and Half of level 2)
-MacOS: [[Click Here]](https://www.dropbox.com/s/14dnzuwbku007oq/Dystopia_MacOS.zip?dl=1)
-
-Windows: [[Click Here]](https://www.dropbox.com/s/abn3k2is5poycf7/Dystopia_x86_64.zip?dl=1)
+### Itch.io page
+[[Click Here]](https://laiet.itch.io/dystopia)
