@@ -1,10 +1,9 @@
 # DystopiaFPSGame
 A Unity3D game that combines RPG and FPS elements.
 
-## Development Videos
-Development Log 1:
+## Trailer
 
-[![Development Log 1](https://img.youtube.com/vi/GO_xFtzjB2s/0.jpg)](https://www.youtube.com/watch?v=GO_xFtzjB2s)
+[![Trailer v0.0.2](https://img.youtube.com/vi/9b7BTAth4-o/0.jpg)](https://www.youtube.com/watch?v=9b7BTAth4-o)
 
 ## Installation
 
