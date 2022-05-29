@@ -8,7 +8,4 @@ A Unity3D game that combines RPG and FPS elements.
 ## Installation
 
 ### Itch.io page
-```html
-<iframe frameborder="0" src="https://itch.io/embed/1544710" width="552" height="167"><a href="https://laiet.itch.io/dystopia">Dystopia by Laiet</a></iframe>
-```
 [[Click Here]](https://laiet.itch.io/dystopia)
