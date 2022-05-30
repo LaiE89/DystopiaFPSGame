@@ -116,6 +116,7 @@ namespace Player {
         [HideInInspector] public float staminaUsageMultiplier;
         [HideInInspector] public float speedMultiplier;
         [HideInInspector] public bool isChoking;
+        [HideInInspector] public int difficulty;
 
         [Header("Gameobject Initialization")]
         [SerializeField] public TextMeshProUGUI interactTextBox;
@@ -422,9 +423,11 @@ namespace Player {
         private IEnumerator RegenStamina() {
             yield return new WaitForSeconds(timeBeforeStamina);
             while (playerStamina < maxPlayerStamina) {
-                playerStamina += maxPlayerStamina / 100;
+                // playerStamina += maxPlayerStamina / 100;
+                playerStamina += Time.deltaTime * 15;
                 staminaSlider.value = playerStamina;
-                yield return new WaitForSeconds(0.1f);
+                // yield return new WaitForSeconds(0.1f);
+                yield return null;
             }
             isRegenStamina = null;
         }
@@ -822,6 +825,7 @@ namespace Player {
             playerDrugs = data.playerDrugs;
             playerAmmo = data.playerAmmo;
             pickUpRange = data.pickUpRange;
+            difficulty = data.difficulty;
             statusEffects = data.statusEffects;
             GameObject cloneWeapon = (GameObject)Resources.Load(data.myWeapon, typeof(GameObject));
             if (cloneWeapon && !cloneWeapon.GetComponent<Weapons>().isDefaultItem) {

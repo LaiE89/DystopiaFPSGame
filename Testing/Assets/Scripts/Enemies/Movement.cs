@@ -95,7 +95,6 @@ namespace Enemies {
 
         private void Start() {
             SceneController.Instance.listOfEnemies.Add(this);
-
             foreach (Transform weapon in Hand.transform) {
                 if (weapon.GetComponent<Weapons>().isDefaultItem) {
                     weapon.SetAsLastSibling();
@@ -105,8 +104,6 @@ namespace Enemies {
             for (int i = 0; i < skills.Length; i++) {
                 this.skills[i] = skills[i].CreateInstance(baseSkillMultiplier);
             }
-
-            UpdatingStatus();
             
             // Initializing Variables
             startingRotation = gameObject.transform.rotation;
@@ -137,6 +134,21 @@ namespace Enemies {
             if (skills.Length > 0) {
                 StartCoroutine(SkillCheckRoutine());
             }
+            
+            switch (pMovement.difficulty) {
+                case 0:
+                    baseDamageMultiplier = baseDamageMultiplier * 0.5f;
+                    shootingInaccuracy = shootingInaccuracy * 2f;
+                    break;
+                case 2:
+                    baseDamageMultiplier = baseDamageMultiplier * 2f;
+                    shootingInaccuracy = shootingInaccuracy * 0.5f;
+                    break;
+                default:
+                    break;
+            }
+
+            UpdatingStatus();
         }
         
         private void Update() {

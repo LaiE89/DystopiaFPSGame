@@ -6,7 +6,6 @@ using EZCameraShake;
 
 [CreateAssetMenu(fileName = "Charge Skill", menuName = "ScriptableObject/Skills/Charge")]
 public class ChargeSkill : SkillsObject {
-    public ParticleSystem initialParticle;
     public float chargeSpeed = 1;
     public float staminaCost = 10;
     public float knockback = 5;
@@ -15,7 +14,6 @@ public class ChargeSkill : SkillsObject {
     public override SkillsObject CreateInstance(float multiplier) {
         ChargeSkill instance = CreateInstance<ChargeSkill>();
         SettingBaseValues(instance, multiplier);
-        instance.initialParticle = initialParticle;
         instance.chargeSpeed = chargeSpeed;
         instance.knockback = knockback;
         instance.minDistance = minDistance;
@@ -35,8 +33,7 @@ public class ChargeSkill : SkillsObject {
 
     public override void UseSkill(GameObject user, GameObject target) {
         base.UseSkill(user, target);
-        ParticleSystem startParticle = Instantiate(initialParticle, user.transform.position, user.transform.rotation);
-        startParticle.Play();
+        SceneController.Instance.groundParticlePool.SpawnDecal(user.transform.forward, user.transform.position, ToolMethods.SettingVector(1f, 1f, 1f));
         Movement isEnemy = user.GetComponent<Movement>();
         if (isEnemy) {
             // isEnemy.ResetSpeed();
@@ -50,8 +47,7 @@ public class ChargeSkill : SkillsObject {
 
     public override void UseSkill(GameObject user) {
         base.UseSkill(user);
-        ParticleSystem startParticle = Instantiate(initialParticle, user.transform.position, user.transform.rotation);
-        startParticle.Play();
+        SceneController.Instance.groundParticlePool.SpawnDecal(user.transform.forward, user.transform.position, ToolMethods.SettingVector(1f, 1f, 1f));
         PlayerMovement isPlayer = user.GetComponent<PlayerMovement>();
         if (isPlayer) {
             isPlayer.UsingStamina(staminaCost);

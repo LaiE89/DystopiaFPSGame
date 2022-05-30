@@ -791,7 +791,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2570240916089706234}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 8.659561e-17, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0.91999996, z: 0}
+  m_LocalPosition: {x: -0, y: 0.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4241686669609613027}
@@ -3186,7 +3186,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8991867732603012023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 7.82}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 87751075866109210}
@@ -3324,12 +3324,16 @@ MonoBehaviour:
   rotationDegPerSec: 10
   alertRadius: 10
   enemyHealth: 5
+  numOfDrugs: 0
+  numOfAmmo: 0
   skills: []
   eWeaponStats: {fileID: 0}
   isRotating: 0
   alreadyAttacked: 0
   isDying: 0
   isMidAttack: 0
+  eWeapon: {fileID: 0}
+  selectedWeapon: 0
   isIdle: 0
   isAlertable: 1
   isPassive: 0
@@ -3343,6 +3347,7 @@ MonoBehaviour:
   attackSpeedMultiplier: 0
   speedMultiplier: 0
   isChoking: 0
+  isReloading: 0
 --- !u!114 &8970192068022437333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3403,7 +3408,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8072950675821004392}
-  m_Method: 3
   m_Curve:
     serializedVersion: 2
     m_Curve:

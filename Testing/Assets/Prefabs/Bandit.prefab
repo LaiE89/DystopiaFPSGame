@@ -664,7 +664,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2160303884196589115}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0.91999996, z: 0}
+  m_LocalPosition: {x: -0, y: 0.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 327877788214988322}
@@ -1502,8 +1502,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4798634463766854518}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 61.085, y: 2.1498, z: 20.958}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8614368553482030109}
@@ -1517,7 +1517,7 @@ Transform:
   - {fileID: 8849544928138115126}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &315981874624755946
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1641,6 +1641,8 @@ MonoBehaviour:
   rotationDegPerSec: 10
   alertRadius: 10
   enemyHealth: 5
+  numOfDrugs: 0
+  numOfAmmo: 0
   skills:
   - {fileID: 11400000, guid: 5456a04cf5c257b489b5421daa5df0bc, type: 2}
   eWeaponStats: {fileID: 0}
@@ -1648,6 +1650,8 @@ MonoBehaviour:
   alreadyAttacked: 0
   isDying: 0
   isMidAttack: 0
+  eWeapon: {fileID: 0}
+  selectedWeapon: 0
   isIdle: 1
   isAlertable: 1
   isPassive: 0
@@ -1661,6 +1665,7 @@ MonoBehaviour:
   attackSpeedMultiplier: 0
   speedMultiplier: 0
   isChoking: 0
+  isReloading: 0
 --- !u!114 &6665313899819471204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1721,7 +1726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 2663805601025044040}
-  m_Method: 3
   m_Curve:
     serializedVersion: 2
     m_Curve:

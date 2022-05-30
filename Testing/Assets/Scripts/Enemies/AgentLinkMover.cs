@@ -24,7 +24,7 @@ public class AgentLinkMover : MonoBehaviour
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.autoTraverseOffMeshLink = false;
         while (true) {
-            if (agent.isOnOffMeshLink) {
+            if (agent.isOnOffMeshLink && agent.isActiveAndEnabled) {
                 NavMeshLink link = (NavMeshLink)agent.navMeshOwner;
                 int areaType = link.area;
                 /*
@@ -64,7 +64,12 @@ public class AgentLinkMover : MonoBehaviour
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 startPos = agent.transform.position;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
-        float duration = Vector3.Distance(startPos, endPos) / agent.speed;
+        float duration;
+        if (agent.speed < 6) {
+            duration = Vector3.Distance(startPos, endPos) / 6;
+        }else {
+            duration = Vector3.Distance(startPos, endPos) / agent.speed;
+        }
         if (duration < 0.7f) {
             duration = 0.7f;
         }
@@ -93,7 +98,13 @@ public class AgentLinkMover : MonoBehaviour
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 startPos = agent.transform.position;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
-        float duration = Vector3.Distance(startPos, endPos) / (agent.speed / 1.5f);
+        // float duration = Vector3.Distance(startPos, endPos) / (agent.speed / 1.5f);
+        float duration;
+        if (agent.speed < 6) {
+            duration = Vector3.Distance(startPos, endPos) / (6 / 1.5f);
+        }else {
+            duration = Vector3.Distance(startPos, endPos) / (agent.speed / 1.5f);
+        }
         float normalizedTime = 0.0f;
         while (normalizedTime < 1.0f)
         {

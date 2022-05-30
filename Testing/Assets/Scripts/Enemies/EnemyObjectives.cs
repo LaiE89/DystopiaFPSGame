@@ -75,6 +75,7 @@ namespace Enemies {
                     }else {
                         if (!SceneController.Instance.objectivesController.isPlaying) {
                             prevObjective = objectivesQueue.Dequeue();
+                            SceneController.Instance.soundController.PlayOneShot("Objective");
                             SceneController.Instance.objectivesController.StartDialogue(prevObjective);
                         }
                     }

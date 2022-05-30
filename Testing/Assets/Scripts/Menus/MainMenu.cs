@@ -10,13 +10,16 @@ using System.Xml;
 
 public class MainMenu : MonoBehaviour {
     [SerializeField] public OptionsMenu options;
-    [SerializeField] public GameObject confirmationScreen; 
+    [SerializeField] public GameObject confirmationScreen;
+    [SerializeField] public GameObject difficultyScreen; 
     [SerializeField] public GameObject loadingScreen; 
     [SerializeField] public Slider slider;
     [SerializeField] public TextMeshProUGUI progressText;
+    [SerializeField] public GameObject devNote;
     private Coroutine AnimationCoroutine;
     public static bool loading;
     public static bool saving;
+    public static bool finishedGame;
     public static SoundController soundController;
 
     [Header("Player Default Values")]
@@ -33,6 +36,10 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] string myWeapon = "Fist";
 
     private void Awake() {
+        if (finishedGame) {
+            devNote.SetActive(true);
+            finishedGame = false;
+        }
         saving = false;
         soundController = GameObject.Find("Sound Controller").GetComponent<SoundController>();
     }
@@ -48,7 +55,8 @@ public class MainMenu : MonoBehaviour {
         if (File.Exists(path)) {
             confirmationScreen.SetActive(true);
         }else {
-            StartingNewPlayer();
+            // StartingNewPlayer();
+            difficultyScreen.SetActive(true);
         }
     }
 
@@ -120,11 +128,11 @@ public class MainMenu : MonoBehaviour {
         soundController.Play("UI Click");
     }
 
-    public void NewPlayer() {
+    public void NewPlayer(int difficulty) {
         Debug.Log(Application.persistentDataPath);
         string path = Application.persistentDataPath + "/player.dat";
 
-        Player.PlayerData data = new Player.PlayerData(playerHealth, playerHunger, walkSpeed, sprintSpeed, jumpForce, playerDrugs, playerAmmo, pickUpRange, sceneIndex, statusEffects, myWeapon);
+        Player.PlayerData data = new Player.PlayerData(playerHealth, playerHunger, walkSpeed, sprintSpeed, jumpForce, playerDrugs, playerAmmo, pickUpRange, sceneIndex, difficulty, statusEffects, myWeapon);
         
         var serializer = new DataContractSerializer(typeof(Player.PlayerData));
         var settings = new XmlWriterSettings()
@@ -137,10 +145,10 @@ public class MainMenu : MonoBehaviour {
         writer.Close();
     }
 
-    public void StartingNewPlayer() {
+    public void StartingNewPlayer(int difficulty) {
         string path = Application.persistentDataPath + "/player.dat";
         DeleteFile();
-        NewPlayer();
+        NewPlayer(difficulty);
         StartCoroutine(LoadAsyncronously(1));
         if (File.Exists(path)) {
             loading = true;

@@ -66,7 +66,7 @@ public class HaymakerSkill : SkillsObject {
             }
             Vector3 direction = thePlayer.transform.position - enemy.transform.position;
             direction.y = (float)(Mathf.Sin(-enemy.transform.rotation.x * Mathf.PI/180) * knockback);
-            thePlayer.rb.AddForce((direction.normalized + thePlayer.transform.right * -2) * knockback, ForceMode.Impulse);
+            thePlayer.rb.AddForce((direction.normalized + enemy.transform.right * 2) * knockback, ForceMode.Impulse);
             if (thePlayer.isBlocking) {
                 var forward = enemy.transform.TransformDirection(Vector3.forward);
                 var playerForward = thePlayer.transform.TransformDirection(Vector3.forward);

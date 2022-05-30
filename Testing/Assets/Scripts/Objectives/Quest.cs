@@ -9,6 +9,7 @@ public class Quest : Trigger {
     public override void result() {
         if (!tutorialTrigger.enabled) {
             tutorialTrigger.enabled = true;
+            SceneController.Instance.soundController.PlayOneShot("Objective");
             Destroy(gameObject);
             if (objectiveBlock != null) {
                 objectiveBlock.SetActive(false);

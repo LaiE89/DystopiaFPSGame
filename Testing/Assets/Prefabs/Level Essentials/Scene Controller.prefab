@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletHoleDecalPrefab: {fileID: 2473760799489893069, guid: 71d4fc1e3f5ecc0468277d843d4bc8a9, type: 3}
-  maxConcurrentDecals: 5
+  maxConcurrentDecals: 15
 --- !u!1 &5273021178010669615
 GameObject:
   m_ObjectHideFlags: 0

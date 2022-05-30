@@ -55,6 +55,8 @@ namespace Player {
         public List<string> statusEffects;
         [DataMember]
         public string myWeapon;
+        [DataMember]
+        public int difficulty; // Easy = 0, Medium = 1, Hard = 2
 
         
         public PlayerData (Player.PlayerMovement player) {
@@ -69,9 +71,10 @@ namespace Player {
             sceneIndex = player.sceneIndex;
             statusEffects = player.statusEffects;
             myWeapon = player.myWeapon.name.Replace("(Clone)", "");
+            difficulty = player.difficulty;
         }
 
-        public PlayerData (float playerHealth, float playerHunger, float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int playerAmmo, int pickUpRange, int sceneIndex, List<string> statusEffects, string myWeapon) {
+        public PlayerData (float playerHealth, float playerHunger, float walkSpeed, float sprintSpeed, float jumpForce, int playerDrugs, int playerAmmo, int pickUpRange, int sceneIndex, int difficulty, List<string> statusEffects, string myWeapon) {
             this.playerHealth = playerHealth;
             this.playerHunger = playerHunger;
             this.walkSpeed = walkSpeed;
@@ -80,6 +83,7 @@ namespace Player {
             this.playerDrugs = playerDrugs;
             this.pickUpRange = pickUpRange;
             this.sceneIndex = sceneIndex;
+            this.difficulty = difficulty;
             this.statusEffects = statusEffects;
             this.myWeapon = myWeapon;
         }

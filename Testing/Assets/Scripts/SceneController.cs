@@ -133,6 +133,7 @@ public class SceneController : MonoBehaviour {
         if (sceneIndex >= SceneManager.sceneCountInBuildSettings) {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            MainMenu.finishedGame = true;
             SceneManager.LoadScene(0);
         }else {
             MainMenu.loading = true;

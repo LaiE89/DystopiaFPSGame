@@ -52,7 +52,7 @@ public class RightHookSkill : SkillsObject {
                     if (hasDamaged) {
                         SceneController.Instance.bloodParticlePool.SpawnDecal(hit.transform.forward, hit.point, ToolMethods.SettingVector(1f, 1f, 1f));
                     }
-                    }else {
+                }else {
                     Destructable destructable = hit.transform.gameObject.GetComponent<Destructable>();
                     if (destructable != null) {
                     destructable.Interact(); 
@@ -84,12 +84,16 @@ public class RightHookSkill : SkillsObject {
                 }else {
                     CameraShaker.Instance.ShakeOnce(damage, damage * 2, 0.1f, 0.5f);
                     player.UsingStamina(damage * 10f);
-                    if (player.hand.transform.childCount > 1) {
+                    // if (player.hand.transform.childCount > 1) {
+                    if (!player.myWeaponStats.isDefaultItem) {
                         player.myWeapon.GetComponent<Holdable>().DroppingWeapon(thePlayer.transform);
                         player.selectedWeapon = 1;
                         player.SwitchWeapon(player.selectedWeapon);
+                    }else {
+                        if (!player.statusEffects.Contains("isInjured")) {
+                            player.BlockingDamage(damage);
+                        }
                     }
-                    player.BlockingDamage(damage);
                     return false;
                 }
             }

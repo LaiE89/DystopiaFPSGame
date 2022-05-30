@@ -953,7 +953,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871211833131434125}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0.91999996, z: 0}
+  m_LocalPosition: {x: -0, y: 0.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 36533250145525908}
@@ -2499,6 +2499,8 @@ MonoBehaviour:
   alreadyAttacked: 0
   isDying: 0
   isMidAttack: 0
+  eWeapon: {fileID: 0}
+  selectedWeapon: 0
   isIdle: 1
   isAlertable: 1
   isPassive: 0
