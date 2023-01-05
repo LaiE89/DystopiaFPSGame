@@ -3,11 +3,11 @@ A Unity3D game that combines RPG and FPS elements.
 
 ### Features
 * Includes a save and load system where the player’s data is automatically saved in the user’s hard drive by serializing the data into an XML file
-* Invididually created, animated, and textured all game models using Blender
+* Individually created, animated, and textured all game models using Blender
 * Used countless data structures such as stacks and queues to create optimal game mechanics
 * Created a professional UI with advanced game settings (i.e. Key Rebinding, Sensitivity, Quality, Volume, FPS Limiter, Resolution, etc.)
 * OOP is constantly used for game mechanics such as items, skills, and types of enemies
-* Programmed a realistic and completely customizable enemy AI with excellent path-finding, combat behaviors (aggressive, passive, scared), dialogue, etc.
+* Programmed a realistic and customizable enemy AI with excellent path-finding, combat behaviors (aggressive, passive, scared), dialogue, etc.
 
 ## Trailer
 
